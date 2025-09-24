@@ -1,0 +1,40 @@
+
+DESIGN THEME:
+- Use Inter font family throughout
+- Color scheme: Primary blue (#3b82f6 to #1d4ed8 gradients), success green (#10b981), warning orange (#f59e0b), error red (#ef4444)
+- Background: Light gradients (f0f9ff to ffffff to e0e7ff)
+- Card design: White backgrounds, 1rem border-radius, subtle shadows, 4px top gradient borders on hover
+- Consistent 8px spacing system
+- Apple-level design aesthetics with micro-interactions
+
+TECHNICAL REQUIREMENTS:
+- Pure HTML/CSS/JavaScript (no frameworks unless specified)
+- Responsive design with mobile-first approach
+- Smooth animations and hover effects
+- Form validation with error states
+- Interactive cards with click handlers
+- Modal overlays for detailed views
+- Toast notifications for user feedback
+- Keyboard shortcuts support
+- Accessibility features (focus management, ARIA labels)
+
+VISUAL ELEMENTS:
+- Gradient backgrounds and buttons
+- Floating animation effects
+- Pulse animations for status indicators
+- Smooth transitions (0.2s to 0.3s ease)
+- Box shadows for depth
+- Icon integration using inline SVGs
+- Status badges with appropriate colors
+- Loading states and micro-interactions
+
+FUNCTIONALITY:
+- Form validation and submission handling
+- Dynamic content updates
+- Filter and search capabilities
+- Real-time clock displays
+- Interactive data visualization
+- Responsive sidebar for admin panel
+- Modal windows for detailed information
+
+Please maintain this exact visual style, interaction patterns, and code organization structure. Use the same color palette, typography, spacing, and animation timings to ensure visual consistency across the entire application.
