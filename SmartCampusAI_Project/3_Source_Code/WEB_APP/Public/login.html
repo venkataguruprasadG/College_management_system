@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College CMS Login | Premium</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
     <style>
         /* ---------- 1. Custom CSS Variables ---------- */
         :root{
@@ -72,33 +75,35 @@
 
         /* Floating label */
         .floating-label{
-            position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);
-            color:#6c757d;background:var(--card-bg);padding:0 0.25rem;pointer-events:none;
-            transition:top var(--transition-speed),font-size var(--transition-speed),color var(--transition-speed),left var(--transition-speed);
+            position:absolute;background:var(--card-bg);
+            left:0.75rem;top:50%;transform:translateY(-50%);
+            color:#6c757d;padding:0 0.25rem;pointer-events:none;
+            transition:top var(--transition-speed),font-size var(--transition-speed),
+                       color var(--transition-speed),left var(--transition-speed);
         }
-        /* When filled/focused */
+        /* Float for text inputs (focus OR filled) */
         .form-group input:focus + .floating-label,
-        .form-group input:not(:placeholder-shown) + .floating-label,
-        .form-group select:focus + .floating-label,
-        .form-group select:valid + .floating-label{
+        .form-group input:not(:placeholder-shown) + .floating-label{
             top:0;font-size:0.75rem;color:var(--primary-color);
             left:0.5rem;padding:0 0.5rem;transform:translateY(-50%);
         }
 
-        /* ---------- 6. Role Group Specific ---------- */
+        /* ---------- 6. Role Group ---------- */
         .role-group{position:relative;}
         .role-group select{
-            appearance:none;padding-left:3.8rem;position:relative;z-index:20;
+            appearance:none;padding-left:3.8rem; /* clear icon */
         }
         .role-icon{
             position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);
-            font-size:1.5rem;color:var(--secondary-color);z-index:15;
+            font-size:1.5rem;color:var(--secondary-color);
         }
-        /* Default label offset so it sits to the right of icon */
+        /* Initial label offset (sits right of icon) */
         .role-group .floating-label{left:2.75rem;}
-        /* Offset label when floating */
-        .role-group select:focus + .floating-label,
-        .role-group select:valid + .floating-label{left:2.75rem;}
+        /* Float label ONLY when dropdown has a value (no focus trigger) */
+        .role-group select:valid + .floating-label{
+            top:0;font-size:0.75rem;color:var(--primary-color);
+            left:2.75rem;padding:0 0.5rem;transform:translateY(-50%);
+        }
 
         /* ---------- 7. Button ---------- */
         .login-button{
@@ -147,6 +152,7 @@
             <p class="login-subtitle">Access your College Management Portal</p>
 
             <form id="loginForm" class="login-form" novalidate>
+
                 <!-- Role -->
                 <div class="form-group role-group">
                     <span class="material-icons-outlined role-icon">group</span>
@@ -162,14 +168,16 @@
 
                 <!-- Username -->
                 <div class="form-group">
-                    <input type="text" id="username" name="username" required autocomplete="username" placeholder=" ">
+                    <input type="text" id="username" name="username"
+                           placeholder=" " required autocomplete="username">
                     <label for="username" class="floating-label">Username / ID</label>
                     <small class="error-message" id="usernameError"></small>
                 </div>
 
                 <!-- Password -->
                 <div class="form-group">
-                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder=" ">
+                    <input type="password" id="password" name="password"
+                           placeholder=" " required autocomplete="current-password">
                     <label for="password" class="floating-label">Password</label>
                     <small class="error-message" id="passwordError"></small>
                 </div>
@@ -185,58 +193,47 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const loginCard = document.getElementById('loginCard');
-        const form = document.getElementById('loginForm');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const roleSelect = document.getElementById('userRole');
+        const loginCard   = document.getElementById('loginCard');
+        const form        = document.getElementById('loginForm');
+        const username    = document.getElementById('username');
+        const password    = document.getElementById('password');
+        const userRole    = document.getElementById('userRole');
 
-        /* 1. Fade-in card */
-        setTimeout(()=> loginCard.classList.add('is-loaded'),100);
+        /* Fade-in card */
+        setTimeout(() => loginCard.classList.add('is-loaded'), 100);
 
-        /* 2. Error helper */
-        const toggleError = (inputEl,message,show) => {
-            const errEl = document.getElementById(inputEl.id + 'Error');
-            const wrapper = inputEl.closest('.form-group');
+        /* Helper for showing/hiding field errors */
+        const toggleError = (el,msg,show) => {
+            const err = document.getElementById(el.id + 'Error');
+            const grp = el.closest('.form-group');
             if(show){
-                errEl.textContent = message;
-                errEl.classList.add('show');
-                wrapper.classList.add('error');
+                err.textContent = msg; err.classList.add('show'); grp.classList.add('error');
             }else{
-                errEl.textContent = '';
-                errEl.classList.remove('show');
-                wrapper.classList.remove('error');
+                err.textContent = '';   err.classList.remove('show'); grp.classList.remove('error');
             }
         };
 
-        /* 3. Validate on submit */
+        /* Validate on submit */
         form.addEventListener('submit', e => {
             e.preventDefault();
-            let valid = true;
+            let ok = true;
 
-            toggleError(usernameInput,'',false);
-            toggleError(passwordInput,'',false);
-            toggleError(roleSelect,'',false);
+            toggleError(username,'',false);
+            toggleError(password,'',false);
+            toggleError(userRole,'',false);
 
-            if(usernameInput.value.trim() === ''){
-                toggleError(usernameInput,'Username/ID is required.',true); valid = false;
-            }
-            if(passwordInput.value.trim() === ''){
-                toggleError(passwordInput,'Password cannot be empty.',true); valid = false;
-            }
-            if(roleSelect.value === ''){
-                toggleError(roleSelect,'Please select your role.',true); valid = false;
-            }
-            if(valid){
-                alert(`Login successful! Role: ${roleSelect.value}, User: ${usernameInput.value}`);
-            }
+            if(username.value.trim()===''){ toggleError(username,'Username/ID is required.',true); ok=false; }
+            if(password.value.trim()===''){ toggleError(password,'Password cannot be empty.',true); ok=false; }
+            if(userRole.value===''){        toggleError(userRole,'Please select your role.',true); ok=false; }
+
+            if(ok) alert(`Login successful! Role: ${userRole.value}, User: ${username.value}`);
         });
 
-        /* 4. Clear errors on input */
-        [usernameInput,passwordInput].forEach(i=>{
-            i.addEventListener('input',()=>{ if(i.value.trim()!=='') toggleError(i,'',false);});
+        /* Clear errors while typing/selecting */
+        [username,password].forEach(el=>{
+            el.addEventListener('input',()=>{ if(el.value.trim()!=='') toggleError(el,'',false); });
         });
-        roleSelect.addEventListener('change',()=>{ if(roleSelect.value!=='') toggleError(roleSelect,'',false);});
+        userRole.addEventListener('change',()=>{ if(userRole.value!=='') toggleError(userRole,'',false); });
     });
     </script>
 </body>
