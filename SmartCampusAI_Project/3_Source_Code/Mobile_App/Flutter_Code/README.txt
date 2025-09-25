@@ -1,1 +1,0 @@
-This is the 3_Source_Code/Mobile_App/Flutter_Code folder.
