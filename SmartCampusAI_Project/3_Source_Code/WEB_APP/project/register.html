@@ -3,176 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - CampusG</title>
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="./style.css">
+    <title>Register - CampusG College Management System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="register-style.css">
 </head>
 <body>
-    <div class="login-wrapper">
-        <!-- Brand Panel -->
-        <div class="brand-panel">
-            <div class="floating-shapes">
-                <div class="shape-1"></div>
-                <div class="shape-2"></div>
-                <div class="shape-3"></div>
-            </div>
-            
-            <div class="brand-content">
-                <h1 class="brand-logo">CampusG</h1>
-                <p class="brand-tagline">
-                    Join thousands of students, faculty, and administrators who trust CampusG for their educational journey.
-                </p>
-                <ul class="brand-features">
-                    <li>Seamless course management</li>
-                    <li>Real-time collaboration tools</li>
-                    <li>Advanced analytics & insights</li>
-                    <li>Secure & reliable platform</li>
-                </ul>
+    <div class="register-container">
+        <!-- Background Elements -->
+        <div class="bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="floating-elements">
+                <div class="floating-icon icon-1">📚</div>
+                <div class="floating-icon icon-2">🎓</div>
+                <div class="floating-icon icon-3">📖</div>
+                <div class="floating-icon icon-4">✏️</div>
+                <div class="floating-icon icon-5">🏫</div>
+                <div class="floating-icon icon-6">🔬</div>
+                <div class="floating-icon icon-7">💻</div>
+                <div class="floating-icon icon-8">📊</div>
             </div>
         </div>
 
-        <!-- Form Panel -->
-        <div class="form-panel">
-            <div class="form-container">
-                <div class="form-header">
-                    <h2 class="form-title">Create Account</h2>
-                    <p class="form-subtitle">Get started with CampusG today</p>
-                </div>
-
-                <form id="registerForm" novalidate>
-                    <!-- Role Selection Tabs -->
-                    <div class="role-tabs">
-                        <button type="button" class="role-tab active" data-role="student">Student</button>
-                        <button type="button" class="role-tab" data-role="faculty">Faculty</button>
-                        <button type="button" class="role-tab" data-role="admin">Admin</button>
-                    </div>
-
-                    <!-- Full Name -->
-                    <div class="form-group">
-                        <label for="fullName" class="form-label">Full Name</label>
-                        <input 
-                            type="text" 
-                            id="fullName" 
-                            name="fullName" 
-                            class="form-input" 
-                            placeholder="Enter your full name"
-                            required
-                        >
-                        <div class="error-message" id="fullNameError"></div>
-                    </div>
-
-                    <!-- Email Address -->
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            class="form-input" 
-                            placeholder="Enter your email address"
-                            required
-                        >
-                        <div class="error-message" id="emailError"></div>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-input" 
-                            placeholder="Create a strong password"
-                            required
-                        >
-                        <div class="password-strength" id="passwordStrength">
-                            <div class="strength-meter">
-                                <div class="strength-fill" id="strengthFill"></div>
+        <!-- Main Content -->
+        <div class="register-wrapper">
+            <!-- Left Panel - Branding -->
+            <div class="brand-panel">
+                <div class="brand-content">
+                    <div class="logo-container">
+                        <div class="logo">
+                            <div class="logo-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 14L8 10L16 10L12 14Z" fill="currentColor"/>
+                                    <path d="M12 2L2 7V10C2 16 6 20.88 12 22C18 20.88 22 16 22 10V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </div>
-                            <div class="strength-text" id="strengthText"></div>
+                            <span class="logo-text">EduPortal</span>
                         </div>
-                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
+                    <div class="brand-info">
+                        <h1 class="brand-title">Join Our Academic Community</h1>
+                        <p class="brand-description">
+                            Create your account and become part of our innovative learning ecosystem. 
+                            Access world-class education, connect with peers, and shape your future.
+                        </p>
+                        
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🌟</div>
+                                <span>Personalized Learning Experience</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🤝</div>
+                                <span>Collaborative Learning Environment</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📈</div>
+                                <span>Real-time Progress Tracking</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🎯</div>
+                                <span>Goal-oriented Education</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <span>Secure & Private Platform</span>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📱</div>
+                                <span>Mobile-first Design</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Registration Form -->
+            <div class="form-panel">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Create Account</h2>
+                        <p class="form-subtitle">Start your academic journey today</p>
                     </div>
 
-                    <!-- Confirm Password -->
-                    <div class="form-group">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input 
-                            type="password" 
-                            id="confirmPassword" 
-                            name="confirmPassword" 
-                            class="form-input" 
-                            placeholder="Confirm your password"
-                            required
-                        >
-                        <div class="error-message" id="confirmPasswordError"></div>
+                    <!-- Role Selection -->
+                    <div class="role-selector">
+                        <div class="role-tabs">
+                            <button class="role-tab active" data-role="student">
+                                <div class="role-icon">🎓</div>
+                                <span>Student</span>
+                            </button>
+                            <button class="role-tab" data-role="faculty">
+                                <div class="role-icon">👨‍🏫</div>
+                                <span>Faculty</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Phone Number (Optional) -->
-                    <div class="form-group">
-                        <label for="phone" class="form-label">Phone Number (Optional)</label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
-                            class="form-input" 
-                            placeholder="Enter your phone number"
-                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        >
-                        <div class="error-message" id="phoneError"></div>
-                    </div>
+                    <!-- Registration Form -->
+                    <form class="register-form" id="registerForm">
+                        <!-- Personal Information Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">Personal Information</h3>
+                            
+                            <div class="input-row">
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper">
+                                        <input type="text" id="firstName" name="firstName" required>
+                                        <label for="firstName">First Name</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="firstNameError"></div>
+                                </div>
 
-                    <!-- Terms & Conditions -->
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
-                        <label for="terms" class="checkbox-label">
-                            I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
-                        </label>
-                    </div>
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper">
+                                        <input type="text" id="lastName" name="lastName" required>
+                                        <label for="lastName">Last Name</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="lastNameError"></div>
+                                </div>
+                            </div>
 
-                    <!-- Register Button -->
-                    <button type="submit" class="login-btn" id="registerBtn" disabled>
-                        Create Account
-                    </button>
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <input type="email" id="email" name="email" required>
+                                    <label for="email">Email Address</label>
+                                    <div class="input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="error-message" id="emailError"></div>
+                            </div>
 
-                    <!-- Social Signup Buttons -->
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn" id="googleSignup">
-                            <svg width="18" height="18" viewBox="0 0 24 24" style="margin-right: 8px;">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            Google
+                            <div class="input-row">
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper">
+                                        <input type="tel" id="phone" name="phone" required>
+                                        <label for="phone">Phone Number</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59344 1.99522 8.06544 2.16708 8.43945 2.48353C8.81346 2.79999 9.06681 3.23945 9.15999 3.72C9.33657 4.68007 9.63131 5.61273 10.04 6.5C10.2 6.89 10.19 7.33 9.99999 7.71L8.80999 9.91C10.1851 12.4135 12.5865 14.8149 15.09 16.19L17.29 15C17.67 14.81 18.11 14.8 18.5 14.96C19.3873 15.3687 20.3199 15.6634 21.28 15.84C21.7658 15.9336 22.2094 16.1910 22.5265 16.5694C22.8437 16.9479 23.0122 17.4240 23 17.91V20.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="phoneError"></div>
+                                </div>
+
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper">
+                                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                                        <label for="dateOfBirth">Date of Birth</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="dateOfBirthError"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Information Section (Student Only) -->
+                        <div class="form-section student-only">
+                            <h3 class="section-title">Academic Information</h3>
+                            
+                            <div class="input-row">
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper select-wrapper">
+                                        <select id="department" name="department" required>
+                                            <option value="">Select Department</option>
+                                            <option value="computer-science">Computer Science</option>
+                                            <option value="electrical-engineering">Electrical Engineering</option>
+                                            <option value="mechanical-engineering">Mechanical Engineering</option>
+                                            <option value="civil-engineering">Civil Engineering</option>
+                                            <option value="business-administration">Business Administration</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="physics">Physics</option>
+                                            <option value="chemistry">Chemistry</option>
+                                            <option value="biology">Biology</option>
+                                            <option value="english">English Literature</option>
+                                            <option value="psychology">Psychology</option>
+                                            <option value="economics">Economics</option>
+                                        </select>
+                                        <label for="department">Department</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 21V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H7C6.46957 3 5.96086 3.21071 5.58579 3.58579C5.21071 3.96086 5 4.46957 5 5V21L12 17L19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="departmentError"></div>
+                                </div>
+
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper select-wrapper">
+                                        <select id="year" name="year" required>
+                                            <option value="">Select Year</option>
+                                            <option value="1">1st Year</option>
+                                            <option value="2">2nd Year</option>
+                                            <option value="3">3rd Year</option>
+                                            <option value="4">4th Year</option>
+                                        </select>
+                                        <label for="year">Academic Year</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="yearError"></div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <input type="text" id="studentId" name="studentId" placeholder="Leave blank for auto-generation">
+                                    <label for="studentId">Student ID (Optional)</label>
+                                    <div class="input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="error-message" id="studentIdError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Faculty Information Section (Faculty Only) -->
+                        <div class="form-section faculty-only" style="display: none;">
+                            <h3 class="section-title">Faculty Information</h3>
+                            
+                            <div class="input-row">
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper select-wrapper">
+                                        <select id="facultyDepartment" name="facultyDepartment" required>
+                                            <option value="">Select Department</option>
+                                            <option value="computer-science">Computer Science</option>
+                                            <option value="electrical-engineering">Electrical Engineering</option>
+                                            <option value="mechanical-engineering">Mechanical Engineering</option>
+                                            <option value="civil-engineering">Civil Engineering</option>
+                                            <option value="business-administration">Business Administration</option>
+                                            <option value="mathematics">Mathematics</option>
+                                            <option value="physics">Physics</option>
+                                            <option value="chemistry">Chemistry</option>
+                                            <option value="biology">Biology</option>
+                                            <option value="english">English Literature</option>
+                                            <option value="psychology">Psychology</option>
+                                            <option value="economics">Economics</option>
+                                        </select>
+                                        <label for="facultyDepartment">Department</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 21V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H7C6.46957 3 5.96086 3.21071 5.58579 3.58579C5.21071 3.96086 5 4.46957 5 5V21L12 17L19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="facultyDepartmentError"></div>
+                                </div>
+
+                                <div class="input-group half-width">
+                                    <div class="input-wrapper select-wrapper">
+                                        <select id="position" name="position" required>
+                                            <option value="">Select Position</option>
+                                            <option value="professor">Professor</option>
+                                            <option value="associate-professor">Associate Professor</option>
+                                            <option value="assistant-professor">Assistant Professor</option>
+                                            <option value="lecturer">Lecturer</option>
+                                            <option value="instructor">Instructor</option>
+                                        </select>
+                                        <label for="position">Position</label>
+                                        <div class="input-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="error-message" id="positionError"></div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <input type="text" id="employeeId" name="employeeId" placeholder="Leave blank for auto-generation">
+                                    <label for="employeeId">Employee ID (Optional)</label>
+                                    <div class="input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="error-message" id="employeeIdError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Security Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">Security</h3>
+                            
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <input type="password" id="password" name="password" required>
+                                    <label for="password">Password</label>
+                                    <div class="input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                                            <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <button type="button" class="password-toggle" id="passwordToggle">
+                                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68192 4.028 7.66607 6.17 6.17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M9.9 4.24C10.5883 4.0789 11.2931 3.99836 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2048 20.84 15.19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="error-message" id="passwordError"></div>
+                                <div class="password-strength">
+                                    <div class="strength-bar">
+                                        <div class="strength-fill"></div>
+                                    </div>
+                                    <span class="strength-text">Password strength</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                    <label for="confirmPassword">Confirm Password</label>
+                                    <div class="input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                                            <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <button type="button" class="password-toggle" id="confirmPasswordToggle">
+                                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68192 4.028 7.66607 6.17 6.17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M9.9 4.24C10.5883 4.0789 11.2931 3.99836 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2048 20.84 15.19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="error-message" id="confirmPasswordError"></div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-options">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-text">
+                                    I agree to the <a href="#" class="link">Terms of Service</a> and 
+                                    <a href="#" class="link">Privacy Policy</a>
+                                </span>
+                            </label>
+                            <div class="error-message" id="agreeTermsError"></div>
+                        </div>
+
+                        <button type="submit" class="register-btn" id="registerBtn">
+                            <span class="btn-text">Create Account</span>
+                            <div class="btn-loader">
+                                <div class="spinner"></div>
+                            </div>
                         </button>
-                        <button type="button" class="social-btn" id="microsoftSignup">
-                            <svg width="18" height="18" viewBox="0 0 24 24" style="margin-right: 8px;">
-                                <path fill="#f25022" d="M1 1h10v10H1z"/>
-                                <path fill="#00a4ef" d="M13 1h10v10H13z"/>
-                                <path fill="#7fba00" d="M1 13h10v10H1z"/>
-                                <path fill="#ffb900" d="M13 13h10v10H13z"/>
-                            </svg>
-                            Microsoft
-                        </button>
-                    </div>
+                    </form>
 
-                    <!-- Login Link -->
-                    <div class="login-link">
-                        Already have an account? <a href="login.html">Login here</a>
+                    <!-- Additional Options -->
+                    <div class="form-footer">
+                        <div class="divider">
+                            <span>or register with</span>
+                        </div>
+
+                        <div class="social-login">
+                            <button class="social-btn google-btn" id="googleRegister">
+                                <svg class="social-icon" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                Google
+                            </button>
+                            <button class="social-btn microsoft-btn" id="microsoftRegister">
+                                <svg class="social-icon" viewBox="0 0 24 24">
+                                    <path fill="#F25022" d="M1 1H11V11H1V1Z"/>
+                                    <path fill="#00A4EF" d="M13 1H23V11H13V1Z"/>
+                                    <path fill="#7FBA00" d="M1 13H11V23H1V13Z"/>
+                                    <path fill="#FFB900" d="M13 13H23V23H13V13Z"/>
+                                </svg>
+                                Microsoft
+                            </button>
+                        </div>
+
+                        <div class="login-link">
+                            <span>Already have an account?</span>
+                            <a href="index.html" class="link">Sign In</a>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toastContainer"></div>
-
-    <script type="module" src="./register.js"></script>
+    <script src="register.js"></script>
 </body>
 </html>
