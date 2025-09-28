@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - CampusG</title>
+    <link rel="stylesheet" href="studentprofile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>CampusG</h2>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Academic Details</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Support</a></li>
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="profile-content">
+            <header class="profile-header">
+                <h1>Student Profile</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="editProfileBtn"><i class="fas fa-edit"></i> Edit Profile</button>
+                    <button class="btn btn-secondary"><i class="fas fa-upload"></i> Upload Document</button>
+                </div>
+            </header>
+
+            <section class="profile-card basic-info">
+                <div class="profile-avatar">
+                    <img src="https://via.placeholder.com/150" alt="Student Avatar" id="profileImage">
+                    <input type="file" id="uploadAvatar" accept="image/*" style="display: none;">
+                    <button class="btn-upload-avatar" onclick="document.getElementById('uploadAvatar').click()"><i class="fas fa-camera"></i></button>
+                </div>
+                <div class="profile-details">
+                    <h3 id="studentName">Jane Doe</h3>
+                    <p><strong>Student ID:</strong> <span id="studentId">S1234567</span></p>
+                    <p><strong>Program:</strong> <span id="studentProgram">Computer Science</span></p>
+                    <p><strong>Year:</strong> <span id="studentYear">3rd Year, Semester 5</span></p>
+                    <p><strong>Email:</strong> <span id="studentEmail">jane.doe@campusg.edu</span></p>
+                    <p><strong>Phone:</strong> <span id="studentPhone">+1 (555) 123-4567</span></p>
+                </div>
+            </section>
+
+            <section class="profile-card academic-overview">
+                <h3>Academic Overview</h3>
+                <div class="academic-stats">
+                    <div class="stat-item">
+                        <p>Current GPA</p>
+                        <h4><span id="gpa">3.85</span></h4>
+                    </div>
+                    <div class="stat-item">
+                        <p>Credits Earned</p>
+                        <h4><span id="credits">90</span> / 120</h4>
+                    </div>
+                    <div class="stat-item">
+                        <p>Attendance</p>
+                        <h4><span id="attendance">92%</span></h4>
+                    </div>
+                </div>
+                <div class="academic-details-list">
+                    <h4>Upcoming Courses</h4>
+                    <ul>
+                        <li><i class="fas fa-calendar-alt"></i> CSC301 - Advanced Algorithms (Mon, Wed 10:00 AM)</li>
+                        <li><i class="fas fa-calendar-alt"></i> MTH302 - Discrete Mathematics (Tue, Thu 01:00 PM)</li>
+                    </ul>
+                    <h4>Academic Advisor</h4>
+                    <p><i class="fas fa-user-tie"></i> Dr. Emily White (<a href="mailto:e.white@campusg.edu">e.white@campusg.edu</a>)</p>
+                </div>
+            </section>
+
+            <section class="profile-card notifications-section">
+                <h3>Notifications & Messages</h3>
+                <ul>
+                    <li><i class="fas fa-exclamation-circle text-danger"></i> Assignment 3 for CSC301 due on Oct 26.</li>
+                    <li><i class="fas fa-envelope text-info"></i> New message from Dr. White regarding project proposal.</li>
+                    <li><i class="fas fa-calendar-check text-success"></i> Course registration for Spring 2024 opens Nov 1.</li>
+                </ul>
+                <a href="#" class="view-all-link">View All Notifications</a>
+            </section>
+
+            <section class="profile-card optional-features">
+                <h3>Extracurriculars & Awards</h3>
+                <ul>
+                    <li><i class="fas fa-users"></i> Member of Computer Science Club</li>
+                    <li><i class="fas fa-trophy"></i> Dean's List (Fall 2022, Spring 2023)</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editName">Full Name</label>
+                    <input type="text" id="editName" value="Jane Doe">
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" value="jane.doe@campusg.edu">
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone</label>
+                    <input type="tel" id="editPhone" value="+1 (555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label for="editProgram">Academic Program</label>
+                    <input type="text" id="editProgram" value="Computer Science">
+                </div>
+                <div class="form-group">
+                    <label for="editYear">Year of Study</label>
+                    <input type="text" id="editYear" value="3rd Year, Semester 5">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="button" class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="studentprofile.js"></script>
+</body>
+</html>
