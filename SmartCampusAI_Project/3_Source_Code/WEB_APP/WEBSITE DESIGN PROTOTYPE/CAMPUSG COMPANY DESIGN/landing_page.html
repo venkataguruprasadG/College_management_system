@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG - Streamline Your College Management</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic features -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom font import for modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Light background for the page */
+        }
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section (Fixed Nav) -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
+                <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                <span>CampusG</span>
+            </a>
+
+            <!-- Navigation Menu (Desktop) -->
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href="#features" class="text-gray-600 hover:text-primary transition duration-150">Features</a>
+                <a href="#pricing" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
+                <a href="#about" class="text-gray-600 hover:text-primary transition duration-150">About Us</a>
+                <a href="#support" class="text-gray-600 hover:text-primary transition duration-150">Support</a>
+                <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
+                
+                <!-- Prominent “Get Started” button -->
+                <button onclick="document.getElementById('demo-form').scrollIntoView({ behavior: 'smooth' });" 
+                    class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                    Get Started
+                </button>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden p-4 bg-white border-t border-gray-100">
+            <nav class="flex flex-col space-y-3">
+                <a href="#features" class="text-gray-700 hover:text-primary py-2 transition">Features</a>
+                <a href="#pricing" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
+                <a href="#about" class="text-gray-700 hover:text-primary py-2 transition">About Us</a>
+                <a href="#support" class="text-gray-700 hover:text-primary py-2 transition">Support</a>
+                <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
+                <button onclick="document.getElementById('demo-form').scrollIntoView({ behavior: 'smooth' });"
+                    class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
+                    Get Started
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-16 md:py-24 bg-gradient-to-br from-indigo-50 to-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="space-y-6 text-center lg:text-left">
+                    <!-- Headline -->
+                    <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
+                        Streamline Your College Management <span class="text-primary">with CampusG</span>
+                    </h1>
+                    <!-- Supporting subtext -->
+                    <p class="text-xl text-gray-600 max-w-xl mx-auto lg:mx-0">
+                        Enhance administrative efficiency, boost communication, and simplify daily operations. Get started in minutes with our easy, efficient, and flexible subscription model.
+                    </p>
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                        <!-- Primary CTA -->
+                        <button onclick="document.getElementById('demo-form').scrollIntoView({ behavior: 'smooth' });"
+                            class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-xl shadow-xl transition duration-300 transform hover:translate-y-0.5 hover:shadow-2xl">
+                            Request a Demo
+                        </button>
+                        <!-- Secondary CTA -->
+                        <a href="#pricing" 
+                           class="border border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
+                            See Pricing
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Visual element (Dashboard Mockup Placeholder) -->
+                <div class="lg:flex justify-end hidden">
+                    <img src="https://placehold.co/600x450/4f46e5/ffffff?text=Dashboard+Visual" 
+                         alt="CampusG Software Dashboard Mockup" 
+                         class="rounded-2xl shadow-2xl transition duration-500 hover:shadow-3xl transform hover:scale-[1.01] max-w-full h-auto"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x450/4f46e5/ffffff?text=Visual+Element';">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Overview Section -->
+        <section id="features" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-12">
+                    Powerful Features to Manage Every Aspect of Your College
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    
+                    <!-- Feature Card 1 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="users" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Student Registration & Profiles</h3>
+                        <p class="text-gray-600">Handle enrollment, manage personal records, and maintain detailed student histories effortlessly.</p>
+                    </div>
+
+                    <!-- Feature Card 2 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="calendar-check" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Class Scheduling & Timetable Management</h3>
+                        <p class="text-gray-600">Create, publish, and update complex timetables and resource schedules with an intuitive interface.</p>
+                    </div>
+
+                    <!-- Feature Card 3 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="fingerprint" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Attendance Tracking & Reports</h3>
+                        <p class="text-gray-600">Automate attendance recording and generate real-time, customizable reports for faculty and parents.</p>
+                    </div>
+
+                    <!-- Feature Card 4 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="receipt" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Fee Payment & Receipts</h3>
+                        <p class="text-gray-600">Integrate online payments, track dues, and automatically generate professional receipts.</p>
+                    </div>
+
+                    <!-- Feature Card 5 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="award" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Examination & Grading</h3>
+                        <p class="text-gray-600">Define exam structures, input scores, calculate GPA/grades, and publish results securely.</p>
+                    </div>
+
+                    <!-- Feature Card 6 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="briefcase" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Faculty & Staff Management</h3>
+                        <p class="text-gray-600">Manage payroll, permissions, and profiles for all teaching and administrative staff.</p>
+                    </div>
+                    
+                    <!-- Feature Card 7 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="book-open" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Library Management</h3>
+                        <p class="text-gray-600">Track inventory, manage borrowing/returns, and simplify search for books and resources.</p>
+                    </div>
+
+                    <!-- Feature Card 8 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary">
+                        <i data-lucide="message-square" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">Communication Tools</h3>
+                        <p class="text-gray-600">Instant notifications, SMS/email alerts, and integrated messaging for all stakeholders.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works / Workflow Section -->
+        <section class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">
+                    Simple, Efficient, and Integrated Workflow
+                </h2>
+
+                <div class="relative flex justify-center">
+                    <!-- Horizontal Line (Workflow Path) -->
+                    <div class="absolute hidden lg:block h-1 bg-primary top-1/2 left-0 w-full -translate-y-1/2 z-0 opacity-25"></div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                        
+                        <!-- Step 1 -->
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary transform hover:scale-[1.03] transition duration-300 relative z-10">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full mb-4 text-xl font-bold shadow-lg">1</div>
+                            <h4 class="font-bold text-lg mb-1">Sign Up</h4>
+                            <p class="text-sm text-gray-600">Create your secure CampusG account.</p>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary transform hover:scale-[1.03] transition duration-300 relative z-10">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full mb-4 text-xl font-bold shadow-lg">2</div>
+                            <h4 class="font-bold text-lg mb-1">Setup Profile</h4>
+                            <p class="text-sm text-gray-600">Customize college details and branding.</p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary transform hover:scale-[1.03] transition duration-300 relative z-10">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full mb-4 text-xl font-bold shadow-lg">3</div>
+                            <h4 class="font-bold text-lg mb-1">Manage Courses</h4>
+                            <p class="text-sm text-gray-600">Define courses, batches, and assign faculty.</p>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary transform hover:scale-[1.03] transition duration-300 relative z-10">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full mb-4 text-xl font-bold shadow-lg">4</div>
+                            <h4 class="font-bold text-lg mb-1">Track & Grade</h4>
+                            <p class="text-sm text-gray-600">Log attendance, manage exams, and input grades.</p>
+                        </div>
+                        
+                        <!-- Step 5 -->
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary transform hover:scale-[1.03] transition duration-300 relative z-10">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full mb-4 text-xl font-bold shadow-lg">5</div>
+                            <h4 class="font-bold text-lg mb-1">Generate Reports</h4>
+                            <p class="text-sm text-gray-600">Access comprehensive analytics and custom reports.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscription Plans Section -->
+        <section id="pricing" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-6">
+                    Flexible Subscription Plans for Every College
+                </h2>
+                <p class="text-xl text-center text-gray-600 mb-12">No hidden fees. Scale as your institution grows.</p>
+
+                <!-- Pricing Toggle -->
+                <div class="flex justify-center mb-12">
+                    <div class="inline-flex rounded-full bg-gray-200 p-1">
+                        <button id="monthly-toggle" class="py-2 px-6 rounded-full text-white bg-primary font-medium transition duration-300">Monthly</button>
+                        <button id="annual-toggle" class="py-2 px-6 rounded-full text-gray-600 hover:text-primary transition duration-300">Annual (Save 20%)</button>
+                    </div>
+                </div>
+
+                <!-- Pricing Table Grid -->
+                <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    
+                    <!-- Plan 1: Basic -->
+                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200">
+                        <div>
+                            <span class="text-sm font-semibold text-primary">Starter</span>
+                            <h3 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Basic Plan</h3>
+                            
+                            <p id="price-basic" class="text-5xl font-extrabold text-gray-900 mb-6 transition-all duration-300">
+                                $99<span class="text-lg font-medium text-gray-500">/month</span>
+                            </p>
+
+                            <ul class="space-y-4 text-gray-600">
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Supports up to <strong class="font-bold">2 Colleges</strong></li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Core Student & Faculty Profiles</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Timetable & Attendance Tracking</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Basic Custom Reports (5 total)</li>
+                                <li class="flex items-start text-gray-400"><i data-lucide="x" class="w-5 h-5 text-gray-400 mr-2 flex-shrink-0 mt-1"></i>Advanced Payment Gateway Integration</li>
+                            </ul>
+                        </div>
+                        <button class="w-full mt-8 bg-primary/10 text-primary font-bold py-3 rounded-xl transition duration-300 hover:bg-primary/20">
+                            Choose Plan
+                        </button>
+                    </div>
+
+                    <!-- Plan 2: Standard (Recommended) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl ring-4 ring-primary flex flex-col justify-between relative transform scale-[1.02]">
+                        <!-- Badge -->
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 bg-secondary text-white text-xs font-bold py-1 px-4 rounded-full shadow-lg">
+                            Recommended
+                        </div>
+                        <div>
+                            <span class="text-sm font-semibold text-secondary">Most Popular</span>
+                            <h3 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Standard Plan</h3>
+                            
+                            <p id="price-standard" class="text-5xl font-extrabold text-gray-900 mb-6 transition-all duration-300">
+                                $249<span class="text-lg font-medium text-gray-500">/month</span>
+                            </p>
+
+                            <ul class="space-y-4 text-gray-600">
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Supports up to <strong class="font-bold">5 Colleges</strong></li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Includes Basic features</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i><strong class="font-bold">Library Management Module</strong></li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Unlimited Custom Reports</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Integrated Communication Tools</li>
+                            </ul>
+                        </div>
+                        <button class="w-full mt-8 bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.01]">
+                            Choose Plan
+                        </button>
+                    </div>
+
+                    <!-- Plan 3: Premium -->
+                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200">
+                        <div>
+                            <span class="text-sm font-semibold text-primary">Enterprise</span>
+                            <h3 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Premium Plan</h3>
+                            
+                            <p id="price-premium" class="text-5xl font-extrabold text-gray-900 mb-6 transition-all duration-300">
+                                $499<span class="text-lg font-medium text-gray-500">/month</span>
+                            </p>
+
+                            <ul class="space-y-4 text-gray-600">
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Supports <strong class="font-bold">Unlimited Colleges</strong></li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Includes Standard features</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i><strong class="font-bold">Advanced Payment Gateway Integration</strong></li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>Dedicated Technical Account Manager</li>
+                                <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1"></i>SLA-backed 24/7 Priority Support</li>
+                            </ul>
+                        </div>
+                        <button class="w-full mt-8 bg-primary/10 text-primary font-bold py-3 rounded-xl transition duration-300 hover:bg-primary/20">
+                            Choose Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Quote Link -->
+                <div class="text-center mt-12">
+                    <p class="text-lg text-gray-600">Need a bespoke solution for a large organization?</p>
+                    <button onclick="document.getElementById('demo-form').scrollIntoView({ behavior: 'smooth' });"
+                        class="text-primary font-semibold hover:text-primary-dark transition duration-150 underline">
+                        Request a Custom Quote
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-12">
+                    What Our Clients Say
+                </h2>
+
+                <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-secondary">
+                        <i data-lucide="quote" class="w-6 h-6 text-secondary mb-3"></i>
+                        <p class="italic text-gray-700 mb-4">"CampusG transformed our registration process. What used to take days is now completed in hours. The attendance tracking is seamless and highly accurate."</p>
+                        <div class="font-semibold text-gray-900">- Dr. Elara Vance</div>
+                        <div class="text-sm text-gray-500">Dean of Administration, Meridian University</div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-secondary">
+                        <i data-lucide="quote" class="w-6 h-6 text-secondary mb-3"></i>
+                        <p class="italic text-gray-700 mb-4">"The communication tools are a game-changer for parent engagement. Instant notifications about grades and fees have drastically cut down on phone calls."</p>
+                        <div class="font-semibold text-gray-900">- Prof. David Kim</div>
+                        <div class="text-sm text-gray-500">Head of Technology, Pacific College of Arts</div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-secondary">
+                        <i data-lucide="quote" class="w-6 h-6 text-secondary mb-3"></i>
+                        <p class="italic text-gray-700 mb-4">"Setting up was surprisingly easy. The integrated fee payment system with automated receipts has made our finance department incredibly efficient."</p>
+                        <div class="font-semibold text-gray-900">- Ms. Sarah Chen</div>
+                        <div class="text-sm text-gray-500">Finance Controller, Westlake Institute</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo / Contact Section -->
+        <section id="demo-form" class="py-16 md:py-24 bg-primary text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <h2 class="text-4xl font-extrabold text-center mb-4">
+                    See CampusG in Action
+                </h2>
+                <p class="text-xl text-center mb-10 opacity-90">
+                    Request a live, personalized demo to explore how CampusG can specifically benefit your institution.
+                </p>
+
+                <!-- Demo Request Form -->
+                <form class="bg-white p-8 md:p-12 rounded-2xl shadow-3xl space-y-6 text-gray-800">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Name -->
+                        <div>
+                            <label for="name" class="block text-sm font-medium mb-2">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="John Doe" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        </div>
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-2">Work Email</label>
+                            <input type="email" id="email" name="email" placeholder="john.doe@college.edu" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        </div>
+                    </div>
+
+                    <!-- College Name -->
+                    <div>
+                        <label for="college" class="block text-sm font-medium mb-2">College / Institution Name</label>
+                        <input type="text" id="college" name="college" placeholder="XYZ University" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium mb-2">Your Message / Requirements</label>
+                        <textarea id="message" name="message" rows="4" placeholder="I'd like to see the analytics dashboard..."
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                        class="w-full bg-secondary hover:bg-emerald-600 text-white font-bold py-4 rounded-xl transition duration-300 transform hover:scale-[1.01] shadow-lg">
+                        Schedule My Demo
+                    </button>
+                    <p class="text-xs text-center text-gray-500 pt-2">
+                        We respect your privacy. No spam, only solutions.
+                    </p>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
+                
+                <!-- Logo & Info -->
+                <div class="col-span-2 md:col-span-1">
+                    <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
+                        <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
+                        <span>CampusG</span>
+                    </a>
+                    <p class="text-sm">Powering the next generation of academic excellence.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-primary transition duration-150">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-primary transition duration-150">Pricing</a></li>
+                        <li><a href="#support" class="hover:text-primary transition duration-150">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Legal</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary transition duration-150">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition duration-150">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-span-2 md:col-span-2">
+                    <h5 class="text-white font-semibold mb-4">Get In Touch</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-primary"></i> <a href="mailto:sales@campusg.com" class="hover:text-primary">sales@campusg.com</a></li>
+                        <li class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-primary"></i> +1 (555) 123-4567</li>
+                    </ul>
+
+                    <!-- Social Media Icons -->
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Copyright -->
+            <div class="text-center text-sm text-gray-500 pt-4">
+                &copy; <span id="current-year"></span> CampusG, Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Initialize Lucide Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
+
+        // 2. Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuButton.querySelector('svg');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+            } else {
+                icon.outerHTML = lucide.createIcons({'icon': 'x'}).x.outerHTML;
+            }
+            lucide.createIcons(); // Recreate icons after changing HTML
+        });
+
+        // Close mobile menu on link click (for smooth scrolling)
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuButton.querySelector('svg');
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+                lucide.createIcons();
+            });
+        });
+
+        // 3. Pricing Toggle Logic
+        const monthlyToggle = document.getElementById('monthly-toggle');
+        const annualToggle = document.getElementById('annual-toggle');
+
+        // Price elements
+        const priceBasic = document.getElementById('price-basic');
+        const priceStandard = document.getElementById('price-standard');
+        const pricePremium = document.getElementById('price-premium');
+
+        // Prices (Monthly vs Annual - Annual is 20% off)
+        const monthlyPrices = { basic: 99, standard: 249, premium: 499 };
+        const annualPrices = { 
+            basic: Math.round(99 * 12 * 0.8), // 950
+            standard: Math.round(249 * 12 * 0.8), // 2390
+            premium: Math.round(499 * 12 * 0.8) // 4790
+        };
+
+        function updatePricing(isAnnual) {
+            if (isAnnual) {
+                // Annual selected
+                monthlyToggle.classList.remove('bg-primary', 'text-white');
+                monthlyToggle.classList.add('text-gray-600', 'hover:text-primary');
+                annualToggle.classList.add('bg-primary', 'text-white');
+                annualToggle.classList.remove('text-gray-600', 'hover:text-primary');
+
+                priceBasic.innerHTML = `$${annualPrices.basic}<span class="text-lg font-medium text-gray-500">/year</span>`;
+                priceStandard.innerHTML = `$${annualPrices.standard}<span class="text-lg font-medium text-gray-500">/year</span>`;
+                pricePremium.innerHTML = `$${annualPrices.premium}<span class="text-lg font-medium text-gray-500">/year</span>`;
+            } else {
+                // Monthly selected
+                annualToggle.classList.remove('bg-primary', 'text-white');
+                annualToggle.classList.add('text-gray-600', 'hover:text-primary');
+                monthlyToggle.classList.add('bg-primary', 'text-white');
+                monthlyToggle.classList.remove('text-gray-600', 'hover:text-primary');
+
+                priceBasic.innerHTML = `$${monthlyPrices.basic}<span class="text-lg font-medium text-gray-500">/month</span>`;
+                priceStandard.innerHTML = `$${monthlyPrices.standard}<span class="text-lg font-medium text-gray-500">/month</span>`;
+                pricePremium.innerHTML = `$${monthlyPrices.premium}<span class="text-lg font-medium text-gray-500">/month</span>`;
+            }
+        }
+
+        // Event Listeners for the toggle
+        monthlyToggle.addEventListener('click', () => updatePricing(false));
+        annualToggle.addEventListener('click', () => updatePricing(true));
+
+        // Initialize to monthly (default)
+        updatePricing(false);
+    </script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Features - Full Suite College Management</title>
+    <!-- SEO Meta -->
+    <meta name="description" content="Explore the comprehensive features of CampusG, the all-in-one platform for student, academic, and financial college management.">
+    <meta name="keywords" content="college management, SIS, ERP, student profiles, grading, admissions software">
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic features -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom font import for modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Consistent light background */
+        }
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+
+        /* Style for the collapsible details summary */
+        details summary {
+            cursor: pointer;
+            padding-bottom: 0.5rem;
+            list-style: none; /* Hide default arrow */
+        }
+        /* Custom arrow style for collapsible */
+        details summary::marker, details summary::-webkit-details-marker {
+            display: none;
+        }
+        details summary::after {
+            content: "\e800"; /* Placeholder for a plus icon */
+            font-family: 'lucide';
+            display: inline-block;
+            margin-left: 0.5rem;
+            transition: transform 0.2s;
+        }
+        details[open] summary::after {
+            transform: rotate(45deg); /* Rotate to an 'x' or minus sign */
+        }
+        /* Fix for Lucide icons in custom content */
+        .lucide { display: inline-block; vertical-align: middle; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section (Fixed Nav - Same as Landing Page) -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-primary">
+                <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                <span>CampusG</span>
+            </a>
+
+            <!-- Navigation Menu (Desktop) -->
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href="#main-features" class="text-primary font-semibold transition duration-150 border-b-2 border-primary">Features</a>
+                <a href="pricing.html" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
+                <a href="about.html" class="text-gray-600 hover:text-primary transition duration-150">About Us</a>
+                <a href="support.html" class="text-gray-600 hover:text-primary transition duration-150">Support</a>
+                <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
+                
+                <!-- Globalization Mock Switch -->
+                <div class="hidden md:block relative group">
+                    <button class="flex items-center text-gray-600 hover:text-primary transition duration-150">
+                        <i data-lucide="globe" class="w-5 h-5 mr-1"></i> Global <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </button>
+                    <!-- Mock Dropdown Content -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl hidden group-hover:block z-50">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English / USD</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Español / EUR</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">日本語 / JPY</a>
+                    </div>
+                </div>
+
+                <!-- Prominent “Get Started” button -->
+                <a href="#cta-section"
+                    class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                    Get Started
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden p-4 bg-white border-t border-gray-100">
+            <nav class="flex flex-col space-y-3">
+                <a href="#main-features" class="text-primary font-semibold py-2 transition">Features</a>
+                <a href="pricing.html" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
+                <a href="about.html" class="text-gray-700 hover:text-primary py-2 transition">About Us</a>
+                <a href="support.html" class="text-gray-700 hover:text-primary py-2 transition">Support</a>
+                <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
+                <a href="#cta-section"
+                    class="w-full bg-primary hover:bg-primary-dark text-white text-center font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
+                    Get Started
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Features Hero Section -->
+        <section class="py-16 md:py-20 bg-primary text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+                    CampusG: All-In-One College Management Platform
+                </h1>
+                <p class="mt-6 text-xl opacity-90">
+                    Built for the future of education, CampusG offers unmatched **security**, **flexibility**, and **global readiness**. We integrate seamlessly into your operations, from admission to graduation and beyond.
+                </p>
+                <a href="#cta-section" class="inline-block mt-8 bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl shadow-xl transition duration-300 transform hover:scale-105">
+                    Request a Demo
+                </a>
+            </div>
+        </section>
+
+        <!-- Core Modules Section with Filtering -->
+        <section id="main-features" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-10">
+                    Core Modules & Functionality
+                </h2>
+
+                <!-- Filtering and Sorting Panel -->
+                <div class="flex flex-col md:flex-row justify-between items-center bg-gray-100 p-4 rounded-xl mb-12 shadow-inner">
+                    <p class="font-semibold text-lg mb-4 md:mb-0">Filter Features By Role:</p>
+                    <div id="role-filter" class="flex flex-wrap gap-3">
+                        <button data-filter="all" class="filter-btn bg-primary text-white py-2 px-4 rounded-full font-medium transition duration-200 shadow-md">Show All</button>
+                        <button data-filter="admin" class="filter-btn bg-white text-gray-700 py-2 px-4 rounded-full font-medium transition duration-200 hover:bg-indigo-50">Administration</button>
+                        <button data-filter="faculty" class="filter-btn bg-white text-gray-700 py-2 px-4 rounded-full font-medium transition duration-200 hover:bg-indigo-50">Faculty</button>
+                        <button data-filter="student" class="filter-btn bg-white text-gray-700 py-2 px-4 rounded-full font-medium transition duration-200 hover:bg-indigo-50">Student/Parent</button>
+                    </div>
+                </div>
+
+                <!-- Feature Grid Container -->
+                <div id="feature-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- 1. Student Information System (SIS) -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-secondary" data-roles="admin student">
+                        <i data-lucide="users" class="w-8 h-8 text-secondary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Student Information System (SIS)</h3>
+                        <p class="text-gray-600 text-sm">Centralized records for registration, profiles, enrollment management, and academic transcripts.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Digital application processing and batch migration.</li>
+                                    <li>Secure, version-controlled academic records.</li>
+                                    <li>Accessible on mobile for quick profile updates.</li>
+                                </ul>
+                                <a href="#" class="text-secondary hover:underline block mt-2">View Sample Dashboard</a>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 2. Class & Course Scheduling -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary" data-roles="admin faculty student">
+                        <i data-lucide="calendar" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Class & Course Scheduling</h3>
+                        <p class="text-gray-600 text-sm">Intuitive timetable builder, automated room allocation, and detailed instructor assignment overviews.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Resource conflict detection prevents double bookings.</li>
+                                    <li>Personalized timetables for every user role.</li>
+                                </ul>
+                                <a href="#" class="text-secondary hover:underline block mt-2">Watch Demo Video</a>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 3. Attendance Management -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-secondary" data-roles="admin faculty student">
+                        <i data-lucide="clipboard-check" class="w-8 h-8 text-secondary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Attendance Management</h3>
+                        <p class="text-gray-600 text-sm">Daily and class-wise tracking, automated reminders for faculty, and comprehensive absence reports.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Supports QR, biometric, and manual entry.</li>
+                                    <li>Real-time alerts sent to parents/guardians.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 4. Grading & Exams -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary" data-roles="admin faculty student">
+                        <i data-lucide="award" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Grading & Exams</h3>
+                        <p class="text-gray-600 text-sm">Exam scheduling, streamlined online grading interface, secure report card generation, and performance analytics.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Flexible calculation of weighted grades and GPA.</li>
+                                    <li>Secure digital publishing of results.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 5. Fee Management & Payments -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-secondary" data-roles="admin student">
+                        <i data-lucide="dollar-sign" class="w-8 h-8 text-secondary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Fee Management & Payments</h3>
+                        <p class="text-gray-600 text-sm">Define fee structures, process payments, automate receipts, and handle scholarships/discounts with multi-currency support.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Integration with major global payment gateways.</li>
+                                    <li>Automated reminders for pending payments.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 6. Faculty & Staff Profiles -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary" data-roles="admin faculty">
+                        <i data-lucide="briefcase" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Faculty & Staff Profiles</h3>
+                        <p class="text-gray-600 text-sm">Role-based access, payroll integration, leave and performance tracking, and professional development records.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Self-service portal for leave applications and approval.</li>
+                                    <li>Integration with HR and ERP systems.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 7. Library Management -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-secondary" data-roles="admin student faculty">
+                        <i data-lucide="book-open" class="w-8 h-8 text-secondary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Library Management</h3>
+                        <p class="text-gray-600 text-sm">Complete book catalog, integrated borrowing system, fines/overdue management, and digital media integration.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Quick ISBN scanning for cataloging.</li>
+                                    <li>Student portal access to book inventory.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 8. Communication Suite -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-primary" data-roles="admin faculty student">
+                        <i data-lucide="message-square" class="w-8 h-8 text-primary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Communication Suite</h3>
+                        <p class="text-gray-600 text-sm">In-app messaging, mass notifications, multi-channel alerts (email, SMS, push), and dedicated parent communication channels.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Scheduled communications for events and deadlines.</li>
+                                    <li>Audit trail for all messages sent.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 9. Analytics & Reporting -->
+                    <div class="feature-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-secondary" data-roles="admin faculty">
+                        <i data-lucide="bar-chart-2" class="w-8 h-8 text-secondary mb-3"></i>
+                        <h3 class="text-xl font-bold mb-2">Analytics & Reporting</h3>
+                        <p class="text-gray-600 text-sm">Custom dashboards, downloadable reports, and trend insights for academics, finance, and attendance.</p>
+                        <details class="mt-3 text-sm">
+                            <summary class="font-semibold text-primary">Learn More</summary>
+                            <div class="pt-2 text-gray-700">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Predictive analytics for student performance risk.</li>
+                                    <li>Export data in CSV, PDF, and Excel formats.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced & Optional Features Section -->
+        <section class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-10">
+                    Advanced & Global Capabilities
+                </h2>
+                <p class="text-lg text-center text-gray-600 max-w-3xl mx-auto mb-16">
+                    Designed for large institutions and future-proof growth, these features ensure scalability, global competitiveness, and full compliance.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    
+                    <!-- Advanced Block 1: Integration & API -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-primary">
+                        <div class="flex items-center mb-4">
+                            <i data-lucide="plug-2" class="w-8 h-8 text-primary mr-3"></i>
+                            <h3 class="text-2xl font-bold text-gray-900">Integrations & Open API Access</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Seamlessly connect CampusG with your existing technology stack.
+                        </p>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start"><i data-lucide="zap" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i> Integration with SIS, LMS, ERP, and e-learning tools.</li>
+                            <li class="flex items-start"><i data-lucide="code" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i> Open REST APIs for custom development and third-party plugins.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Advanced Block 2: Compliance & Security -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-secondary">
+                        <div class="flex items-center mb-4">
+                            <i data-lucide="lock" class="w-8 h-8 text-secondary mr-3"></i>
+                            <h3 class="text-2xl font-bold text-gray-900">Compliance & Security</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Your data integrity and student privacy are our highest priority globally.
+                        </p>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start"><i data-lucide="shield" class="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-1"></i> Full GDPR, FERPA, and regional privacy compliance.</li>
+                            <li class="flex items-start"><i data-lucide="key" class="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-1"></i> Two-factor authentication, end-to-end encryption, and detailed audit logs.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Advanced Block 3: Customization & Branding -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-secondary">
+                        <div class="flex items-center mb-4">
+                            <i data-lucide="palette" class="w-8 h-8 text-secondary mr-3"></i>
+                            <h3 class="text-2xl font-bold text-gray-900">Customization & Branding</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            The platform adapts to your institution's unique identity and workflow.
+                        </p>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start"><i data-lucide="layout-grid" class="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-1"></i> Customizable module visibility and college-specific themes.</li>
+                            <li class="flex items-start"><i data-lucide="globe" class="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-1"></i> Domain mapping and full logo/color upload support.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Advanced Block 4: Alumni & Placement -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-primary">
+                        <div class="flex items-center mb-4">
+                            <i data-lucide="rocket" class="w-8 h-8 text-primary mr-3"></i>
+                            <h3 class="text-2xl font-bold text-gray-900">Alumni & Placement</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Manage the transition from student to successful professional seamlessly.
+                        </p>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start"><i data-lucide="network" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i> Dedicated alumni networking profiles and event management.</li>
+                            <li class="flex items-start"><i data-lucide="briefcase-business" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i> Job placement tracking and employer relationship management.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- CTA Section (Consistent Styling) -->
+        <section id="cta-section" class="py-16 md:py-20 bg-primary text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+                <h2 class="text-4xl font-extrabold mb-4">
+                    Ready to Transform Your Campus?
+                </h2>
+                <p class="text-xl mb-10 opacity-90">
+                    See the full power of CampusG tailored to your institution's needs.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button 
+                        class="bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl shadow-xl transition duration-300 transform hover:translate-y-0.5 hover:shadow-2xl">
+                        Request a Personalized Demo
+                    </button>
+                    <a href="pricing.html" 
+                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
+                        View Pricing Plans
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section (Same as Landing Page) -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
+                
+                <!-- Logo & Info -->
+                <div class="col-span-2 md:col-span-1">
+                    <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
+                        <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
+                        <span>CampusG</span>
+                    </a>
+                    <p class="text-sm">Powering the next generation of academic excellence.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#main-features" class="hover:text-primary transition duration-150">Features</a></li>
+                        <li><a href="pricing.html" class="hover:text-primary transition duration-150">Pricing</a></li>
+                        <li><a href="support.html" class="hover:text-primary transition duration-150">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Legal</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary transition duration-150">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition duration-150">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-span-2 md:col-span-2">
+                    <h5 class="text-white font-semibold mb-4">Get In Touch</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-primary"></i> <a href="mailto:sales@campusg.com" class="hover:text-primary">sales@campusg.com</a></li>
+                        <li class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-primary"></i> +1 (555) 123-4567</li>
+                    </ul>
+
+                    <!-- Social Media Icons -->
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Copyright -->
+            <div class="text-center text-sm text-gray-500 pt-4">
+                &copy; <span id="current-year-features"></span> CampusG, Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Initialize Lucide Icons and Year
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            document.getElementById('current-year-features').textContent = new Date().getFullYear();
+
+            // Re-create icons for custom summary marker
+            const detailsElements = document.querySelectorAll('details');
+            detailsElements.forEach(details => {
+                const summary = details.querySelector('summary');
+                if (summary) {
+                    // Inject lucide plus icon into the summary ::after content
+                    // The CSS handles the rotation based on details[open]
+                    summary.setAttribute('data-lucide-icon', 'plus');
+                }
+            });
+        });
+
+        // 2. Mobile Menu Toggle (Re-used from index.html)
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuButton.querySelector('svg');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+            } else {
+                icon.outerHTML = lucide.createIcons({'icon': 'x'}).x.outerHTML;
+            }
+            lucide.createIcons(); // Recreate icons after changing HTML
+        });
+
+        // Close mobile menu on link click (for smooth scrolling)
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuButton.querySelector('svg');
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+                lucide.createIcons();
+            });
+        });
+        
+        // 3. Feature Filtering Logic
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const featureCards = document.querySelectorAll('.feature-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const filterRole = event.target.getAttribute('data-filter');
+                
+                // Update active button state
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white', 'hover:bg-indigo-50');
+                    btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-indigo-50');
+                });
+                event.target.classList.add('bg-primary', 'text-white');
+                event.target.classList.remove('bg-white', 'text-gray-700', 'hover:bg-indigo-50');
+
+                // Filter cards
+                featureCards.forEach(card => {
+                    const roles = card.getAttribute('data-roles');
+                    if (filterRole === 'all' || roles.includes(filterRole)) {
+                        card.classList.remove('hidden');
+                        card.classList.add('block');
+                    } else {
+                        card.classList.remove('block');
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
