@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Profile - CampusG</title>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="profile-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CampusG</h2>
+            </div>
+            <div class="nav-links">
+                <a href="./index.html" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link">Courses</a>
+                <a href="#" class="nav-link">Messages</a>
+                <a href="#" class="nav-link">Resources</a>
+            </div>
+            <div class="nav-user">
+                <button class="nav-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="sidebar-content">
+                <h3>Quick Links</h3>
+                <ul class="sidebar-links">
+                    <li><a href="#" class="sidebar-link active">Profile Overview</a></li>
+                    <li><a href="#" class="sidebar-link">My Courses</a></li>
+                    <li><a href="#" class="sidebar-link">Leave Application</a></li>
+                    <li><a href="#" class="sidebar-link">Messages</a></li>
+                    <li><a href="#" class="sidebar-link">Resources</a></li>
+                    <li><a href="#" class="sidebar-link">Settings</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-main">
+            <!-- Header Section -->
+            <section class="profile-header">
+                <div class="header-content">
+                    <div class="profile-photo-container">
+                        <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop" 
+                             alt="Profile Photo" class="profile-photo" id="profilePhoto">
+                        <button class="photo-upload-btn" id="photoUploadBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                        </button>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-info">
+                        <div class="name-section">
+                            <h1 class="profile-name" id="profileName">Dr. Sarah Johnson</h1>
+                            <button class="edit-btn" id="editNameBtn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="profile-designation">Professor, Computer Science</p>
+                        <p class="profile-department">Department of Computer Science & Engineering</p>
+                        <div class="contact-summary">
+                            <span class="contact-item">sarah.johnson@campusg.edu</span>
+                            <span class="contact-item">+1 (555) 123-4567</span>
+                        </div>
+                        <div class="status-indicator">
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="action-btn primary" id="editProfileBtn">Edit Profile</button>
+                    <button class="action-btn secondary" id="downloadPdfBtn">Download PDF</button>
+                </div>
+            </section>
+
+            <!-- Profile Content Tabs -->
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="personal">Personal Info</button>
+                <button class="tab-btn" data-tab="professional">Professional</button>
+                <button class="tab-btn" data-tab="academic">Academic</button>
+                <button class="tab-btn" data-tab="attendance">Attendance</button>
+                <button class="tab-btn" data-tab="schedule">Schedule</button>
+                <button class="tab-btn" data-tab="settings">Settings</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Personal Information Tab -->
+                <div class="tab-panel active" id="personal">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Basic Information</h3>
+                            <div class="info-row">
+                                <label>Full Name</label>
+                                <div class="editable-field">
+                                    <span class="field-value">Dr. Sarah Elizabeth Johnson</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>Date of Birth</label>
+                                <div class="editable-field">
+                                    <span class="field-value">March 15, 1985</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>Gender</label>
+                                <div class="editable-field">
+                                    <span class="field-value">Female</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Contact Details</h3>
+                            <div class="info-row">
+                                <label>Email</label>
+                                <div class="editable-field">
+                                    <span class="field-value">sarah.johnson@campusg.edu</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>Phone Number</label>
+                                <div class="editable-field">
+                                    <span class="field-value">+1 (555) 123-4567</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>Emergency Contact</label>
+                                <div class="editable-field">
+                                    <span class="field-value">John Johnson - +1 (555) 987-6543</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Address</h3>
+                            <div class="info-row">
+                                <label>Current Address</label>
+                                <div class="editable-field">
+                                    <span class="field-value">123 University Ave, Campus City, CC 12345</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>Permanent Address</label>
+                                <div class="editable-field">
+                                    <span class="field-value">456 Main St, Hometown, HT 67890</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Professional Links</h3>
+                            <div class="info-row">
+                                <label>LinkedIn</label>
+                                <div class="editable-field">
+                                    <span class="field-value">linkedin.com/in/sarah-johnson-phd</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <label>ResearchGate</label>
+                                <div class="editable-field">
+                                    <span class="field-value">researchgate.net/profile/Sarah-Johnson-12</span>
+                                    <button class="field-edit-btn">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Information Tab -->
+                <div class="tab-panel" id="professional">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Employment Details</h3>
+                            <div class="info-row">
+                                <label>Employee ID</label>
+                                <span class="field-value">EMP-CS-2019-001</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Department</label>
+                                <span class="field-value">Computer Science & Engineering</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Specialization</label>
+                                <span class="field-value">Machine Learning, Data Science</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Joining Date</label>
+                                <span class="field-value">August 15, 2019</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Years of Experience</label>
+                                <span class="field-value">8 years</span>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Qualifications</h3>
+                            <div class="info-row">
+                                <label>Highest Qualification</label>
+                                <span class="field-value">Ph.D. in Computer Science</span>
+                            </div>
+                            <div class="qualification-list">
+                                <div class="qualification-item">
+                                    <strong>Ph.D. Computer Science</strong>
+                                    <span>Stanford University (2018)</span>
+                                </div>
+                                <div class="qualification-item">
+                                    <strong>M.S. Computer Science</strong>
+                                    <span>MIT (2015)</span>
+                                </div>
+                                <div class="qualification-item">
+                                    <strong>B.S. Computer Engineering</strong>
+                                    <span>UC Berkeley (2013)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Current Assignments</h3>
+                            <div class="course-list">
+                                <div class="course-item">
+                                    <span class="course-code">CS-401</span>
+                                    <span class="course-name">Machine Learning</span>
+                                    <span class="course-students">45 students</span>
+                                </div>
+                                <div class="course-item">
+                                    <span class="course-code">CS-502</span>
+                                    <span class="course-name">Advanced Data Structures</span>
+                                    <span class="course-students">32 students</span>
+                                </div>
+                                <div class="course-item">
+                                    <span class="course-code">CS-601</span>
+                                    <span class="course-name">Research Methodology</span>
+                                    <span class="course-students">18 students</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Designation History</h3>
+                            <div class="history-timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Aug 2019 - Present</div>
+                                    <div class="timeline-content">
+                                        <strong>Professor</strong>
+                                        <span>Computer Science Department</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Jan 2017 - Jul 2019</div>
+                                    <div class="timeline-content">
+                                        <strong>Assistant Professor</strong>
+                                        <span>Previous Institution</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Contributions Tab -->
+                <div class="tab-panel" id="academic">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Research & Publications</h3>
+                            <div class="publication-list">
+                                <div class="publication-item">
+                                    <h4>"Deep Learning Applications in Healthcare"</h4>
+                                    <p>Journal of Medical AI, 2023</p>
+                                    <div class="publication-actions">
+                                        <button class="link-btn">View</button>
+                                        <button class="link-btn">Download</button>
+                                    </div>
+                                </div>
+                                <div class="publication-item">
+                                    <h4>"Optimizing Neural Networks for Edge Computing"</h4>
+                                    <p>IEEE Transactions on Computing, 2022</p>
+                                    <div class="publication-actions">
+                                        <button class="link-btn">View</button>
+                                        <button class="link-btn">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Conferences & Events</h3>
+                            <div class="conference-list">
+                                <div class="conference-item">
+                                    <strong>International Conference on Machine Learning (ICML 2023)</strong>
+                                    <span>Presenter - "Federated Learning in Healthcare"</span>
+                                </div>
+                                <div class="conference-item">
+                                    <strong>IEEE Conference on Computer Vision (ICCV 2022)</strong>
+                                    <span>Attendee</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Awards & Recognition</h3>
+                            <div class="award-list">
+                                <div class="award-item">
+                                    <strong>Excellence in Teaching Award</strong>
+                                    <span>CampusG University, 2023</span>
+                                </div>
+                                <div class="award-item">
+                                    <strong>Best Research Paper Award</strong>
+                                    <span>ICML Conference, 2022</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Tab -->
+                <div class="tab-panel" id="attendance">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Monthly Attendance Overview</h3>
+                            <div class="attendance-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">22</span>
+                                    <span class="stat-label">Days Present</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">1</span>
+                                    <span class="stat-label">Days Absent</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">95.7%</span>
+                                    <span class="stat-label">Attendance Rate</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Leave Balance</h3>
+                            <div class="leave-balance">
+                                <div class="leave-item">
+                                    <span class="leave-type">Casual Leave</span>
+                                    <span class="leave-count">8 / 12</span>
+                                </div>
+                                <div class="leave-item">
+                                    <span class="leave-type">Sick Leave</span>
+                                    <span class="leave-count">2 / 10</span>
+                                </div>
+                                <div class="leave-item">
+                                    <span class="leave-type">Annual Leave</span>
+                                    <span class="leave-count">15 / 21</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Recent Leave Applications</h3>
+                            <div class="leave-history">
+                                <div class="leave-record">
+                                    <div class="leave-dates">Dec 20-22, 2023</div>
+                                    <div class="leave-type">Annual Leave</div>
+                                    <div class="leave-status approved">Approved</div>
+                                </div>
+                                <div class="leave-record">
+                                    <div class="leave-dates">Nov 15, 2023</div>
+                                    <div class="leave-type">Sick Leave</div>
+                                    <div class="leave-status approved">Approved</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Tab -->
+                <div class="tab-panel" id="schedule">
+                    <div class="info-grid">
+                        <div class="info-card full-width">
+                            <h3>Weekly Class Schedule</h3>
+                            <div class="schedule-grid">
+                                <div class="schedule-header">
+                                    <div class="time-slot">Time</div>
+                                    <div class="day-header">Monday</div>
+                                    <div class="day-header">Tuesday</div>
+                                    <div class="day-header">Wednesday</div>
+                                    <div class="day-header">Thursday</div>
+                                    <div class="day-header">Friday</div>
+                                </div>
+                                <div class="schedule-row">
+                                    <div class="time-slot">9:00 AM</div>
+                                    <div class="class-slot">CS-401<br>ML</div>
+                                    <div class="class-slot empty"></div>
+                                    <div class="class-slot">CS-401<br>ML</div>
+                                    <div class="class-slot empty"></div>
+                                    <div class="class-slot">CS-601<br>Research</div>
+                                </div>
+                                <div class="schedule-row">
+                                    <div class="time-slot">11:00 AM</div>
+                                    <div class="class-slot empty"></div>
+                                    <div class="class-slot">CS-502<br>Data Structures</div>
+                                    <div class="class-slot empty"></div>
+                                    <div class="class-slot">CS-502<br>Data Structures</div>
+                                    <div class="class-slot empty"></div>
+                                </div>
+                                <div class="schedule-row">
+                                    <div class="time-slot">2:00 PM</div>
+                                    <div class="class-slot office-hours">Office Hours</div>
+                                    <div class="class-slot office-hours">Office Hours</div>
+                                    <div class="class-slot office-hours">Office Hours</div>
+                                    <div class="class-slot office-hours">Office Hours</div>
+                                    <div class="class-slot empty"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Office Hours</h3>
+                            <div class="office-hours">
+                                <div class="office-hour-item">
+                                    <strong>Monday - Thursday</strong>
+                                    <span>2:00 PM - 4:00 PM</span>
+                                </div>
+                                <div class="office-hour-item">
+                                    <strong>Location</strong>
+                                    <span>Room 304, CS Building</span>
+                                </div>
+                                <div class="office-hour-item">
+                                    <strong>Appointment</strong>
+                                    <span>Walk-in or by appointment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-panel" id="settings">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Communication Preferences</h3>
+                            <div class="setting-group">
+                                <label class="setting-item">
+                                    <input type="checkbox" checked>
+                                    <span>Email notifications</span>
+                                </label>
+                                <label class="setting-item">
+                                    <input type="checkbox">
+                                    <span>SMS notifications</span>
+                                </label>
+                                <label class="setting-item">
+                                    <input type="checkbox" checked>
+                                    <span>In-app notifications</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Privacy Settings</h3>
+                            <div class="setting-group">
+                                <label class="setting-item">
+                                    <input type="checkbox" checked>
+                                    <span>Show email to students</span>
+                                </label>
+                                <label class="setting-item">
+                                    <input type="checkbox">
+                                    <span>Show phone number to students</span>
+                                </label>
+                                <label class="setting-item">
+                                    <input type="checkbox" checked>
+                                    <span>Show office hours publicly</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Security Settings</h3>
+                            <div class="security-actions">
+                                <button class="action-btn secondary">Change Password</button>
+                                <button class="action-btn secondary">Setup 2FA</button>
+                                <button class="action-btn secondary">View Login History</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Field</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label id="modalLabel">Field Name</label>
+                <input type="text" id="modalInput" class="form-input">
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn secondary" id="modalCancel">Cancel</button>
+                <button class="action-btn primary" id="modalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./staff-profile.js"></script>
+</body>
+</html>
