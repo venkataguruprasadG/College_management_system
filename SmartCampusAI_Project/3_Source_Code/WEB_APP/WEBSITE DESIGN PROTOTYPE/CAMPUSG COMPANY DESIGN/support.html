@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Support - Knowledge Base & Contact</title>
+    <!-- SEO Meta -->
+    <meta name="description" content="Access the CampusG Knowledge Base, submit a support ticket, or contact our team for immediate assistance with your college management platform.">
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic features -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom font import for modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Consistent light background */
+        }
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section (Fixed Nav - Same as Landing Page) -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-primary">
+                <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                <span>CampusG</span>
+            </a>
+
+            <!-- Navigation Menu (Desktop) -->
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href="features.html" class="text-gray-600 hover:text-primary transition duration-150">Features</a>
+                <a href="pricing.html" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
+                <a href="about.html" class="text-gray-600 hover:text-primary transition duration-150">About Us</a>
+                <a href="#hero-section" class="text-primary font-semibold transition duration-150 border-b-2 border-primary">Support</a>
+                <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
+                
+                <!-- Prominent “Get Started” button -->
+                <a href="#cta-section"
+                    class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                    Get Started
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden p-4 bg-white border-t border-gray-100">
+            <nav class="flex flex-col space-y-3">
+                <a href="features.html" class="text-gray-700 hover:text-primary py-2 transition">Features</a>
+                <a href="pricing.html" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
+                <a href="about.html" class="text-gray-700 hover:text-primary py-2 transition">About Us</a>
+                <a href="#hero-section" class="text-primary font-semibold py-2 transition">Support</a>
+                <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
+                <a href="#cta-section"
+                    class="w-full bg-primary hover:bg-primary-dark text-white text-center font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
+                    Get Started
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Support Hero Section: Search & Title -->
+        <section id="hero-section" class="pt-16 pb-12 md:pt-20 md:pb-16 bg-primary text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
+                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+                    How Can We Help You Today?
+                </h1>
+                <p class="mt-4 text-xl opacity-90">
+                    Find instant answers in our Knowledge Base or connect with a support specialist.
+                </p>
+                
+                <!-- Mock Search Bar -->
+                <div class="mt-8 max-w-xl mx-auto">
+                    <div class="relative">
+                        <input type="search" placeholder="Search the Knowledge Base..."
+                            class="w-full py-3 pl-12 pr-4 rounded-xl text-gray-800 focus:ring-2 focus:ring-secondary focus:outline-none transition duration-300 shadow-lg"
+                            aria-label="Search support articles">
+                        <i data-lucide="search" class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Channels Grid -->
+        <section class="py-16 md:py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-12">
+                    Connect with Our Support Team
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                    
+                    <!-- Channel 1: Knowledge Base -->
+                    <a href="#" class="group block p-6 rounded-2xl shadow-xl border-t-4 border-secondary hover:shadow-2xl hover:scale-105 transition duration-300 bg-gray-50">
+                        <i data-lucide="book-open-text" class="w-10 h-10 text-secondary mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Knowledge Base</h4>
+                        <p class="text-gray-600 text-sm">Find step-by-step guides, video tutorials, and technical documentation 24/7.</p>
+                        <p class="text-secondary font-semibold mt-3 group-hover:underline">Browse Articles &rarr;</p>
+                    </a>
+
+                    <!-- Channel 2: Submit a Ticket -->
+                    <a href="#ticket-form" class="group block p-6 rounded-2xl shadow-xl border-t-4 border-primary hover:shadow-2xl hover:scale-105 transition duration-300 bg-gray-50">
+                        <i data-lucide="life-buoy" class="w-10 h-10 text-primary mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Submit a Ticket</h4>
+                        <p class="text-gray-600 text-sm">For complex issues, open a dedicated support ticket. We guarantee a response within 4 hours.</p>
+                        <p class="text-primary font-semibold mt-3 group-hover:underline">Open New Ticket &rarr;</p>
+                    </a>
+
+                    <!-- Channel 3: Live Chat -->
+                    <a href="#" class="group block p-6 rounded-2xl shadow-xl border-t-4 border-secondary hover:shadow-2xl hover:scale-105 transition duration-300 bg-gray-50">
+                        <i data-lucide="messages-square" class="w-10 h-10 text-secondary mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Live Chat</h4>
+                        <p class="text-gray-600 text-sm">Chat instantly with a support agent during business hours (9AM - 5PM EST).</p>
+                        <p class="text-secondary font-semibold mt-3 group-hover:underline">Chat Now &rarr;</p>
+                    </a>
+
+                    <!-- Channel 4: Phone Support (Premium Only) -->
+                    <div class="p-6 rounded-2xl shadow-xl border-t-4 border-gray-400 bg-gray-50">
+                        <i data-lucide="phone-call" class="w-10 h-10 text-gray-500 mb-4"></i>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Phone Support</h4>
+                        <p class="text-gray-600 text-sm">Dedicated 24/7 phone line for Premium subscribers and critical system emergencies.</p>
+                        <p class="text-gray-500 font-semibold mt-3">Available for Premium &rarr;</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Submit Ticket Form (Mock) -->
+        <section id="ticket-form" class="py-16 md:py-20 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl border-t-4 border-primary">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-6 text-center">
+                        Submit a New Support Request
+                    </h3>
+                    <form onsubmit="event.preventDefault(); showFormConfirmation();" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Your Full Name</label>
+                            <input type="text" id="name" name="name" required
+                                class="w-full border border-gray-300 p-3 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">College Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full border border-gray-300 p-3 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            <input type="text" id="subject" name="subject" required
+                                class="w-full border border-gray-300 p-3 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Detailed Description of Issue</label>
+                            <textarea id="message" name="message" rows="5" required
+                                class="w-full border border-gray-300 p-3 rounded-lg focus:ring-primary focus:border-primary transition duration-150"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl shadow-md transition duration-300 transform hover:scale-[1.01]">
+                            Send Support Request
+                        </button>
+                    </form>
+                    
+                    <!-- Confirmation Message Box (Hidden by default) -->
+                    <div id="confirmation-message" class="hidden mt-6 p-4 bg-secondary/10 border border-secondary text-gray-700 rounded-lg text-center font-medium">
+                        <p>Thank you! Your ticket has been submitted. A support specialist will contact you shortly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Popular FAQs Section -->
+        <section class="py-16 md:py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-12">
+                    Popular Troubleshooting
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- FAQ 1 -->
+                    <details class="group bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-primary transition duration-300">
+                        <summary class="flex justify-between items-center font-semibold text-lg text-gray-800 cursor-pointer">
+                            I cannot log in to the administrator dashboard.
+                            <i data-lucide="chevron-down" class="w-6 h-6 transform transition duration-300 group-open:rotate-180 text-primary"></i>
+                        </summary>
+                        <div class="pt-4 text-gray-600">
+                            Please ensure you are using the correct URL specific to your institution. If the issue persists, try clearing your browser cache and cookies, then attempt to reset your password using the "Forgot Password" link on the login screen.
+                        </div>
+                    </details>
+                    <!-- FAQ 2 -->
+                    <details class="group bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-primary transition duration-300">
+                        <summary class="flex justify-between items-center font-semibold text-lg text-gray-800 cursor-pointer">
+                            How do I schedule a new course semester?
+                            <i data-lucide="chevron-down" class="w-6 h-6 transform transition duration-300 group-open:rotate-180 text-primary"></i>
+                        </summary>
+                        <div class="pt-4 text-gray-600">
+                            Navigate to the **Academics** module, select **Timetabling**, and click "New Semester Setup." Our system will guide you through resource allocation, faculty assignment, and course mapping. Refer to the 'Course Scheduling Guide' in the Knowledge Base for detailed steps.
+                        </div>
+                    </details>
+                    <!-- FAQ 3 -->
+                    <details class="group bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-primary transition duration-300">
+                        <summary class="flex justify-between items-center font-semibold text-lg text-gray-800 cursor-pointer">
+                            Where can I download the latest API documentation?
+                            <i data-lucide="chevron-down" class="w-6 h-6 transform transition duration-300 group-open:rotate-180 text-primary"></i>
+                        </summary>
+                        <div class="pt-4 text-gray-600">
+                            The full REST API documentation, including endpoints and authentication details, is available in the **Developers Section** of the Knowledge Base. You must have Premium or Enterprise access rights to view and utilize the API.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- CTA Section (Consistent Styling) -->
+        <section id="cta-section" class="py-16 md:py-20 bg-primary text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+                <h2 class="text-4xl font-extrabold mb-4">
+                    Ready to Start Your Digital Campus Journey?
+                </h2>
+                <p class="text-xl mb-10 opacity-90">
+                    See the platform in action with a free, no-obligation demo.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button 
+                        class="bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl shadow-xl transition duration-300 transform hover:translate-y-0.5 hover:shadow-2xl">
+                        Request a Personalized Demo
+                    </button>
+                    <a href="features.html" 
+                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
+                        Explore Full Features List
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section (Same as Landing Page) -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
+                
+                <!-- Logo & Info -->
+                <div class="col-span-2 md:col-span-1">
+                    <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
+                        <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
+                        <span>CampusG</span>
+                    </a>
+                    <p class="text-sm">Powering the next generation of academic excellence.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Quick Links</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="features.html" class="hover:text-primary transition duration-150">Features</a></li>
+                        <li><a href="pricing.html" class="hover:text-primary transition duration-150">Pricing</a></li>
+                        <li><a href="#hero-section" class="hover:text-primary transition duration-150">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="md:col-span-1">
+                    <h5 class="text-white font-semibold mb-4">Legal</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary transition duration-150">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition duration-150">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-span-2 md:col-span-2">
+                    <h5 class="text-white font-semibold mb-4">Get In Touch</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-primary"></i> <a href="mailto:sales@campusg.com" class="hover:text-primary">sales@campusg.com</a></li>
+                        <li class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-primary"></i> +1 (555) 123-4567</li>
+                    </ul>
+
+                    <!-- Social Media Icons -->
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition duration-150"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Copyright -->
+            <div class="text-center text-sm text-gray-500 pt-4">
+                &copy; <span id="current-year-support"></span> CampusG, Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Initialize Lucide Icons and Year
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            document.getElementById('current-year-support').textContent = new Date().getFullYear();
+        });
+
+        // 2. Mobile Menu Toggle (Consistent across pages)
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuButton.querySelector('svg');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+            } else {
+                icon.outerHTML = lucide.createIcons({'icon': 'x'}).x.outerHTML;
+            }
+            lucide.createIcons(); // Recreate icons after changing HTML
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuButton.querySelector('svg');
+                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
+                lucide.createIcons();
+            });
+        });
+
+        // 3. Form Submission Confirmation (Non-blocking replacement for alert/confirm)
+        function showFormConfirmation() {
+            const form = document.querySelector('#ticket-form form');
+            const confirmation = document.getElementById('confirmation-message');
+
+            // Simulate form reset and showing success message
+            form.reset();
+            confirmation.classList.remove('hidden');
+
+            // Hide the message after 5 seconds
+            setTimeout(() => {
+                confirmation.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
