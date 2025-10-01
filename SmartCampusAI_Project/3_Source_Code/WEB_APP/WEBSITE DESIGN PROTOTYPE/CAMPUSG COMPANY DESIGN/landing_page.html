@@ -27,6 +27,18 @@
         ::-webkit-scrollbar-track {
             background: #e5e7eb;
         }
+
+        /* Custom class to manage smooth accordion/dropdown height transition in mobile */
+        .collapsible {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+        }
+        .collapsible.open {
+            max-height: 500px; /* Large enough value to handle content */
+            opacity: 1;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -48,17 +60,62 @@
     <header class="sticky top-0 z-50 bg-white shadow-md">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <!-- Logo -->
-            <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
+            <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-primary">
                 <i data-lucide="graduation-cap" class="w-7 h-7"></i>
                 <span>CampusG</span>
             </a>
 
             <!-- Navigation Menu (Desktop) -->
             <nav class="hidden lg:flex items-center space-x-8">
-                <a href="#features" class="text-gray-600 hover:text-primary transition duration-150">Features</a>
-                <a href="#pricing" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
-                <a href="#about" class="text-gray-600 hover:text-primary transition duration-150">About Us</a>
-                <a href="#support" class="text-gray-600 hover:text-primary transition duration-150">Support</a>
+                
+                <a href="features.html" class="text-gray-600 hover:text-primary transition duration-150">Features</a>
+                <a href="pricing.html" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
+
+                <!-- Dropdown 1: About Us -->
+                <div class="relative group" id="desktop-about-us">
+                    <button class="flex items-center text-gray-600 hover:text-primary transition duration-150 py-2">
+                        About Us 
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180"></i>
+                    </button>
+                    <div class="absolute left-1/2 -translate-x-1/2 mt-0 w-48 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 transform scale-95 group-hover:scale-100 border border-gray-100 z-50">
+                        <div class="flex flex-col p-2">
+                            <a href="about.html#team" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Team</a>
+                            <a href="#testimonials" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Testimonials</a>
+                            <a href="#" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Careers</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown 2: Resources -->
+                <div class="relative group" id="desktop-resources">
+                    <button class="flex items-center text-gray-600 hover:text-primary transition duration-150 py-2">
+                        Resources
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180"></i>
+                    </button>
+                    <div class="absolute left-1/2 -translate-x-1/2 mt-0 w-48 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 transform scale-95 group-hover:scale-100 border border-gray-100 z-50">
+                        <div class="flex flex-col p-2">
+                            <a href="#" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Blog</a>
+                            <a href="#" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Case Studies</a>
+                            <a href="support.html#knowledge-base" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Documentation</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown 3: Support -->
+                <div class="relative group" id="desktop-support">
+                    <button class="flex items-center text-gray-600 hover:text-primary transition duration-150 py-2">
+                        Support
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180"></i>
+                    </button>
+                    <div class="absolute left-1/2 -translate-x-1/2 mt-0 w-48 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 transform scale-95 group-hover:scale-100 border border-gray-100 z-50">
+                        <div class="flex flex-col p-2">
+                            <a href="support.html#faq" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">FAQ</a>
+                            <a href="support.html#ticket-form" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Contact</a>
+                            <a href="support.html" class="text-gray-700 hover:text-primary hover:bg-indigo-50 px-3 py-2 rounded-lg transition duration-150">Help Center</a>
+                        </div>
+                    </div>
+                </div>
+
                 <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
                 
                 <!-- Prominent “Get Started” button -->
@@ -77,10 +134,48 @@
         <!-- Mobile Menu Drawer (Hidden by default) -->
         <div id="mobile-menu" class="hidden lg:hidden p-4 bg-white border-t border-gray-100">
             <nav class="flex flex-col space-y-3">
-                <a href="#features" class="text-gray-700 hover:text-primary py-2 transition">Features</a>
-                <a href="#pricing" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
-                <a href="#about" class="text-gray-700 hover:text-primary py-2 transition">About Us</a>
-                <a href="#support" class="text-gray-700 hover:text-primary py-2 transition">Support</a>
+                <a href="features.html" class="text-gray-700 hover:text-primary py-2 transition">Features</a>
+                <a href="pricing.html" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
+
+                <!-- Mobile Dropdown 1: About Us -->
+                <div class="border-b border-gray-100">
+                    <button class="mobile-dropdown-toggle flex justify-between items-center w-full text-gray-700 hover:text-primary py-2 font-medium" data-target="about-links">
+                        About Us
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform"></i>
+                    </button>
+                    <div id="about-links" class="collapsible flex flex-col pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
+                        <a href="about.html#team" class="text-gray-600 hover:text-primary py-1 transition">Team</a>
+                        <a href="#testimonials" class="text-gray-600 hover:text-primary py-1 transition">Testimonials</a>
+                        <a href="#" class="text-gray-600 hover:text-primary py-1 transition">Careers</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Dropdown 2: Resources -->
+                <div class="border-b border-gray-100">
+                    <button class="mobile-dropdown-toggle flex justify-between items-center w-full text-gray-700 hover:text-primary py-2 font-medium" data-target="resources-links">
+                        Resources
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform"></i>
+                    </button>
+                    <div id="resources-links" class="collapsible flex flex-col pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
+                        <a href="#" class="text-gray-600 hover:text-primary py-1 transition">Blog</a>
+                        <a href="#" class="text-gray-600 hover:text-primary py-1 transition">Case Studies</a>
+                        <a href="support.html#knowledge-base" class="text-gray-600 hover:text-primary py-1 transition">Documentation</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Dropdown 3: Support -->
+                <div class="border-b border-gray-100">
+                    <button class="mobile-dropdown-toggle flex justify-between items-center w-full text-gray-700 hover:text-primary py-2 font-medium" data-target="support-links">
+                        Support
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1 transition-transform"></i>
+                    </button>
+                    <div id="support-links" class="collapsible flex flex-col pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
+                        <a href="support.html#faq" class="text-gray-600 hover:text-primary py-1 transition">FAQ</a>
+                        <a href="support.html#ticket-form" class="text-gray-600 hover:text-primary py-1 transition">Contact</a>
+                        <a href="support.html" class="text-gray-600 hover:text-primary py-1 transition">Help Center</a>
+                    </div>
+                </div>
+
                 <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
                 <button onclick="document.getElementById('demo-form').scrollIntoView({ behavior: 'smooth' });"
                     class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
@@ -112,8 +207,8 @@
                             Request a Demo
                         </button>
                         <!-- Secondary CTA -->
-                        <a href="#pricing" 
-                           class="border border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
+                        <a href="pricing.html" 
+                            class="border border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md flex items-center justify-center">
                             See Pricing
                         </a>
                     </div>
@@ -122,9 +217,9 @@
                 <!-- Visual element (Dashboard Mockup Placeholder) -->
                 <div class="lg:flex justify-end hidden">
                     <img src="https://placehold.co/600x450/4f46e5/ffffff?text=Dashboard+Visual" 
-                         alt="CampusG Software Dashboard Mockup" 
-                         class="rounded-2xl shadow-2xl transition duration-500 hover:shadow-3xl transform hover:scale-[1.01] max-w-full h-auto"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x450/4f46e5/ffffff?text=Visual+Element';">
+                            alt="CampusG Software Dashboard Mockup" 
+                            class="rounded-2xl shadow-2xl transition duration-500 hover:shadow-3xl transform hover:scale-[1.01] max-w-full h-auto"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x450/4f46e5/ffffff?text=Visual+Element';">
                 </div>
             </div>
         </section>
@@ -258,7 +353,7 @@
                 </h2>
                 <p class="text-xl text-center text-gray-600 mb-12">No hidden fees. Scale as your institution grows.</p>
 
-                <!-- Pricing Toggle -->
+                <!-- Pricing Toggle (Retained from previous version, though inconsistent with dedicated pricing page) -->
                 <div class="flex justify-center mb-12">
                     <div class="inline-flex rounded-full bg-gray-200 p-1">
                         <button id="monthly-toggle" class="py-2 px-6 rounded-full text-white bg-primary font-medium transition duration-300">Monthly</button>
@@ -270,7 +365,7 @@
                 <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     
                     <!-- Plan 1: Basic -->
-                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200">
+                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200" data-plan="basic">
                         <div>
                             <span class="text-sm font-semibold text-primary">Starter</span>
                             <h3 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Basic Plan</h3>
@@ -293,7 +388,7 @@
                     </div>
 
                     <!-- Plan 2: Standard (Recommended) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-2xl ring-4 ring-primary flex flex-col justify-between relative transform scale-[1.02]">
+                    <div class="plan-card bg-white p-8 rounded-2xl shadow-2xl ring-4 ring-primary flex flex-col justify-between relative transform scale-[1.02]" data-plan="standard">
                         <!-- Badge -->
                         <div class="absolute top-0 right-0 -mt-4 -mr-4 bg-secondary text-white text-xs font-bold py-1 px-4 rounded-full shadow-lg">
                             Recommended
@@ -320,7 +415,7 @@
                     </div>
 
                     <!-- Plan 3: Premium -->
-                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200">
+                    <div class="bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-gray-200" data-plan="premium">
                         <div>
                             <span class="text-sm font-semibold text-primary">Enterprise</span>
                             <h3 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Premium Plan</h3>
@@ -356,7 +451,7 @@
         </section>
 
         <!-- Testimonials Section -->
-        <section class="py-16 md:py-24 bg-gray-50">
+        <section id="testimonials" class="py-16 md:py-24 bg-gray-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-12">
                     What Our Clients Say
@@ -401,7 +496,7 @@
                 </p>
 
                 <!-- Demo Request Form -->
-                <form class="bg-white p-8 md:p-12 rounded-2xl shadow-3xl space-y-6 text-gray-800">
+                <form onsubmit="event.preventDefault(); document.getElementById('form-message').classList.remove('hidden');" class="bg-white p-8 md:p-12 rounded-2xl shadow-3xl space-y-6 text-gray-800">
                     <div class="grid md:grid-cols-2 gap-6">
                         <!-- Name -->
                         <div>
@@ -439,6 +534,11 @@
                     <p class="text-xs text-center text-gray-500 pt-2">
                         We respect your privacy. No spam, only solutions.
                     </p>
+                    
+                    <!-- Non-blocking message box -->
+                    <div id="form-message" class="hidden mt-4 p-4 bg-secondary/10 border border-secondary text-gray-700 rounded-lg text-center font-medium">
+                        <p>Your demo request has been sent! We will contact you soon to schedule a time.</p>
+                    </div>
                 </form>
 
             </div>
@@ -452,7 +552,7 @@
                 
                 <!-- Logo & Info -->
                 <div class="col-span-2 md:col-span-1">
-                    <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
+                    <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
                         <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
                         <span>CampusG</span>
                     </a>
@@ -463,9 +563,9 @@
                 <div class="md:col-span-1">
                     <h5 class="text-white font-semibold mb-4">Quick Links</h5>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#features" class="hover:text-primary transition duration-150">Features</a></li>
-                        <li><a href="#pricing" class="hover:text-primary transition duration-150">Pricing</a></li>
-                        <li><a href="#support" class="hover:text-primary transition duration-150">Support</a></li>
+                        <li><a href="features.html" class="hover:text-primary transition duration-150">Features</a></li>
+                        <li><a href="pricing.html" class="hover:text-primary transition duration-150">Pricing</a></li>
+                        <li><a href="support.html" class="hover:text-primary transition duration-150">Support</a></li>
                     </ul>
                 </div>
 
@@ -506,13 +606,13 @@
 
     <!-- JavaScript for Interactivity -->
     <script>
-        // 1. Initialize Lucide Icons
+        // 1. Initialize Lucide Icons and Year
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             document.getElementById('current-year').textContent = new Date().getFullYear();
         });
 
-        // 2. Mobile Menu Toggle
+        // 2. Mobile Menu Toggle (Main Nav)
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -527,27 +627,35 @@
             lucide.createIcons(); // Recreate icons after changing HTML
         });
 
-        // Close mobile menu on link click (for smooth scrolling)
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                const icon = mobileMenuButton.querySelector('svg');
-                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
-                lucide.createIcons();
+        // 3. Mobile Dropdown Toggle (Accordion Logic)
+        const dropdownToggles = document.querySelectorAll('.mobile-dropdown-toggle');
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const targetId = toggle.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                const icon = toggle.querySelector('svg');
+
+                const isOpen = targetElement.classList.toggle('open');
+                
+                // Toggle rotation of the arrow icon
+                if (isOpen) {
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
             });
         });
 
-        // 3. Pricing Toggle Logic
+        // 4. Pricing Toggle Logic (Retained from previous version)
         const monthlyToggle = document.getElementById('monthly-toggle');
         const annualToggle = document.getElementById('annual-toggle');
-
-        // Price elements
         const priceBasic = document.getElementById('price-basic');
         const priceStandard = document.getElementById('price-standard');
         const pricePremium = document.getElementById('price-premium');
 
-        // Prices (Monthly vs Annual - Annual is 20% off)
         const monthlyPrices = { basic: 99, standard: 249, premium: 499 };
+        // Annual prices (20% off)
         const annualPrices = { 
             basic: Math.round(99 * 12 * 0.8), // 950
             standard: Math.round(249 * 12 * 0.8), // 2390
@@ -578,7 +686,6 @@
             }
         }
 
-        // Event Listeners for the toggle
         monthlyToggle.addEventListener('click', () => updatePricing(false));
         annualToggle.addEventListener('click', () => updatePricing(true));
 
