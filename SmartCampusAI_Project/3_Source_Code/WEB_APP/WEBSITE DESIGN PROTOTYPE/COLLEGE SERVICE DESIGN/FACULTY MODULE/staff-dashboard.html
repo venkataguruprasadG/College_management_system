@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CampusG - Staff Dashboard</title>
+<style>
+  :root{
+    --blue-600:#2b6cf6;
+    --blue-700:#1a4bd6;
+    --muted:#f3f5f9;
+    --card:#ffffff;
+    --glass: rgba(255,255,255,0.85);
+    --text:#222;
+    --accent:#6c3cf6;
+    --success:#23c38a;
+    --danger:#ff5c6c;
+    --shadow: 0 6px 20px rgba(30,40,80,0.06);
+    --radius:12px;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui,Arial,sans-serif;background:#f6f8fb;color:var(--text)}
+  /* Layout */
+  .app {
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    height:100vh;
+    gap:0;
+  }
+  /* Left sidebar (collapsible) */
+  .sidebar {
+    background:linear-gradient(180deg,var(--blue-600),var(--accent));
+    padding:20px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand .logo {
+    width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;
+  }
+  .brand h3{margin:0;font-size:18px}
+  .profile-mini {display:flex;align-items:center;gap:12px;margin-top:6px}
+  .profile-mini img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.25)}
+  .profile-mini .info{font-size:14px}
+  .profile-mini .info strong{display:block}
+  .nav {margin-top:8px; display:flex;flex-direction:column;gap:8px}
+  .nav button {background:transparent;border:0;color:white;text-align:left;padding:10px;border-radius:8px;cursor:pointer;font-weight:600}
+  .nav button:hover{background:rgba(255,255,255,0.06)}
+  .collapse-btn{margin-top:auto;display:flex;gap:10px;align-items:center}
+  .collapse-btn button{background:rgba(255,255,255,0.08);border:0;color:white;padding:8px 12px;border-radius:8px;cursor:pointer}
+  /* Main area */
+  .main {
+    padding:22px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+  }
+  .topbar .left {display:flex;gap:12px;align-items:center}
+  .toggle-sidebar{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid #e8eefb;background:white;cursor:pointer}
+  .welcome{font-size:18px;font-weight:700}
+  .notif-pill{background:var(--card);padding:8px 12px;border-radius:12px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow)}
+  .search {flex:1;display:flex;justify-content:flex-end}
+  .search input{padding:10px 12px;border-radius:10px;border:1px solid #e6eefb;min-width:220px}
+  /* Cards grid */
+  .grid {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:14px;
+  }
+  .card {
+    background:var(--card);
+    padding:14px;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    min-height:80px;
+  }
+  .card h4{margin:0 0 8px 0;font-size:14px}
+  .stat-large{font-weight:700;font-size:22px}
+  /* Widgets grid responsive */
+  @media (max-width:1100px){
+    .app{grid-template-columns:260px 1fr}
+    .grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:760px){
+    .app{grid-template-columns:1fr}
+    .sidebar{position:fixed;left:-320px;top:0;height:100vh;z-index:60;transition:all .25s}
+    .sidebar.open{left:0}
+    .main{padding:14px}
+    .grid{grid-template-columns:1fr}
+  }
+  /* Widgets specific */
+  .welcome-widget {display:flex;align-items:center;gap:14px}
+  .welcome-widget img{width:72px;height:72px;border-radius:10px;object-fit:cover;border:3px solid var(--blue-600)}
+  .notifications-list{display:flex;flex-direction:column;gap:8px}
+  .notif {display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;border:1px solid #f0f4fb}
+  .notif .dot{width:10px;height:10px;border-radius:50%;background:var(--blue-600);margin-top:6px}
+  .small {font-size:13px;color:#556}
+  .tasks-list{display:flex;flex-direction:column;gap:8px}
+  .task {display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px dashed #eef3ff}
+  .task .left{display:flex;gap:10px;align-items:center}
+  .task input[type=checkbox]{transform:scale(1.1)}
+  .students-table {width:100%;border-collapse:collapse}
+  .students-table th, .students-table td{padding:8px;text-align:left;border-bottom:1px solid #f3f6fb;font-size:13px}
+  .small-muted{font-size:12px;color:#778}
+  .course-shortcuts {display:flex;flex-wrap:wrap;gap:8px}
+  .course-shortcuts button{padding:8px 12px;border-radius:8px;border:1px solid #eef3ff;background:transparent;cursor:pointer}
+  .calendar {display:flex;flex-direction:column;gap:8px}
+  .appointment{display:flex;justify-content:space-between;padding:8px;border-radius:8px;border:1px solid #f3f6fb}
+  /* Drag handle */
+  .card .handle {float:right;opacity:0.6;cursor:grab}
+  /* Controls area */
+  .controls {display:flex;gap:10px;align-items:center}
+  .controls button{padding:8px 12px;border-radius:8px;border:1px solid #eef3ff;background:white;cursor:pointer}
+  /* Chart canvas style */
+  .chart {width:100%;height:100px}
+  /* Widget header */
+  .widget-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .widget-header .title{font-weight:700}
+  /* Visibility toggles modal */
+  .widget-chooser {position:fixed;right:18px;bottom:18px;background:white;padding:12px;border-radius:10px;box-shadow:var(--shadow);z-index:80}
+  .dragging{opacity:.6;transform:scale(.98)}
+  /* mini KPI */
+  .kpi {display:flex;gap:12px;align-items:center}
+  .kpi .bar{height:8px;background:#eef3ff;border-radius:999px;width:120px;overflow:hidden}
+  .kpi .bar .fill{height:100%;background:var(--accent)}
+  .footer {padding:18px;text-align:center;color:#889;border-top:1px solid #f1f4fb;font-size:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">CG</div>
+      <div>
+        <h3>CampusG</h3>
+        <div class="small">Staff Dashboard</div>
+      </div>
+    </div>
+
+    <div class="profile-mini">
+      <img id="miniAvatar" src="https://via.placeholder.com/120" alt="staff avatar">
+      <div class="info">
+        <strong id="miniName">Dr. A. Sharma</strong>
+        <div class="small-muted" id="miniRole">Associate Professor · CSE</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button onclick="showSection('home')">Dashboard Home</button>
+      <button onclick="showSection('profile')">Profile</button>
+      <button onclick="showSection('courses')">Courses</button>
+      <button onclick="showSection('students')">Students</button>
+      <button onclick="showSection('leave')">Leave</button>
+      <button onclick="showSection('messages')">Messages</button>
+      <button onclick="showSection('resources')">Resources</button>
+    </nav>
+
+    <div style="margin-top:12px">
+      <div class="small-muted">Quick links</div>
+      <div style="margin-top:8px" class="course-shortcuts">
+        <button onclick="alert('Open Course Management')">Manage Materials</button>
+        <button onclick="alert('Open Attendance')">Attendance</button>
+        <button onclick="alert('Open Gradebook')">Gradebook</button>
+      </div>
+    </div>
+
+    <div class="collapse-btn">
+      <button id="toggleSidebarBtn">Close</button>
+      <button onclick="openWidgetChooser()">Widgets</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main" id="main">
+    <div class="topbar">
+      <div class="left">
+        <div class="toggle-sidebar" onclick="toggleSidebar()">
+          ☰ <span style="margin-left:6px">Menu</span>
+        </div>
+        <div style="margin-left:12px">
+          <div class="welcome">Welcome back, <span id="staffName">Dr. A. Sharma</span></div>
+          <div class="small-muted">Faculty · Computer Science</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="notif-pill" title="notifications">
+          🔔 <span id="notifCount">3</span>
+        </div>
+        <div class="search">
+          <input id="globalSearch" placeholder="Search students, courses, messages..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Quick-stats -->
+    <section class="grid" id="widgetsGrid">
+      <!-- Welcome widget -->
+      <div class="card widget" draggable="true" data-id="welcome" id="widget-welcome">
+        <div class="widget-header"><div class="title">Welcome & Notifications</div><div class="handle">≡</div></div>
+        <div class="welcome-widget">
+          <img src="https://via.placeholder.com/160" alt="profile" id="profileBig">
+          <div>
+            <div style="font-weight:700">Dr. Asha Sharma</div>
+            <div class="small-muted">Associate Professor — CSE</div>
+            <div style="margin-top:8px">
+              <button onclick="openProfileEditor()" class="btn" style="padding:8px 10px;border-radius:8px;background:var(--blue-600);border:0;color:white">Edit Profile</button>
+              <button onclick="alert('Open messages')" class="btn" style="padding:8px 10px;border-radius:8px;background:#eee;color:var(--text)">Messages</button>
+            </div>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid #f2f6ff;margin:12px 0">
+        <div class="notifications-list">
+          <div class="notif"><div class="dot"></div><div><strong>Meeting at 3:00 PM</strong><div class="small">Dept. board meeting in Room 102</div></div></div>
+          <div class="notif"><div class="dot"></div><div><strong>Grade submissions pending</strong><div class="small">2 courses need grading</div></div></div>
+          <div class="notif"><div class="dot" style="background:var(--accent)"></div><div><strong>System maintenance</strong><div class="small">Scheduled tonight 11:00 PM</div></div></div>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="card widget" draggable="true" data-id="quickstats" id="widget-quickstats">
+        <div class="widget-header"><div class="title">Overview</div><div class="handle">≡</div></div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="flex:1">
+            <h4>Today's Classes</h4>
+            <div class="stat-large">2</div>
+            <div class="small-muted">3 meetings</div>
+          </div>
+          <div style="flex:1">
+            <h4>Pending Tasks</h4>
+            <div class="stat-large" id="pendingCount">5</div>
+            <div class="small-muted">Grade submissions & approvals</div>
+          </div>
+          <div style="flex:1">
+            <h4>Attendance (Today)</h4>
+            <div class="stat-large">92%</div>
+            <div class="small-muted">Avg across your courses</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student performance chart -->
+      <div class="card widget" draggable="true" data-id="chart" id="widget-chart">
+        <div class="widget-header"><div class="title">Student Performance (Last 4 weeks)</div><div class="handle">≡</div></div>
+        <canvas id="perfChart" class="chart"></canvas>
+      </div>
+
+      <!-- Tasks -->
+      <div class="card widget" draggable="true" data-id="tasks" id="widget-tasks">
+        <div class="widget-header"><div class="title">Task Manager</div><div class="handle">≡</div></div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input id="newTaskInput" placeholder="Add a task..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #eef3ff">
+          <button onclick="addTask()" class="btn" style="padding:8px 10px;border-radius:8px">Add</button>
+        </div>
+        <div class="tasks-list" id="tasksList"></div>
+      </div>
+
+      <!-- Messages -->
+      <div class="card widget" draggable="true" data-id="messages" id="widget-messages">
+        <div class="widget-header"><div class="title">Communications Hub</div><div class="handle">≡</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between">
+            <div><strong>Inbox</strong><div class="small-muted">3 new messages</div></div>
+            <div><button onclick="alert('Compose message')">Compose</button></div>
+          </div>
+          <div style="border-top:1px solid #f3f6fb;padding-top:8px">
+            <div class="small">From: Principal - Meeting notes</div>
+            <div class="small">From: Student (CS102) - Assignment query</div>
+            <div class="small">From: Admin - Payment receipt</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students / Advisees -->
+      <div class="card widget" draggable="true" data-id="students" id="widget-students">
+        <div class="widget-header"><div class="title">Assigned Students</div><div class="handle">≡</div></div>
+        <table class="students-table">
+          <thead><tr><th>Name</th><th>Attendance</th><th>Avg Grade</th></tr></thead>
+          <tbody id="studentsTbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Calendar / Schedule -->
+      <div class="card widget" draggable="true" data-id="calendar" id="widget-calendar">
+        <div class="widget-header"><div class="title">My Schedule</div><div class="handle">≡</div></div>
+        <div class="calendar" id="calendarList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Leave & Attendance -->
+      <div class="card widget" draggable="true" data-id="leave" id="widget-leave">
+        <div class="widget-header"><div class="title">Leave & Attendance</div><div class="handle">≡</div></div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="flex:1">
+            <h4>Leave Balance</h4>
+            <div class="small-muted">Casual: 6 days · Sick: 4 days</div>
+          </div>
+          <div style="flex:1">
+            <h4>Pending Requests</h4>
+            <div class="small-muted">1 awaiting approval</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course shortcuts -->
+      <div class="card widget" draggable="true" data-id="courses" id="widget-courses">
+        <div class="widget-header"><div class="title">Course Management</div><div class="handle">≡</div></div>
+        <div class="course-shortcuts" id="coursesList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Performance KPI -->
+      <div class="card widget" draggable="true" data-id="kpi" id="widget-kpi">
+        <div class="widget-header"><div class="title">Performance Analytics</div><div class="handle">≡</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="kpi"><div>Avg Feedback</div><div style="margin-left:auto;font-weight:700">4.5 / 5</div></div>
+          <div class="kpi"><div>Grading Turnaround</div><div style="margin-left:auto;font-weight:700">2.3 days</div></div>
+          <div class="kpi"><div>Student Engagement</div><div style="margin-left:auto;width:140px"><div class="bar"><div class="fill" style="width:78%"></div></div></div></div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="footer small-muted">CampusG • Staff Portal • &copy; <span id="year"></span></div>
+
+  </main>
+</div>
+
+<!-- Widget chooser (show/hide widgets) -->
+<div id="widgetChooser" class="widget-chooser" style="display:none">
+  <strong>Widgets</strong>
+  <div style="margin-top:8px" id="widgetsToggles"></div>
+  <div style="text-align:right;margin-top:8px"><button onclick="closeWidgetChooser()">Close</button></div>
+</div>
+
+<script>
+/* ---------- Sample data ---------- */
+const sampleStudents = [
+  {name:'Kavya S',att:95,grade:'A'},
+  {name:'Rohit P',att:88,grade:'B+'},
+  {name:'Neha M',att:91,grade:'A-'},
+  {name:'Arjun K',att:76,grade:'B'},
+  {name:'Pranav R',att:84,grade:'B+'},
+];
+
+const sampleCourses = [
+  {code:'CS101',title:'Intro to Programming'},
+  {code:'CS204',title:'Data Structures'},
+  {code:'CS302',title:'Operating Systems'},
+];
+
+const schedule = [
+  {time:'09:00 - 10:00',title:'CS101 - Lecture',loc:'Room 201'},
+  {time:'11:00 - 12:00',title:'Dept Meeting',loc:'Room 102'},
+  {time:'14:00 - 15:30',title:'Office Hours',loc:'Consult Room'},
+];
+
+/* ---------- Utilities ---------- */
+function $(s){return document.querySelector(s)}
+function $all(s){return Array.from(document.querySelectorAll(s))}
+
+/* ---------- Render initial data ---------- */
+function renderStudents(){
+  const tbody = $('#studentsTbody');
+  tbody.innerHTML = '';
+  sampleStudents.forEach(s=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${s.name}</strong><div class="small-muted">Advisee</div></td>
+                    <td>${s.att}%</td>
+                    <td>${s.grade}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderCourses(){
+  const cwrap = $('#coursesList');
+  cwrap.innerHTML = '';
+  sampleCourses.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.textContent = `${c.code} · ${c.title}`;
+    btn.onclick = ()=>alert('Open '+c.code);
+    cwrap.appendChild(btn);
+  });
+}
+
+function renderSchedule(){
+  const el = $('#calendarList');
+  el.innerHTML = '';
+  schedule.forEach(s=>{
+    const div = document.createElement('div');
+    div.className='appointment';
+    div.innerHTML = `<div><strong>${s.title}</strong><div class="small-muted">${s.loc}</div></div><div class="small-muted">${s.time}</div>`;
+    el.appendChild(div);
+  });
+}
+
+/* ---------- Tasks Manager ---------- */
+let tasks = [
+  {id:1, text:'Submit grades for CS101',done:false},
+  {id:2, text:'Approve leave request - Neha',done:false},
+  {id:3, text:'Upload assignment solutions',done:true},
+];
+
+function renderTasks(){
+  const list = $('#tasksList');
+  list.innerHTML = '';
+  tasks.forEach(t=>{
+    const div = document.createElement('div');
+    div.className='task';
+    div.innerHTML = `<div class="left"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})"><div>${t.text}</div></div>
+      <div><button onclick="removeTask(${t.id})">✕</button></div>`;
+    list.appendChild(div);
+  });
+  document.getElementById('pendingCount').textContent = tasks.filter(t=>!t.done).length;
+}
+
+function addTask(){
+  const val = $('#newTaskInput').value.trim();
+  if(!val) return;
+  const id = Date.now();
+  tasks.unshift({id,text:val,done:false});
+  $('#newTaskInput').value='';
+  saveState();
+  renderTasks();
+}
+function toggleTask(id){
+  tasks = tasks.map(t=> t.id===id? {...t,done:!t.done}:t);
+  saveState(); renderTasks();
+}
+function removeTask(id){
+  tasks = tasks.filter(t=>t.id!==id);
+  saveState(); renderTasks();
+}
+
+/* ---------- Simple performance chart (canvas) ---------- */
+function drawPerfChart(){
+  const canvas = document.getElementById('perfChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  // sample weekly scores
+  const data = [68,72,75,80,82,85,88,87];
+  const padding = 24;
+  const max = 100;
+  // background grid
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='#eef4ff';
+  for(let i=0;i<5;i++){
+    const y = padding + i*(h-2*padding)/4;
+    ctx.beginPath(); ctx.moveTo(padding,y); ctx.lineTo(w-padding,y); ctx.stroke();
+  }
+  // polyline
+  ctx.beginPath();
+  data.forEach((v,i)=>{
+    const x = padding + i*(w-padding*2)/(data.length-1);
+    const y = padding + (1 - v/max)*(h-2*padding);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle = 'rgba(43,108,246,0.95)';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  // dots
+  data.forEach((v,i)=>{
+    const x = padding + i*(w-padding*2)/(data.length-1);
+    const y = padding + (1 - v/max)*(h-2*padding);
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fillStyle='white'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.strokeStyle='rgba(43,108,246,0.95)'; ctx.stroke();
+  });
+}
+
+/* ---------- Sidebar toggle ---------- */
+const sidebar = document.getElementById('sidebar');
+function toggleSidebar(){
+  if(window.innerWidth<=760){
+    sidebar.classList.toggle('open');
+    return;
+  }
+  if(sidebar.style.width==='60px'){
+    sidebar.style.width='320px'; $('#toggleSidebarBtn').textContent='Close';
+  } else {
+    sidebar.style.width='60px'; $('#toggleSidebarBtn').textContent='Open';
+  }
+}
+
+/* ---------- Sections (just placeholders to simulate link) ---------- */
+function showSection(name){
+  alert('Navigate to: ' + name);
+}
+
+/* ---------- Profile editor ---------- */
+function openProfileEditor(){
+  const newname = prompt('Edit full name', $('#staffName').textContent);
+  if(newname){ $('#staffName').textContent=newname; $('#miniName').textContent=newname; saveState(); }
+}
+
+/* ---------- Widget show/hide chooser ---------- */
+function openWidgetChooser(){
+  const chooser = $('#widgetChooser'); chooser.style.display='block';
+  const toggles = $('#widgetsToggles'); toggles.innerHTML='';
+  const widgets = $all('.widget');
+  widgets.forEach(w=>{
+    const id = w.dataset.id;
+    const label = id.charAt(0).toUpperCase()+id.slice(1);
+    const div = document.createElement('div');
+    const checked = !w.classList.contains('hidden');
+    div.innerHTML = `<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${checked?'checked':''} onchange="toggleWidget('${id}',this.checked)"> ${label}</label>`;
+    toggles.appendChild(div);
+  });
+}
+function closeWidgetChooser(){ $('#widgetChooser').style.display='none' }
+function toggleWidget(id,show){
+  const w = $(`#widget-${id}`);
+  if(!w) return;
+  if(show) w.classList.remove('hidden'); else w.classList.add('hidden');
+  saveState();
+}
+
+/* ---------- Drag & drop reorder (HTML5) ---------- */
+let dragSrc = null;
+const grid = document.getElementById('widgetsGrid');
+function setupDrag(){
+  const widgets = $all('.widget');
+  widgets.forEach(w=>{
+    w.addEventListener('dragstart', handleDragStart);
+    w.addEventListener('dragover', handleDragOver);
+    w.addEventListener('drop', handleDrop);
+    w.addEventListener('dragend', handleDragEnd);
+  });
+}
+function handleDragStart(e){
+  dragSrc = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function handleDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  const target = this;
+  if(target === dragSrc) return;
+  const rect = target.getBoundingClientRect();
+  const next = (e.clientY - rect.top) > rect.height/2;
+  grid.insertBefore(dragSrc, next ? target.nextSibling : target);
+}
+function handleDrop(e){ e.stopPropagation(); saveState(); }
+function handleDragEnd(e){ this.classList.remove('dragging'); }
+
+/* ---------- Persist layout & data ---------- */
+function saveState(){
+  const widgetIds = Array.from($all('.widget')).map(w=>w.dataset.id);
+  const hidden = Array.from($all('.widget.hidden')).map(w=>w.dataset.id);
+  const state = {widgetOrder:widgetIds,hidden:hidden,tasks,tasksTime:Date.now()};
+  localStorage.setItem('staffDashboardState', JSON.stringify(state));
+}
+function loadState(){
+  const raw = localStorage.getItem('staffDashboardState');
+  if(!raw) return;
+  try{
+    const state = JSON.parse(raw);
+    if(state.widgetOrder){
+      const container = $('#widgetsGrid');
+      state.widgetOrder.forEach(id=>{
+        const n = $(`#widget-${id}`);
+        if(n) container.appendChild(n);
+      });
+    }
+    if(state.hidden) state.hidden.forEach(id=>{
+      const n = $(`#widget-${id}`);
+      if(n) n.classList.add('hidden');
+    });
+    if(state.tasks) tasks = state.tasks;
+  }catch(e){ console.warn('Could not load state',e) }
+}
+
+/* ---------- Simple search (filter students) ---------- */
+$('#globalSearch').addEventListener('input', (e)=>{
+  const q = e.target.value.toLowerCase();
+  const rows = $all('#studentsTbody tr');
+  rows.forEach(r=>{
+    const txt = r.textContent.toLowerCase();
+    r.style.display = txt.includes(q)? 'table-row':'none';
+  });
+});
+
+/* ---------- Save on unload ---------- */
+window.addEventListener('beforeunload', saveState);
+
+/* ---------- Init ---------- */
+function init(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+  renderStudents();
+  renderCourses();
+  renderSchedule();
+  renderTasks();
+  drawPerfChart();
+  setupDrag();
+  loadState();
+  // re-setup drag after potential reorder load:
+  setTimeout(setupDrag, 200);
+}
+init();
+
+/* ---------- Responsive: hide sidebar on small screens ---------- */
+window.addEventListener('resize', ()=>{
+  if(window.innerWidth>760) sidebar.classList.remove('open');
+});
+
+/* ---------- Simple save every 10s to persist tasks ---------- */
+setInterval(saveState, 10000);
+</script>
+</body>
+</html>
