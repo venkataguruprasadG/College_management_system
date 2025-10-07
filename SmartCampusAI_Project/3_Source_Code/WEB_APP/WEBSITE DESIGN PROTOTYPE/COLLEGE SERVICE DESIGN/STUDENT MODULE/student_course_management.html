@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement & Training Enrollment Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for better appearance */
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #9ca3af;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track { background: #f3f4f6; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div id="app" class="max-w-7xl mx-auto p-4 md:p-8">
+
+        <!-- Header - Updated for Professional Focus -->
+        <header class="bg-white shadow-xl rounded-xl mb-8 p-4 md:p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <h1 class="text-4xl font-extrabold text-indigo-800">Placement & Skill Development Portal</h1>
+                <div class="text-sm mt-3 md:mt-0 text-gray-600 bg-gray-100 p-2 rounded-lg">
+                    <span class="font-semibold">Student ID (Prototype):</span> 
+                    <span id="user-id" class="break-all font-mono text-xs bg-gray-300 px-2 py-1 rounded">PROTOTYPE-USER-12345</span>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="mt-4 border-t pt-4">
+                <div class="flex space-x-4">
+                    <button id="nav-browse" class="nav-button px-6 py-2 rounded-xl font-bold transition duration-150 ease-in-out bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transform hover:scale-[1.02]">
+                        Browse Programs
+                    </button>
+                    <button id="nav-mycourses" class="nav-button px-6 py-2 rounded-xl font-bold transition duration-150 ease-in-out text-gray-700 bg-gray-200 hover:bg-gray-300 transform hover:scale-[1.02]">
+                        My Enrollments
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="content-area" class="bg-white p-6 md:p-8 rounded-xl shadow-xl min-h-[60vh] flex flex-col">
+            <div id="loading-indicator" class="text-center py-16 text-2xl font-semibold text-indigo-500 hidden">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full mr-3"></div>
+                Fetching Placement Programs...
+            </div>
+            <div id="error-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden" role="alert">
+                <strong class="font-bold">Error:</strong>
+                <span id="error-text" class="block sm:inline"></span>
+            </div>
+            <!-- Content will be rendered here dynamically -->
+        </main>
+
+    </div>
+
+    <!-- PURE JAVASCRIPT PROTOTYPE LOGIC -->
+    <script type="module">
+        // --- MOCK DATA FOR FRONTEND PROTOTYPING ---
+        const MOCK_COURSES = [
+            { code: "DS201", title: "Applied Data Science Bootcamp", instructor: "AI Labs Team", schedule: "Online, Asynchronous", syllabusUrl: "https://example.com/syllabus/DS201", maxCapacity: 50, enrolledCount: 45 },
+            { code: "INT401", title: "Virtual FinTech Internship", instructor: "Apex Bank Inc.", schedule: "8 Weeks | Full-time", syllabusUrl: "https://example.com/syllabus/INT401", maxCapacity: 15, enrolledCount: 15 }, // FULL
+            { code: "SKL105", title: "Advanced Interview & Soft Skills", instructor: "HR Experts Global", schedule: "Tue/Thu 5:00 PM", syllabusUrl: "https://example.com/syllabus/SKL105", maxCapacity: 40, enrolledCount: 10 },
+            { code: "CYB302", title: "Certified Ethical Hacking (CEH)", instructor: "SecureTech Academy", schedule: "Sat 9:00 AM - 1:00 PM", syllabusUrl: "https://example.com/syllabus/CYB302", maxCapacity: 20, enrolledCount: 19 },
+            { code: "PM101", title: "Agile Project Management Certification", instructor: "Tech Leaders Group", schedule: "Mon/Wed/Fri 10:00 AM", syllabusUrl: "https://example.com/syllabus/PM101", maxCapacity: 30, enrolledCount: 30 }, // FULL
+            { code: "COM304", title: "Technical Communication Mastery", instructor: "WriteRight Consulting", schedule: "Online, Self-Paced", syllabusUrl: "https://example.com/syllabus/COM304", maxCapacity: 100, enrolledCount: 55 },
+        ];
+
+        // The mock state for enrollments (initially, the user is enrolled in SKL105)
+        let allCourses = MOCK_COURSES;
+        let enrolledCourses = { "SKL105": true }; 
+        let currentPage = 'browse';
+
+        const contentArea = document.getElementById('content-area');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const userIdDisplay = document.getElementById('user-id');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+
+        // --- Utility Functions ---
+
+        /** Shows an error message in the UI. */
+        const displayError = (message) => {
+            console.error(message);
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        };
+
+        /** Hides the error message. */
+        const hideError = () => {
+            errorMessage.classList.add('hidden');
+        };
+
+        /** Toggles the loading indicator. */
+        const toggleLoading = (isLoading) => {
+            loadingIndicator.classList.toggle('hidden', !isLoading);
+        };
+
+        /** Updates the navigation bar active state. */
+        const updateNavBar = () => {
+            document.querySelectorAll('.nav-button').forEach(button => {
+                const isCurrent = button.id.includes(currentPage);
+                button.classList.toggle('bg-indigo-600', isCurrent);
+                button.classList.toggle('text-white', isCurrent);
+                button.classList.toggle('shadow-lg', isCurrent);
+                button.classList.toggle('hover:bg-indigo-700', isCurrent);
+
+                button.classList.toggle('text-gray-700', !isCurrent);
+                button.classList.toggle('bg-gray-200', !isCurrent);
+                button.classList.toggle('hover:bg-gray-300', !isCurrent);
+                button.classList.toggle('transform', true);
+                button.classList.toggle('hover:scale-[1.02]', true);
+            });
+        };
+
+        // --- MOCK Enrollment Actions (Frontend State Management) ---
+
+        /** Mocks enrolling the user in a specific course. */
+        const enrollCourse = (courseCode) => {
+            if (enrolledCourses[courseCode]) return;
+            
+            // 1. Update mock enrollment state
+            enrolledCourses[courseCode] = true;
+
+            // 2. Update mock course count (to simulate real enrollment)
+            const courseToUpdate = allCourses.find(c => c.code === courseCode);
+            if (courseToUpdate && courseToUpdate.enrolledCount < courseToUpdate.maxCapacity) {
+                courseToUpdate.enrolledCount += 1;
+            }
+
+            console.log(`MOCK: Enrolled in ${courseCode}. Rendering updated state.`);
+            renderApp(); // Rerender the UI
+        };
+
+        /** Mocks dropping the user from a specific course. */
+        const dropCourse = (courseCode) => {
+            if (!enrolledCourses[courseCode]) return; 
+
+            // 1. Update mock enrollment state
+            delete enrolledCourses[courseCode];
+
+            // 2. Update mock course count
+            const courseToUpdate = allCourses.find(c => c.code === courseCode);
+            if (courseToUpdate && courseToUpdate.enrolledCount > 0) {
+                courseToUpdate.enrolledCount -= 1;
+            }
+
+            console.log(`MOCK: Dropped ${courseCode}. Rendering updated state.`);
+            renderApp(); // Rerender the UI
+        };
+
+        // --- Rendering Logic - Updated for better student visual experience ---
+
+        /** Generates the HTML for a single course card. */
+        const createCourseCard = (course) => {
+            const isEnrolled = !!enrolledCourses[course.code];
+            const isFull = course.enrolledCount >= course.maxCapacity;
+
+            // Base card classes with enhanced styling and hover effects
+            let cardClasses = 'bg-white border border-gray-200 rounded-xl p-6 shadow-lg flex flex-col justify-between transition-all duration-300 hover:shadow-xl transform hover:scale-[1.02]';
+            
+            // Highlight enrolled programs visually
+            if (isEnrolled) {
+                cardClasses = cardClasses.replace('bg-white', 'bg-indigo-50 border-indigo-400 ring-4 ring-indigo-200 ring-opacity-50');
+            }
+
+            let statusBadge = '';
+            if (isEnrolled) {
+                statusBadge = '<span class="inline-flex items-center px-3 py-1 text-sm font-bold rounded-full bg-green-100 text-green-800 mb-2 shadow-sm uppercase">✅ ENROLLED</span>';
+            } else if (isFull) {
+                statusBadge = '<span class="inline-flex items-center px-3 py-1 text-sm font-bold rounded-full bg-red-100 text-red-800 mb-2 shadow-sm uppercase">🛑 CAPACITY FULL</span>';
+            }
+
+            let button;
+            if (isEnrolled) {
+                button = `<button onclick="window.dropCourse('${course.code}')" class="w-full mt-4 px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition duration-150 transform hover:scale-[1.01]">Drop Program</button>`;
+            } else if (isFull) {
+                button = `<button class="w-full mt-4 px-4 py-2 bg-gray-400 text-gray-700 font-bold rounded-lg cursor-not-allowed" disabled>Capacity Full (${course.enrolledCount}/${course.maxCapacity})</button>`;
+            } else {
+                // Enrollment button with prominent shadow for visibility
+                button = `<button onclick="window.enrollCourse('${course.code}')" class="w-full mt-4 px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow-xl shadow-indigo-400/50 hover:bg-indigo-700 transition duration-150 transform hover:scale-[1.01]">Enroll Now (${course.enrolledCount}/${course.maxCapacity})</button>`;
+            }
+            
+            // Program Guide/Syllabus link with inline SVG icon for professional look
+            const syllabusLink = course.syllabusUrl 
+                ? `<a href="${course.syllabusUrl}" target="_blank" class="text-sm font-bold text-indigo-700 hover:text-indigo-900 transition duration-150 flex items-center mt-3">
+                      <svg class="w-4 h-4 mr-1 text-indigo-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0113 3.414L16.586 7A2 2 0 0117 8.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                      View Program Guide
+                  </a>`
+                : `<span class="text-sm text-gray-400 mt-3 flex items-center">Guide Not Available</span>`;
+
+            return `
+                <div class="${cardClasses}">
+                    <div>
+                        ${statusBadge}
+                        <h3 class="text-2xl font-extrabold text-gray-900 mb-1">${course.title}</h3>
+                        <p class="text-sm text-indigo-600 font-semibold mb-3">Code: ${course.code}</p>
+                        
+                        <div class="space-y-2 text-gray-700 text-base border-t border-gray-200 pt-3">
+                            <p class="flex items-center"><span class="font-semibold text-gray-600 w-20">Provider:</span> ${course.instructor}</p>
+                            <p class="flex items-center"><span class="font-semibold text-gray-600 w-20">Schedule:</span> ${course.schedule}</p>
+                        </div>
+                        
+                        ${syllabusLink}
+                    </div>
+                    ${button}
+                </div>
+            `;
+        };
+
+        /** Renders the Browse Courses view. */
+        const renderBrowseCourses = () => {
+            hideError();
+            
+            let html = `
+                <h2 class="text-3xl font-bold mb-8 text-gray-800">Browse Placement Opportunities (${allCourses.length})</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            `;
+
+            if (allCourses.length === 0) {
+                html += '<p class="col-span-4 text-center text-gray-500 py-10">No programs available yet. Check back soon!</p>';
+            } else {
+                allCourses.forEach(course => {
+                    html += createCourseCard(course);
+                });
+            }
+
+            html += '</div>';
+            contentArea.innerHTML = html;
+        };
+
+        /** Renders the My Courses view. */
+        const renderMyCourses = () => {
+            hideError();
+
+            const myCourses = allCourses.filter(course => enrolledCourses[course.code]);
+
+            let html = `
+                <h2 class="text-3xl font-bold mb-8 text-gray-800">My Current Enrollments (${myCourses.length})</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            `;
+
+            if (myCourses.length === 0) {
+                html += `
+                    <div class="col-span-4 text-center py-16 bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-300">
+                        <p class="text-2xl text-gray-700 font-semibold">Ready to upskill?</p>
+                        <p class="mt-2 text-indigo-600 text-lg font-medium">Click "Browse Programs" to find a training or virtual internship that fits your career goals!</p>
+                    </div>
+                `;
+            } else {
+                myCourses.forEach(course => {
+                    html += createCourseCard(course);
+                });
+            }
+
+            html += '</div>';
+            contentArea.innerHTML = html;
+        };
+
+        /** Main render function based on current page state. */
+        const renderApp = () => {
+            updateNavBar();
+            // Simulate loading only once for the prototype
+            toggleLoading(false); 
+
+            if (currentPage === 'browse') {
+                renderBrowseCourses();
+            } else {
+                renderMyCourses();
+            }
+        };
+
+        // --- Initialization ---
+
+        const initApp = () => {
+            // Expose mock functions globally for HTML onClick calls
+            window.enrollCourse = enrollCourse;
+            window.dropCourse = dropCourse;
+
+            // Setup navigation listeners
+            document.getElementById('nav-browse').addEventListener('click', () => {
+                currentPage = 'browse';
+                renderApp();
+            });
+            document.getElementById('nav-mycourses').addEventListener('click', () => {
+                currentPage = 'mycourses';
+                renderApp();
+            });
+
+            // Initial render state
+            renderApp();
+        };
+
+        // Start the application
+        window.onload = initApp;
+    </script>
+</body>
+</html>
