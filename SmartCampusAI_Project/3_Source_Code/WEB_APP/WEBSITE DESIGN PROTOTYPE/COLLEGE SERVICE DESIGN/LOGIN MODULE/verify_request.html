@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG | Request Verification</title>
+    <!-- Load Tailwind CSS from CDN for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Load Lucide icons for clean, modern interface elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #4f46e5; /* Indigo 600 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .text-primary { color: var(--primary-color); }
+        .bg-primary { background-color: var(--primary-color); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+        <!-- Main Card Container -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100">
+
+            <div class="text-center mb-6">
+                <!-- App Logo: Matches all Auth Pages -->
+                <svg class="mx-auto h-12 w-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 21V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/>
+                    <path d="M12 3L2 7l10 4 10-4-10-4z"/>
+                    <path d="M9 21h6"/>
+                </svg>
+                <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900">Verify Your Account</h1>
+                <p class="mt-2 text-sm text-gray-500">
+                    Enter the email address you used for registration to receive your activation link.
+                </p>
+            </div>
+
+            <!-- User Feedback Message Area -->
+            <div id="message-area" class="h-8 mb-4">
+                <!-- Messages will be injected here by JavaScript -->
+            </div>
+
+            <!-- Request Verification Form -->
+            <form id="verification-request-form" class="space-y-6">
+
+                <!-- 1. Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@campus.edu"
+                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 transition duration-150">
+                    <span id="email-error" class="text-xs text-red-500 mt-1 block"></span>
+                </div>
+
+                <!-- 2. Submit Button -->
+                <div>
+                    <button type="submit" id="request-button"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200 disabled:opacity-50">
+                        Send Activation Link
+                    </button>
+                </div>
+            </form>
+
+            <!-- Back to Login Link -->
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <a href="login.html" class="font-medium text-primary hover:text-indigo-700 transition-colors duration-150 flex items-center justify-center">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                    Back to Sign In
+                </a>
+            </div>
+
+            <!-- Integration Points Placeholder -->
+            <div class="mt-8 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
+                <!-- API Integration Point: POST /auth/request-verification-link with the provided email -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PURE JAVASCRIPT LOGIC -->
+    <script>
+        // Use the lucide icon library to render the icons after the DOM loads
+        lucide.createIcons();
+
+        // 1. DOM Element Mapping
+        const elements = {
+            form: document.getElementById('verification-request-form'),
+            emailInput: document.getElementById('email'),
+            messageArea: document.getElementById('message-area'),
+            emailError: document.getElementById('email-error'),
+            requestButton: document.getElementById('request-button'),
+        };
+
+        // 2. Utility Functions
+
+        /**
+         * Displays a user-friendly message in the message area.
+         */
+        const displayMessage = (message, type) => {
+            let color, icon;
+            switch (type) {
+                case 'error':
+                    color = 'bg-red-100 text-red-700';
+                    icon = 'x-circle';
+                    break;
+                case 'success':
+                    color = 'bg-green-100 text-green-700';
+                    icon = 'check-circle';
+                    break;
+                case 'loading':
+                    color = 'bg-yellow-100 text-yellow-700';
+                    icon = 'loader';
+                    break;
+                default:
+                    color = 'bg-gray-100 text-gray-700';
+                    icon = 'info';
+            }
+
+            elements.messageArea.innerHTML = `
+                <div role="alert" class="flex items-center p-3 rounded-lg text-sm font-medium transition duration-200 ${color}">
+                    <i data-lucide="${icon}" class="w-4 h-4 mr-2 animate-${type === 'loading' ? 'spin' : 'none'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        /**
+         * Simple regex for email validation (client-side only).
+         */
+        const isValidEmail = (email) => {
+            // Very basic check: must contain @ and a domain structure.
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        /**
+         * Simulates an API call to send the verification link.
+         */
+        const simulateSendLink = () => {
+            // Clear all fields after successful mock submission
+            elements.emailInput.value = '';
+
+            // Start loading state
+            displayMessage('Sending verification link...', 'loading');
+            elements.requestButton.disabled = true;
+
+            setTimeout(() => {
+                elements.requestButton.disabled = false;
+                // Mock successful send
+                displayMessage('Verification link sent! Check your inbox to activate your account.', 'success');
+            }, 2000); // Simulate network latency
+        };
+
+
+        /**
+         * Main function to handle form submission and validation.
+         */
+        const handleRequest = (event) => {
+            event.preventDefault();
+
+            const email = elements.emailInput.value.trim();
+            elements.messageArea.innerHTML = '';
+            elements.emailError.textContent = '';
+            
+            let isValid = true;
+
+            // 1. Basic required field check
+            if (!email) {
+                displayMessage('Please enter your email address.', 'error');
+                isValid = false;
+            } 
+            
+            // 2. Email format validation
+            else if (!isValidEmail(email)) {
+                elements.emailError.textContent = 'Please enter a valid email address (e.g., user@domain.com).';
+                isValid = false;
+            }
+
+            if (isValid) {
+                simulateSendLink();
+            }
+        };
+
+
+        // 3. Attach Event Listeners
+        elements.form.addEventListener('submit', handleRequest);
+
+    </script>
+</body>
+</html>
