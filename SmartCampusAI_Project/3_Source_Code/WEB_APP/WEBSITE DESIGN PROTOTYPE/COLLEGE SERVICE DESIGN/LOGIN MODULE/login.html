@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusG | Register</title>
+    <title>CampusG | Login</title>
     <!-- Load Tailwind CSS from CDN for modern, responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -26,47 +26,38 @@
             border-radius: 9999px;
             margin-top: 4px;
         }
-        /* Ensures the registration card looks good when scrollable on small devices */
-        .max-w-md-scrolling {
-            max-width: 40rem;
-            max-height: 95vh;
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md max-w-md-scrolling">
+    <div class="w-full max-w-md">
         <!-- Main Card Container -->
         <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100">
 
             <div class="text-center mb-6">
-                <!-- App Logo: Matches Login Page -->
+                <!-- App Logo -->
                 <svg class="mx-auto h-12 w-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 21V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/>
                     <path d="M12 3L2 7l10 4 10-4-10-4z"/>
                     <path d="M9 21h6"/>
                 </svg>
-                <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900">Create your CampusG Account</h1>
+                <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900">Sign in to CampusG</h1>
                 <p class="mt-2 text-sm text-gray-500">
-                    Join the institutional management software.
+                    Use mock credentials: `test@campusg.com` / `StrongPass123`
                 </p>
             </div>
-
-            <!-- Removed the old Student/Staff Mode Switch buttons -->
-
 
             <!-- User Feedback Message Area -->
             <div id="message-area" class="h-8 mb-4">
                 <!-- Messages will be injected here by JavaScript -->
             </div>
 
-            <!-- Registration Form -->
-            <form id="register-form" autocomplete="off" class="space-y-6">
-                
+            <!-- Login Form -->
+            <form id="login-form" autocomplete="off" class="space-y-6">
+
                 <!-- NEW: User Role Dropdown - Student, Faculty, Admin -->
                 <div>
-                    <label for="user-role" class="block text-sm font-medium text-gray-700 mb-1">I am registering as a...</label>
+                    <label for="user-role" class="block text-sm font-medium text-gray-700 mb-1">I am logging in as a...</label>
                     <select id="user-role" name="user-role" required
                         class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 transition duration-150 bg-white">
                         <option value="" disabled selected>Select your role</option>
@@ -75,79 +66,64 @@
                         <option value="admin">Admin</option>
                     </select>
                 </div>
-                
-                <!-- 1. Full Name Field -->
-                <div>
-                    <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input id="full-name" name="full-name" type="text" required placeholder="John Doe"
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 transition duration-150">
-                </div>
 
-                <!-- 2. Email Field -->
+                <!-- 1. Email Field -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="name@college.edu"
+                    <input id="email" name="email" type="email" autocomplete="username" required placeholder="name@college.edu"
                         class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 transition duration-150">
                     <span id="email-error" class="text-xs text-red-500 mt-1 block"></span>
                 </div>
 
-                <!-- 3. Password Field with Visibility Toggle and Strength Indicator -->
+                <!-- 2. Password Field with Visibility Toggle -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative">
-                        <input id="password" name="password" type="password" autocomplete="new-password" required placeholder="••••••••"
+                        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••"
                             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 pr-12 transition duration-150">
 
                         <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-primary transition-colors duration-150" aria-label="Toggle password visibility">
                             <i data-lucide="eye" class="w-5 h-5"></i>
                         </button>
                     </div>
-                    <div id="password-strength"></div>
                 </div>
 
-                <!-- 4. Confirm Password Field -->
-                <div>
-                    <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                    <input id="confirm-password" name="confirm-password" type="password" required placeholder="••••••••"
-                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary border p-3 transition duration-150">
-                    <span id="password-match-error" class="text-xs text-red-500 mt-1 block"></span>
-                </div>
-
-                <!-- 5. Terms and Conditions -->
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        <input id="terms-checkbox" name="terms-checkbox" type="checkbox"
+                <!-- 3. Remember Me & Forgot Password Links -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox"
                             class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
                     </div>
-                    <div class="ml-3 text-sm">
-                        <label for="terms-checkbox" class="font-medium text-gray-700">I agree to the
-                            <a href="#" class="text-primary hover:text-indigo-700">Terms & Conditions</a>
-                        </label>
-                        <span id="terms-error" class="text-xs text-red-500 mt-1 block"></span>
+
+                    <div class="text-sm">
+                        <a href="forgot_password.html" class="font-medium text-primary hover:text-indigo-700 transition-colors duration-150">
+                            Forgot password?
+                        </a>
                     </div>
                 </div>
 
 
-                <!-- 6. Register Button -->
+                <!-- 4. Login Button -->
                 <div>
-                    <button type="submit" id="register-button"
+                    <button type="submit" id="login-button"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200 disabled:opacity-50">
-                        Create Account
+                        Sign In
                     </button>
                 </div>
             </form>
 
-            <!-- Login Link -->
+            <!-- Registration Link -->
             <div class="mt-6 text-center text-sm text-gray-600">
-                Already have an account?
-                <a href="login.html" class="font-medium text-primary hover:text-indigo-700 transition-colors duration-150">
-                    Sign In
+                Not a member yet?
+                <a href="register.html" class="font-medium text-primary hover:text-indigo-700 transition-colors duration-150">
+                    Sign up for an account
                 </a>
             </div>
 
             <!-- Integration Points Placeholder -->
             <div class="mt-8 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
-                <!-- API Integration Point: This is where the actual POST request to the backend /auth/register endpoint will go -->
+                <!-- API Integration Point: This is where the actual POST request to the backend /auth/login endpoint will go -->
             </div>
 
         </div>
@@ -160,23 +136,18 @@
 
         // 1. DOM Element Mapping
         const elements = {
-            form: document.getElementById('register-form'),
+            form: document.getElementById('login-form'),
             userRoleSelect: document.getElementById('user-role'), // NEW
-            fullNameInput: document.getElementById('full-name'),
             emailInput: document.getElementById('email'),
             passwordInput: document.getElementById('password'),
-            confirmPasswordInput: document.getElementById('confirm-password'),
-            termsCheckbox: document.getElementById('terms-checkbox'),
+            rememberMe: document.getElementById('remember-me'),
             passwordToggle: document.getElementById('password-toggle'),
             messageArea: document.getElementById('message-area'),
             emailError: document.getElementById('email-error'),
-            passwordStrength: document.getElementById('password-strength'),
-            passwordMatchError: document.getElementById('password-match-error'),
-            termsError: document.getElementById('terms-error'),
-            registerButton: document.getElementById('register-button'),
+            loginButton: document.getElementById('login-button'),
         };
 
-        // 2. Utility Functions (Copied/Adapted from Login Page)
+        // 2. Utility Functions
 
         /**
          * Displays a user-friendly message in the message area.
@@ -218,44 +189,6 @@
             return re.test(email);
         };
 
-        /**
-         * Checks the strength of the password and updates the indicator bar.
-         */
-        const checkPasswordStrength = (password) => {
-            let strength = 0;
-            const len = password.length;
-            const indicator = elements.passwordStrength;
-
-            // Length check
-            if (len >= 8) strength++;
-            if (len >= 12) strength++;
-
-            // Character variety checks
-            if (/[A-Z]/.test(password)) strength++; // Uppercase
-            if (/[0-9]/.test(password)) strength++; // Numbers
-            if (/[^A-Za-z0-9]/.test(password)) strength++; // Symbols
-
-            let width = '0%';
-            let color = 'transparent';
-
-            if (strength === 0) {
-                // No change
-            } else if (strength <= 2) {
-                width = '33%';
-                color = 'bg-red-500';
-            } else if (strength <= 4) {
-                width = '66%';
-                color = 'bg-yellow-500';
-            } else {
-                width = '100%';
-                color = 'bg-green-500';
-            }
-
-            // Apply styling
-            indicator.className = `h-1 mt-1 rounded-full ${color}`;
-            indicator.style.width = width;
-        };
-
 
         // 3. Event Handlers
 
@@ -265,7 +198,6 @@
         const togglePasswordVisibility = () => {
             const isVisible = elements.passwordInput.type === 'text';
             elements.passwordInput.type = isVisible ? 'password' : 'text';
-            elements.confirmPasswordInput.type = isVisible ? 'password' : 'text'; // Toggle confirm field too
 
             // Update the icon
             const iconElement = elements.passwordToggle.querySelector('i');
@@ -273,48 +205,61 @@
         };
 
         /**
-         * Simulates an API call for registration.
+         * Simulates an API call for login and handles session.
          * (Placeholder for future backend integration)
          */
-        const simulateRegistration = (name, email, password, role) => {
+        const simulateLogin = (email, role, remember) => {
+            // Determine storage method
+            const storage = remember ? localStorage : sessionStorage;
+            const storageType = remember ? 'Local Storage' : 'Session Storage';
+
             // Start loading state
-            displayMessage(`Creating ${role} account for ${name}...`, 'loading');
-            elements.registerButton.disabled = true;
+            displayMessage(`Signing in as ${role}...`, 'loading');
+            elements.loginButton.disabled = true;
 
             setTimeout(() => {
-                elements.registerButton.disabled = false;
-                // Mock successful registration
-                displayMessage('Registration successful! Check your email for verification before logging in.', 'success');
-                elements.form.reset(); // Clear form on success
-                elements.passwordStrength.style.width = '0%'; // Clear strength bar
-                // In a real app: Redirect to a 'check email' page
-            }, 2000); // Simulate network latency
+                elements.loginButton.disabled = false;
+
+                // Mock check against hardcoded credentials
+                if (email === 'test@campusg.com' && elements.passwordInput.value === 'StrongPass123') {
+                    // Mock Successful Login
+                    const mockToken = `mock-token-${role}-${Date.now()}`;
+                    const mockUser = { email: email, role: role, token: mockToken };
+
+                    // Set mock session state
+                    storage.setItem('campusg_session', JSON.stringify(mockUser));
+
+                    displayMessage(`Login successful! Session stored in ${storageType}. Mock user: ${email} (${role})`, 'success');
+
+                    // In a real app: Redirect to the dashboard
+                } else {
+                    // Mock Failed Login
+                    displayMessage('Invalid credentials or role selected.', 'error');
+                }
+
+            }, 1500); // Simulate network latency
         };
 
 
         /**
          * Main function to handle form submission and validation.
          */
-        const handleRegistration = (event) => {
+        const handleLogin = (event) => {
             event.preventDefault();
 
-            const name = elements.fullNameInput.value.trim();
             const email = elements.emailInput.value.trim();
             const password = elements.passwordInput.value;
-            const confirmPassword = elements.confirmPasswordInput.value;
-            const termsAccepted = elements.termsCheckbox.checked;
-            const role = elements.userRoleSelect.value; // Get role from dropdown
+            const role = elements.userRoleSelect.value;
+            const remember = elements.rememberMe.checked;
 
             let isValid = true;
             // Clear previous errors
             elements.emailError.textContent = '';
-            elements.passwordMatchError.textContent = '';
-            elements.termsError.textContent = '';
             elements.messageArea.innerHTML = '';
 
-            // 1. Basic required field check (Now includes the role check)
-            if (!name || !email || !password || !confirmPassword || !role) {
-                displayMessage('Please fill in all required fields.', 'error');
+            // 1. Basic required field check
+            if (!email || !password || !role) {
+                displayMessage('Please select a role and fill in all fields.', 'error');
                 isValid = false;
             }
 
@@ -324,20 +269,8 @@
                 isValid = false;
             }
 
-            // 3. Password matching check
-            if (password && confirmPassword && password !== confirmPassword) {
-                elements.passwordMatchError.textContent = 'Passwords do not match.';
-                isValid = false;
-            }
-
-            // 4. Terms acceptance check
-            if (!termsAccepted) {
-                elements.termsError.textContent = 'You must agree to the Terms & Conditions.';
-                isValid = false;
-            }
-
             if (isValid) {
-                simulateRegistration(name, email, password, role);
+                simulateLogin(email, role, remember);
             }
         };
 
@@ -345,25 +278,20 @@
         // 4. Attach Event Listeners
 
         // Form submission listener
-        elements.form.addEventListener('submit', handleRegistration);
+        elements.form.addEventListener('submit', handleLogin);
 
         // Password visibility toggle listener
         elements.passwordToggle.addEventListener('click', togglePasswordVisibility);
 
-        // Password strength indicator listener
-        elements.passwordInput.addEventListener('keyup', (e) => checkPasswordStrength(e.target.value));
-
-        // Password matching live feedback
-        elements.confirmPasswordInput.addEventListener('input', () => {
-            if (elements.passwordInput.value !== elements.confirmPasswordInput.value) {
-                elements.passwordMatchError.textContent = 'Passwords do not match.';
+        // Email validation live feedback
+        elements.emailInput.addEventListener('input', (e) => {
+            if (e.target.value.trim() === '' || validateEmail(e.target.value)) {
+                 elements.emailError.textContent = '';
             } else {
-                elements.passwordMatchError.textContent = '';
+                 elements.emailError.textContent = 'Invalid email format.';
             }
         });
-        
-        // Removed the old mode switch event listeners as they are no longer needed.
-        
+
     </script>
 </body>
 </html>
