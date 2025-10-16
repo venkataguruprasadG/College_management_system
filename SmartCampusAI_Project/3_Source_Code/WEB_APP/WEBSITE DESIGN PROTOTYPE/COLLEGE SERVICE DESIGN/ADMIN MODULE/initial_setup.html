@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Initial Setup</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font and base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Light app background */
+            min-height: 100vh;
+        }
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
+
+        /* Styling for the step content transitions */
+        .step-content {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .step-inactive {
+            display: none;
+            opacity: 0;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800 flex items-center justify-center p-4">
+
+    <!-- Setup Card Container -->
+    <div class="w-full max-w-3xl bg-white rounded-2xl shadow-2xl p-6 md:p-10">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <a href="#" class="flex items-center justify-center space-x-2 text-3xl font-bold text-primary mb-3">
+                <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>CampusG Setup</span>
+            </a>
+            <p class="text-gray-500">Welcome! Let's get your campus ready for management.</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mb-10">
+            <div class="flex justify-between text-sm font-medium">
+                <span id="step-name" class="text-primary">1. Institution Details</span>
+                <span id="step-count">Step 1 of 4</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full mt-2">
+                <div id="progress-bar" class="h-2 bg-primary rounded-full transition-all duration-500 ease-in-out" style="width: 25%;"></div>
+            </div>
+        </div>
+
+        <!-- Multi-Step Form -->
+        <form id="setup-form" onsubmit="event.preventDefault()">
+            
+            <!-- Step 1: Institution Details -->
+            <div id="step-1" class="step-content">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Institution Details</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="college-name" class="block text-sm font-medium mb-1">College/University Name</label>
+                        <input type="text" id="college-name" required placeholder="e.g., Global Tech University"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+                    <div>
+                        <label for="website" class="block text-sm font-medium mb-1">Official Website (Optional)</label>
+                        <input type="url" id="website" placeholder="e.g., https://mycollege.edu"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+                    <div>
+                        <label for="timezone" class="block text-sm font-medium mb-1">Timezone / Region</label>
+                        <select id="timezone" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                            <option value="">Select Timezone</option>
+                            <option value="EST">EST (Eastern Standard Time)</option>
+                            <option value="PST">PST (Pacific Standard Time)</option>
+                            <option value="IST">IST (India Standard Time)</option>
+                            <option value="GMT">GMT (Greenwich Mean Time)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Academic Structure -->
+            <div id="step-2" class="step-content step-inactive">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Academic Structure</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="academic-year" class="block text-sm font-medium mb-1">Current Academic Year Start</label>
+                        <input type="number" id="academic-year" required placeholder="e.g., 2024" min="2000" max="2100"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+                    <div>
+                        <label for="default-departments" class="block text-sm font-medium mb-1">Initial Departments (Comma Separated)</label>
+                        <textarea id="default-departments" rows="3" required placeholder="e.g., Computer Science, Business, Arts & Humanities"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">These will be used for course and staff assignment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Financial Defaults -->
+            <div id="step-3" class="step-content step-inactive">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Financial Defaults</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="default-currency" class="block text-sm font-medium mb-1">Default Currency</label>
+                        <select id="default-currency" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                            <option value="">Select Currency</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="EUR">EUR (€)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="default-fee" class="block text-sm font-medium mb-1">Default Tuition Fee (Annual Mock)</label>
+                        <input type="number" id="default-fee" required placeholder="e.g., 5000" min="0"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        <p class="text-xs text-gray-500 mt-1">This can be customized later per course.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Initial User Access -->
+            <div id="step-4" class="step-content step-inactive">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Initial User Access</h3>
+                <div class="p-6 bg-indigo-50 rounded-lg border border-indigo-200 mb-4">
+                    <p class="font-semibold text-gray-900 flex items-center mb-2">
+                        <i data-lucide="info" class="w-5 h-5 text-primary mr-2"></i>
+                        Grant Faculty/Staff Access
+                    </p>
+                    <p class="text-sm text-gray-700">You can invite your team now. They will receive an email to set their password and will be granted **Faculty** access.</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="staff-email-1" class="block text-sm font-medium mb-1">Staff Email 1 (e.g., Finance Head)</label>
+                        <input type="email" id="staff-email-1" required placeholder="team.member@college.edu"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+                    <div>
+                        <label for="staff-email-2" class="block text-sm font-medium mb-1">Staff Email 2 (e.g., Academic Head)</label>
+                        <input type="email" id="staff-email-2" placeholder="another.team@college.edu"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">More users can be added from the Admin Dashboard later.</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div id="form-navigation" class="flex justify-between items-center mt-10 border-t pt-6">
+                <button type="button" id="back-button" onclick="prevStep()" disabled
+                    class="flex items-center text-gray-600 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition duration-150">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back
+                </button>
+                
+                <button type="button" id="next-button" onclick="nextStep()"
+                    class="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.02] flex items-center">
+                    Next Step <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                </button>
+                
+                <button type="submit" id="complete-button" onclick="completeSetup()"
+                    class="bg-secondary hover:bg-emerald-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.02] hidden">
+                    Complete Setup <i data-lucide="check" class="w-4 h-4 ml-2"></i>
+                </button>
+            </div>
+            
+            <p id="error-message" class="text-center text-red-500 font-medium mt-4 hidden"></p>
+        </form>
+
+    </div>
+
+    <!-- Pure JavaScript Logic for Multi-Step Form -->
+    <script>
+        // Constants and State
+        const steps = [
+            { name: 'Institution Details', id: 'step-1', requiredFields: ['college-name', 'timezone'] },
+            { name: 'Academic Structure', id: 'step-2', requiredFields: ['academic-year', 'default-departments'] },
+            { name: 'Financial Defaults', id: 'step-3', requiredFields: ['default-currency', 'default-fee'] },
+            { name: 'Initial User Access', id: 'step-4', requiredFields: ['staff-email-1'] }
+        ];
+        let currentStep = 0;
+        const totalSteps = steps.length;
+        const MOCK_SESSION_KEY = 'campusg_session_mock';
+
+        // DOM Elements
+        const progressBar = document.getElementById('progress-bar');
+        const stepNameEl = document.getElementById('step-name');
+        const stepCountEl = document.getElementById('step-count');
+        const backButton = document.getElementById('back-button');
+        const nextButton = document.getElementById('next-button');
+        const completeButton = document.getElementById('complete-button');
+        const errorMessageEl = document.getElementById('error-message');
+
+        // Functions
+        function updateUI() {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => {
+                el.classList.add('step-inactive');
+                el.classList.remove('opacity-100');
+            });
+
+            // Show current step
+            const currentStepEl = document.getElementById(steps[currentStep].id);
+            currentStepEl.classList.remove('step-inactive');
+            setTimeout(() => currentStepEl.classList.add('opacity-100'), 10); // Trigger transition
+
+            // Update header text
+            stepNameEl.textContent = `${currentStep + 1}. ${steps[currentStep].name}`;
+            stepCountEl.textContent = `Step ${currentStep + 1} of ${totalSteps}`;
+
+            // Update progress bar
+            const progress = ((currentStep + 1) / totalSteps) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Update buttons
+            backButton.disabled = currentStep === 0;
+            
+            if (currentStep === totalSteps - 1) {
+                nextButton.classList.add('hidden');
+                completeButton.classList.remove('hidden');
+            } else {
+                nextButton.classList.remove('hidden');
+                completeButton.classList.add('hidden');
+            }
+
+            // Clear previous error message
+            errorMessageEl.classList.add('hidden');
+            lucide.createIcons(); // Recreate icons for buttons
+        }
+
+        function validateCurrentStep() {
+            const requiredFields = steps[currentStep].requiredFields;
+            let isValid = true;
+            let firstInvalidField = null;
+
+            requiredFields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                // Check if the input value is empty or just whitespace
+                if (input && input.value.trim() === '') {
+                    isValid = false;
+                    if (!firstInvalidField) {
+                        firstInvalidField = input;
+                    }
+                    input.classList.add('border-red-500', 'ring-red-500');
+                } else {
+                    input.classList.remove('border-red-500', 'ring-red-500');
+                }
+            });
+
+            if (!isValid) {
+                errorMessageEl.textContent = 'Please fill in all required fields to continue.';
+                errorMessageEl.classList.remove('hidden');
+                if (firstInvalidField) {
+                     firstInvalidField.focus();
+                }
+            }
+            return isValid;
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps - 1) {
+                    currentStep++;
+                    updateUI();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        function completeSetup() {
+            if (validateCurrentStep()) {
+                // Mock the completion and store the 'onboarded' status
+                const sessionData = JSON.parse(localStorage.getItem(MOCK_SESSION_KEY) || '{}');
+                sessionData.is_onboarded = true;
+                localStorage.setItem(MOCK_SESSION_KEY, JSON.stringify(sessionData));
+
+                // In a real application, data would be sent to the backend here.
+
+                // Success Message and Redirect
+                const formNav = document.getElementById('form-navigation');
+                formNav.innerHTML = `<div class="text-center w-full p-4 bg-secondary/10 text-secondary border border-secondary rounded-xl font-bold">
+                    <p>Setup Complete! Redirecting you to the main Dashboard...</p>
+                </div>`;
+                
+                // Simulate success delay and redirect to dashboard.html
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            }
+        }
+        
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if the user is already onboarded (protects against accidental access)
+            const sessionData = JSON.parse(localStorage.getItem(MOCK_SESSION_KEY) || '{}');
+            if (sessionData.is_onboarded) {
+                console.warn('User already onboarded. Redirecting to Dashboard.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            lucide.createIcons();
+            updateUI();
+        });
+    </script>
+</body>
+</html>
