@@ -13,66 +13,80 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Custom font import for modern look */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fb; /* Consistent light background */
         }
+        /* Tailwind configuration color variables */
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
         /* Custom scrollbar for aesthetics */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e5e7eb;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #e5e7eb; }
 
-        /* Toggle Switch Styling */
+        /* --- Toggle Switch Styling (Enhanced and Simplified) --- */
         .toggle-switch-container {
             position: relative;
-            display: inline-block;
-            width: 250px;
-            height: 40px;
+            display: inline-flex;
+            width: 280px; /* Increased width for better visual */
+            height: 48px; 
             background-color: #e0e7ff; /* Light indigo background */
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 4px;
         }
         .toggle-label {
-            position: absolute;
+            position: relative;
             width: 50%;
-            height: 32px;
-            line-height: 32px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            border-radius: 16px;
+            border-radius: 20px;
             cursor: pointer;
             z-index: 2;
             transition: color 0.3s ease;
             font-weight: 600;
         }
-        #monthly-label { left: 4px; }
-        #annual-label { right: 4px; }
-
         .toggle-slider {
             position: absolute;
             left: 4px;
-            width: 50%;
-            height: 32px;
+            width: calc(50% - 4px); /* Adjusted to fit better */
+            height: 40px;
             background-color: #4f46e5; /* Primary indigo color */
-            border-radius: 16px;
-            transition: transform 0.3s ease;
+            border-radius: 20px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
             z-index: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .toggle-switch-container.annual .toggle-slider {
             transform: translateX(100%);
         }
-        .toggle-switch-container.annual #monthly-label { color: #4f46e5; }
-        .toggle-switch-container.annual #annual-label { color: white; }
-        .toggle-switch-container.monthly #monthly-label { color: white; }
-        .toggle-switch-container.monthly #annual-label { color: #4f46e5; }
+        /* Color updates controlled by JS on click */
+        
+        /* --- Pricing Card Enhancements --- */
+        .pricing-card {
+            transition: all 0.3s ease-in-out;
+            transform-origin: bottom;
+            border-radius: 1.5rem; /* 2xl */
+        }
+        /* Default state styling */
+        .pricing-card {
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* shadow-xl */
+            transform: scale(1.0);
+        }
+        /* Highlighted/Recommended state styling (Controlled by JS/Data-Attr) */
+        .card-highlight {
+            border-color: #4f46e5;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08); /* stronger shadow */
+            transform: scale(1.04);
+            position: relative;
+            z-index: 10;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -90,12 +104,17 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section (Fixed Nav - Same as Landing Page) -->
+    <!-- Header Section (Fixed Nav) -->
     <header class="sticky top-0 z-50 bg-white shadow-md">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <!-- Logo -->
+            <!-- Logo (Using placeholder icon for consistency with the provided template) -->
             <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-primary">
-                <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <span>CampusG</span>
             </a>
 
@@ -105,7 +124,7 @@
                 <a href="#pricing-table" class="text-primary font-semibold transition duration-150 border-b-2 border-primary">Pricing</a>
                 <a href="about.html" class="text-gray-600 hover:text-primary transition duration-150">About Us</a>
                 <a href="support.html" class="text-gray-600 hover:text-primary transition duration-150">Support</a>
-                <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
+                <a href="login.html" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
                 
                 <!-- Prominent “Get Started” button -->
                 <a href="#cta-section"
@@ -116,7 +135,7 @@
 
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
+                <i data-lucide="menu" class="w-6 h-6" id="mobile-menu-icon"></i>
             </button>
         </div>
 
@@ -127,7 +146,7 @@
                 <a href="#pricing-table" class="text-primary font-semibold py-2 transition">Pricing</a>
                 <a href="about.html" class="text-gray-700 hover:text-primary py-2 transition">About Us</a>
                 <a href="support.html" class="text-gray-700 hover:text-primary py-2 transition">Support</a>
-                <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
+                <a href="login.html" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
                 <a href="#cta-section"
                     class="w-full bg-primary hover:bg-primary-dark text-white text-center font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
                     Get Started
@@ -138,7 +157,7 @@
 
     <main>
         <!-- Pricing Hero Section -->
-        <section class="pt-16 pb-12 md:pt-20 md:pb-16 bg-white">
+        <section class="pt-16 pb-12 md:pt-20 md:pb-16 bg-white shadow-md">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
                 <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-3">Simple & Transparent Billing</p>
                 <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
@@ -154,7 +173,7 @@
         <section id="pricing-table" class="py-16 md:py-20 bg-gray-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 
-                <!-- Toggle Switch -->
+                <!-- Toggle Switch (Integrated Styling) -->
                 <div class="flex justify-center mb-12">
                     <div id="price-toggle-container" class="toggle-switch-container monthly">
                         <div id="toggle-slider" class="toggle-slider"></div>
@@ -167,15 +186,14 @@
                 <div id="pricing-grid" class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     
                     <!-- Plan 1: Basic -->
-                    <!-- Note: Classes are controlled by JS for hover/default state -->
-                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col transition duration-300" data-default="false">
+                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col" data-default="false">
                         <p class="text-sm font-semibold text-primary uppercase mb-2">Basic</p>
                         <h3 class="text-3xl font-bold mb-6 text-gray-900">Starter College</h3>
                         
                         <!-- Price Display -->
                         <div class="mb-8">
                             <span class="text-5xl font-extrabold text-gray-900">$<span class="price-value" data-monthly="99" data-annual="84">99</span></span>
-                            <span class="text-xl font-medium text-gray-500"> / month</span>
+                            <span class="text-xl font-medium text-gray-500 price-unit"> / month</span>
                             <p class="text-sm text-gray-500 mt-1 price-note opacity-0 transition duration-300">Billed annually at $1,008</p>
                         </div>
                         
@@ -183,45 +201,44 @@
 
                         <ul class="space-y-4 mb-10">
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Up to **500 Student Profiles**</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>**Core SIS** & Basic Timetabling</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Basic Attendance Tracking</span>
                             </li>
                             <li class="flex items-start text-gray-400">
-                                <i data-lucide="x-circle" class="w-5 h-5 mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="x" class="w-5 h-5 mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Advanced Analytics & Custom Reports</span>
                             </li>
                             <li class="flex items-start text-gray-400">
-                                <i data-lucide="x-circle" class="w-5 h-5 mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="x" class="w-5 h-5 mr-3 flex-shrink-0 mt-1"></i>
                                 <span>API Access & 2FA Security</span>
                             </li>
                         </ul>
                         
-                        <a href="#" class="w-full text-center bg-gray-100 text-primary font-semibold py-3 px-6 rounded-lg border-2 border-gray-100 hover:border-primary transition duration-200 mt-auto">
+                        <a href="#" class="w-full text-center bg-gray-100 text-primary font-semibold py-3 px-6 rounded-lg border-2 border-gray-100 hover:border-primary transition duration-200 mt-auto shadow-md hover:bg-gray-200">
                             Choose Plan
                         </a>
                     </div>
 
-                    <!-- Plan 2: Standard (Recommended) -->
-                    <!-- Note: Classes are controlled by JS for hover/default state -->
-                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col transition duration-300" data-default="true">
+                    <!-- Plan 2: Standard (Recommended - Default Highlighted) -->
+                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col card-highlight" data-default="true">
                         <div class="flex justify-between items-center mb-2">
                             <p class="text-sm font-semibold text-primary uppercase">Standard</p>
-                            <span class="bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Recommended</span>
+                            <span class="bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-md">Recommended</span>
                         </div>
                         <h3 class="text-3xl font-bold mb-6 text-gray-900">Growing Campus</h3>
                         
                         <!-- Price Display -->
                         <div class="mb-8">
                             <span class="text-5xl font-extrabold text-gray-900">$<span class="price-value" data-monthly="299" data-annual="254">299</span></span>
-                            <span class="text-xl font-medium text-gray-500"> / month</span>
+                            <span class="text-xl font-medium text-gray-500 price-unit"> / month</span>
                             <p class="text-sm text-gray-500 mt-1 price-note opacity-0 transition duration-300">Billed annually at $3,048</p>
                         </div>
                         
@@ -229,42 +246,41 @@
 
                         <ul class="space-y-4 mb-10">
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Up to **5,000 Student Profiles**</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>**Full Academic Suite** (Grading & Exams)</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Integrated **Fee Management & Payments**</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Library & Faculty Management</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>**Analytics & Custom Reports**</span>
                             </li>
                         </ul>
                         
-                        <a href="#" class="w-full text-center bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary-dark transition duration-200 mt-auto">
+                        <a href="#" class="w-full text-center bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary-dark transition duration-200 mt-auto transform hover:scale-[1.01]">
                             Choose Plan
                         </a>
                     </div>
 
                     <!-- Plan 3: Premium -->
-                    <!-- Note: Classes are controlled by JS for hover/default state -->
-                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col transition duration-300" data-default="false">
+                    <div class="pricing-card bg-white p-8 rounded-2xl flex flex-col" data-default="false">
                         <p class="text-sm font-semibold text-primary uppercase mb-2">Premium</p>
                         <h3 class="text-3xl font-bold mb-6 text-gray-900">University Suite</h3>
                         
                         <!-- Price Display -->
                         <div class="mb-8">
                             <span class="text-5xl font-extrabold text-gray-900">$<span class="price-value" data-monthly="699" data-annual="594">699</span></span>
-                            <span class="text-xl font-medium text-gray-500"> / month</span>
+                            <span class="text-xl font-medium text-gray-500 price-unit"> / month</span>
                             <p class="text-sm text-gray-500 mt-1 price-note opacity-0 transition duration-300">Billed annually at $7,128</p>
                         </div>
                         
@@ -272,23 +288,23 @@
 
                         <ul class="space-y-4 mb-10">
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Up to **20,000 Student Profiles**</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>All Standard features, plus:</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>**Open REST API** & System Integrations</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>Alumni & Placement Management</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="check-circle" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="check" class="w-5 h-5 text-secondary mr-3 flex-shrink-0 mt-1"></i>
                                 <span>**Priority 24/7** Technical Support</span>
                             </li>
                         </ul>
@@ -305,7 +321,7 @@
                     <p class="text-lg text-gray-600 mb-6">
                         If your institution has over 20,000 students or requires multi-campus deployment and custom features, let's talk.
                     </p>
-                    <a href="#cta-section" class="inline-flex items-center bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl transition duration-300 transform hover:scale-105">
+                    <a href="#cta-section" class="inline-flex items-center bg-secondary hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl transition duration-300 transform hover:scale-105 shadow-md">
                         Request a Custom Quote
                         <i data-lucide="mail" class="w-5 h-5 ml-2"></i>
                     </a>
@@ -373,7 +389,7 @@
                         Request a Personalized Demo
                     </button>
                     <a href="features.html" 
-                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
+                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md flex items-center justify-center">
                         Explore Full Features List
                     </a>
                 </div>
@@ -389,7 +405,12 @@
                 <!-- Logo & Info -->
                 <div class="col-span-2 md:col-span-1">
                     <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
-                        <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
+                        <svg class="h-7 w-7 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                            <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <span>CampusG</span>
                     </a>
                     <p class="text-sm">Powering the next generation of academic excellence.</p>
@@ -443,8 +464,7 @@
     <!-- JavaScript for Interactivity -->
     <script>
         // Classes for dynamic card styling
-        const defaultClasses = 'shadow-xl border-t-8 border-gray-200 scale-100';
-        const highlightClasses = 'shadow-2xl ring-4 ring-primary scale-105';
+        const highlightClasses = 'card-highlight'; // Custom class defined in CSS
 
         function setupPricingCardInteractions() {
             const gridContainer = document.getElementById('pricing-grid');
@@ -453,24 +473,22 @@
 
             // Function to apply highlight style
             const highlight = (card) => {
-                card.classList.remove(...defaultClasses.split(' '));
-                card.classList.add(...highlightClasses.split(' '));
+                card.classList.add(highlightClasses);
             };
 
             // Function to apply default style
             const unhighlight = (card) => {
-                card.classList.remove(...highlightClasses.split(' '));
-                card.classList.add(...defaultClasses.split(' '));
+                card.classList.remove(highlightClasses);
             };
             
             // 1. Initial Setup: Highlight the default card
-            unhighlight(defaultCard); // Ensure it starts clean
+            cards.forEach(c => unhighlight(c));
             highlight(defaultCard);
             
-            // 2. Setup interactions for all cards on mouseenter
+            // 2. Setup interactions for all cards on mouseenter/mouseleave
             cards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    // Unhighlight all cards when entering any card
+                    // Unhighlight the default/all cards
                     cards.forEach(c => unhighlight(c));
                     // Highlight the currently hovered card
                     highlight(card);
@@ -486,9 +504,14 @@
         
         // 1. Initialize Lucide Icons and Year
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu icon setup
+            const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+            if (mobileMenuIcon) mobileMenuIcon.setAttribute('data-lucide', 'menu'); 
+
             lucide.createIcons();
             document.getElementById('current-year-pricing').textContent = new Date().getFullYear();
             setupPricingCardInteractions(); // Initialize new pricing card logic
+            togglePricing(false); // Ensure monthly is the default active state
         });
 
         // 2. Mobile Menu Toggle (Consistent across pages)
@@ -496,53 +519,61 @@
         const mobileMenu = document.getElementById('mobile-menu');
 
         mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            const isHidden = mobileMenu.classList.toggle('hidden');
             const icon = mobileMenuButton.querySelector('svg');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
-            } else {
-                icon.outerHTML = lucide.createIcons({'icon': 'x'}).x.outerHTML;
+            
+            // Toggle icon (menu <-> x)
+            if (icon) {
+                const iconName = isHidden ? 'menu' : 'x';
+                icon.outerHTML = lucide.createIcons({'icon': iconName}).outerHTML;
             }
-            lucide.createIcons(); // Recreate icons after changing HTML
+            lucide.createIcons();
         });
 
         // Close mobile menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                const icon = mobileMenuButton.querySelector('svg');
-                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
-                lucide.createIcons();
+        if (mobileMenu) {
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuButton.querySelector('svg');
+                    if (icon) {
+                        icon.outerHTML = lucide.createIcons({'icon': 'menu'}).outerHTML;
+                    }
+                    lucide.createIcons();
+                });
             });
-        });
+        }
 
         // 3. Pricing Toggle Logic
         function togglePricing(isAnnual) {
             const container = document.getElementById('price-toggle-container');
             const priceValues = document.querySelectorAll('.price-value');
+            const priceUnits = document.querySelectorAll('.price-unit');
             const priceNotes = document.querySelectorAll('.price-note');
 
             if (isAnnual) {
                 container.classList.remove('monthly');
                 container.classList.add('annual');
+                // Display annual note
                 priceNotes.forEach(note => note.classList.add('opacity-100'));
+                // Change price unit to /year (mock)
+                priceUnits.forEach(unit => unit.textContent = ' / year');
             } else {
                 container.classList.remove('annual');
                 container.classList.add('monthly');
+                // Hide annual note
                 priceNotes.forEach(note => note.classList.remove('opacity-100'));
+                // Change price unit back to /month
+                priceUnits.forEach(unit => unit.textContent = ' / month');
             }
 
+            // Update price number based on mode
             priceValues.forEach(el => {
                 const priceKey = isAnnual ? 'annual' : 'monthly';
                 el.textContent = el.getAttribute(`data-${priceKey}`);
             });
         }
         
-        // Initialize pricing to monthly display (default state)
-        document.addEventListener('DOMContentLoaded', () => {
-            togglePricing(false);
-        });
-
     </script>
 </body>
 </html>
