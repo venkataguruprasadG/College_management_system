@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About CampusG - Our Mission and Vision</title>
+    <title>About CampusG - Our Mission and Team</title>
     <!-- SEO Meta -->
-    <meta name="description" content="Learn about the CampusG mission, our history, and the core values driving the future of college management technology.">
+    <meta name="description" content="Learn about the CampusG mission, our journey to revolutionize college management, and the dedicated team driving our vision.">
     
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,32 +13,30 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Custom font import for modern look */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fb; /* Consistent light background */
         }
+        /* Tailwind configuration color variables */
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
         /* Custom scrollbar for aesthetics */
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #e5e7eb; }
+
+        /* Animation for the visual feature grid */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
         }
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e5e7eb;
-        }
-        /* Simple style for mock profile images */
-        .profile-img {
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
-        }
-        .profile-card:hover .profile-img {
-            filter: grayscale(0%);
+        .animate-pulse-light {
+            animation: pulse-border 2s infinite cubic-bezier(0.66, 0, 0, 1);
         }
     </style>
     <script>
@@ -57,12 +55,17 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section (Fixed Nav - Same as Landing Page) -->
+    <!-- Header Section (Fixed Nav - Consistent) -->
     <header class="sticky top-0 z-50 bg-white shadow-md">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <!-- Logo -->
             <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-primary">
-                <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <span>CampusG</span>
             </a>
 
@@ -70,9 +73,9 @@
             <nav class="hidden lg:flex items-center space-x-8">
                 <a href="features.html" class="text-gray-600 hover:text-primary transition duration-150">Features</a>
                 <a href="pricing.html" class="text-gray-600 hover:text-primary transition duration-150">Pricing</a>
-                <a href="#hero-section" class="text-primary font-semibold transition duration-150 border-b-2 border-primary">About Us</a>
+                <a href="#mission" class="text-primary font-semibold transition duration-150 border-b-2 border-primary">About Us</a>
                 <a href="support.html" class="text-gray-600 hover:text-primary transition duration-150">Support</a>
-                <a href="#" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
+                <a href="login.html" class="text-gray-600 hover:text-primary transition duration-150">Login</a>
                 
                 <!-- Prominent “Get Started” button -->
                 <a href="#cta-section"
@@ -83,7 +86,7 @@
 
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
+                <i data-lucide="menu" class="w-6 h-6" id="mobile-menu-icon"></i>
             </button>
         </div>
 
@@ -92,9 +95,9 @@
             <nav class="flex flex-col space-y-3">
                 <a href="features.html" class="text-gray-700 hover:text-primary py-2 transition">Features</a>
                 <a href="pricing.html" class="text-gray-700 hover:text-primary py-2 transition">Pricing</a>
-                <a href="#hero-section" class="text-primary font-semibold py-2 transition">About Us</a>
+                <a href="#mission" class="text-primary font-semibold py-2 transition">About Us</a>
                 <a href="support.html" class="text-gray-700 hover:text-primary py-2 transition">Support</a>
-                <a href="#" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
+                <a href="login.html" class="text-gray-700 hover:text-primary py-2 transition">Login</a>
                 <a href="#cta-section"
                     class="w-full bg-primary hover:bg-primary-dark text-white text-center font-semibold py-2 px-4 rounded-lg mt-2 transition duration-300">
                     Get Started
@@ -104,152 +107,246 @@
     </header>
 
     <main>
-        <!-- Hero Section: Mission Statement -->
-        <section id="hero-section" class="pt-16 pb-12 md:pt-20 md:pb-16 bg-white">
+        <!-- About Us Hero Section -->
+        <section id="mission" class="py-16 md:py-24 bg-primary text-white shadow-xl">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-                <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-3">Our Foundation</p>
-                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
-                    Building the Future of Academic Management
+                <p class="text-indigo-200 font-semibold uppercase tracking-widest mb-3">Who We Are</p>
+                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+                    Driving the Digital Transformation of Education
                 </h1>
-                <p class="mt-4 text-xl text-gray-600">
-                    CampusG was founded on the belief that college administration should be simple, intuitive, and centered around student success, not complexity.
+                <p class="mt-6 text-xl opacity-90">
+                    CampusG was founded on the belief that college administration should be effortless, secure, and focused entirely on empowering students and educators. We build software so institutions can focus on their mission.
                 </p>
             </div>
         </section>
 
-        <!-- Mission and Vision Section -->
-        <section class="py-16 md:py-20 bg-gray-50">
+        <!-- Mission & Values Section -->
+        <section class="py-16 md:py-24 bg-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
                     
-                    <!-- Our Mission -->
-                    <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-primary">
-                        <i data-lucide="target" class="w-10 h-10 text-primary mb-4"></i>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-4">Our Mission</h3>
-                        <p class="text-lg text-gray-600">
-                            To empower educational institutions globally by delivering a secure, integrated, and flexible management platform that automates routine tasks, accelerates decision-making, and fosters a collaborative digital learning environment.
-                        </p>
-                    </div>
+                    <!-- Visual Element: Animated Feature Grid (NEW) -->
+                    <div class="grid grid-cols-2 gap-6 p-4 bg-indigo-50/50 rounded-2xl shadow-xl">
+                        
+                        <!-- Mini Card 1: SIS (Data Integrity) -->
+                        <div class="text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary hover:shadow-2xl transition duration-300 transform hover:scale-[1.03]">
+                            <i data-lucide="database" class="w-8 h-8 text-primary mx-auto mb-2 animate-pulse-light"></i>
+                            <h4 class="font-bold text-lg text-gray-900">SIS Records</h4>
+                            <p class="text-sm text-gray-600">Centralized Student Data</p>
+                        </div>
 
-                    <!-- Our Vision -->
-                    <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-secondary">
-                        <i data-lucide="eye" class="w-10 h-10 text-secondary mb-4"></i>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-4">Our Vision</h3>
-                        <p class="text-lg text-gray-600">
-                            To be the world's leading academic software partner, recognized for setting the standard in administrative efficiency, data integrity, and enabling educators to focus their energy on teaching, not paperwork.
-                        </p>
+                        <!-- Mini Card 2: Finance (User-Centric) -->
+                        <div class="text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-secondary hover:shadow-2xl transition duration-300 transform hover:scale-[1.03]">
+                            <i data-lucide="wallet" class="w-8 h-8 text-secondary mx-auto mb-2"></i>
+                            <h4 class="font-bold text-lg text-gray-900">Finance & Fees</h4>
+                            <p class="text-sm text-gray-600">Automated Payments</p>
+                        </div>
+                        
+                        <!-- Mini Card 3: Attendance (Innovation) -->
+                        <div class="text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-secondary hover:shadow-2xl transition duration-300 transform hover:scale-[1.03]">
+                            <i data-lucide="fingerprint" class="w-8 h-8 text-secondary mx-auto mb-2"></i>
+                            <h4 class="font-bold text-lg text-gray-900">Attendance Tech</h4>
+                            <p class="text-sm text-gray-600">Real-Time Tracking</p>
+                        </div>
+                        
+                        <!-- Mini Card 4: Security (Core Value) -->
+                        <div class="text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-primary hover:shadow-2xl transition duration-300 transform hover:scale-[1.03]">
+                            <i data-lucide="lock" class="w-8 h-8 text-primary mx-auto mb-2 animate-pulse-light"></i>
+                            <h4 class="font-bold text-lg text-gray-900">Data Security</h4>
+                            <p class="text-sm text-gray-600">Privacy Compliant</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Content (Values) -->
+                    <div class="space-y-8">
+                        <h2 class="text-4xl font-extrabold text-gray-900">Our Mission and Core Values</h2>
+                        <div class="space-y-6">
+                            <!-- Value 1 -->
+                            <div class="flex items-start space-x-4 p-4 bg-indigo-50 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-[1.01]">
+                                <i data-lucide="shield-check" class="w-8 h-8 text-primary flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">Data Integrity & Security</h3>
+                                    <p class="text-gray-700 text-sm">We ensure all sensitive student and financial data is protected with enterprise-grade encryption and compliance standards (FERPA, GDPR, etc.).</p>
+                                </div>
+                            </div>
+                            <!-- Value 2 -->
+                            <div class="flex items-start space-x-4 p-4 bg-indigo-50 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-[1.01]">
+                                <i data-lucide="hand-platter" class="w-8 h-8 text-primary flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">User-Centric Simplicity</h3>
+                                    <p class="text-gray-700 text-sm">Our platform is designed to be intuitive for everyone—from busy administrators to students accessing their grades on mobile.</p>
+                                </div>
+                            </div>
+                            <!-- Value 3 -->
+                            <div class="flex items-start space-x-4 p-4 bg-indigo-50 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:scale-[1.01]">
+                                <i data-lucide="lightbulb" class="w-8 h-8 text-primary flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">Continuous Innovation</h3>
+                                    <p class="text-gray-700 text-sm">We actively integrate new technologies, like AI-driven analytics, to keep our partner institutions ahead of the curve in educational technology.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Our Core Values Section -->
-        <section class="py-16 md:py-20 bg-white">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p class="text-sm font-semibold uppercase tracking-wider text-secondary mb-3">Foundational Principles</p>
-                <h2 class="text-4xl font-extrabold text-gray-900 mb-12">
-                    Our Core Values
-                </h2>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <!-- Our Story / Timeline Section -->
+        <section class="py-16 md:py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-12">The CampusG Journey</h2>
+                
+                <!-- Timeline Component -->
+                <div class="relative">
+                    <!-- Vertical Line -->
+                    <div class="hidden md:block absolute left-1/2 w-1 h-full bg-gray-300 -translate-x-1/2 top-0"></div>
                     
-                    <!-- Value 1: Innovation -->
-                    <div class="p-6 rounded-xl border border-gray-200 hover:shadow-lg transition duration-300">
-                        <i data-lucide="lightbulb" class="w-8 h-8 text-primary mx-auto mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Innovation</h4>
-                        <p class="text-gray-600 text-sm">Continuously seeking smarter ways to solve complex administrative challenges using cutting-edge cloud technology.</p>
+                    <!-- Timeline Item 1 -->
+                    <div class="mb-8 flex md:justify-between items-center w-full right-timeline">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-10 flex items-center order-1 bg-primary shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                        </div>
+                        <div class="order-1 bg-white rounded-lg shadow-xl w-full md:w-5/12 px-6 py-4 border-t-4 border-primary hover:shadow-2xl transition duration-300">
+                            <p class="text-xs font-medium text-primary mb-1">2018</p>
+                            <h3 class="mb-3 font-bold text-xl">The Concept is Born</h3>
+                            <p class="text-sm leading-snug text-gray-700 text-opacity-100">
+                                Recognizing the outdated systems plaguing college admins, our founder sketched the first blueprint for a unified, modern platform.
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Value 2: Integrity -->
-                    <div class="p-6 rounded-xl border border-gray-200 hover:shadow-lg transition duration-300">
-                        <i data-lucide="shield-check" class="w-8 h-8 text-primary mx-auto mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Integrity & Security</h4>
-                        <p class="text-gray-600 text-sm">Upholding the highest standards of data privacy, security, and transparency in all client relationships and product features.</p>
+                    <!-- Timeline Item 2 -->
+                    <div class="mb-8 flex md:justify-between items-center w-full left-timeline">
+                        <div class="order-1 bg-white rounded-lg shadow-xl w-full md:w-5/12 px-6 py-4 border-t-4 border-secondary hover:shadow-2xl transition duration-300">
+                            <p class="text-xs font-medium text-secondary mb-1">2020</p>
+                            <h3 class="mb-3 font-bold text-xl">Beta Launch & Early Adopters</h3>
+                            <p class="text-sm leading-snug text-gray-700 text-opacity-100">
+                                CampusG launches its first modules (SIS & Attendance) in partnership with three regional colleges, validating the core architecture.
+                            </p>
+                        </div>
+                        <div class="z-10 flex items-center order-1 bg-secondary shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">2</h1>
+                        </div>
+                        <div class="order-1 md:w-5/12"></div>
+                    </div>
+                    
+                    <!-- Timeline Item 3 -->
+                    <div class="mb-8 flex md:justify-between items-center w-full right-timeline">
+                        <div class="order-1 md:w-5/12"></div>
+                        <div class="z-10 flex items-center order-1 bg-primary shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                        </div>
+                        <div class="order-1 bg-white rounded-lg shadow-xl w-full md:w-5/12 px-6 py-4 border-t-4 border-primary hover:shadow-2xl transition duration-300">
+                            <p class="text-xs font-medium text-primary mb-1">2022</p>
+                            <h3 class="mb-3 font-bold text-xl">Full Feature & Growth</h3>
+                            <p class="text-sm leading-snug text-gray-700 text-opacity-100">
+                                We roll out the Payments, Grading, and Communication Suites, officially becoming a full-service college management platform.
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Value 3: Partnership -->
-                    <div class="p-6 rounded-xl border border-gray-200 hover:shadow-lg transition duration-300">
-                        <i data-lucide="users" class="w-8 h-8 text-primary mx-auto mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Partnership</h4>
-                        <p class="text-gray-600 text-sm">Working hand-in-hand with colleges to tailor solutions and provide responsive support that feels like an extension of their team.</p>
+                    <!-- Timeline Item 4 -->
+                    <div class="mb-8 flex md:justify-between items-center w-full left-timeline">
+                        <div class="order-1 bg-white rounded-lg shadow-xl w-full md:w-5/12 px-6 py-4 border-t-4 border-secondary hover:shadow-2xl transition duration-300">
+                            <p class="text-xs font-medium text-secondary mb-1">2024</p>
+                            <h3 class="mb-3 font-bold text-xl">Global Expansion & Enterprise Ready</h3>
+                            <p class="text-sm leading-snug text-gray-700 text-opacity-100">
+                                CampusG achieves compliance certifications and integrates multi-currency support, serving institutions across three continents.
+                            </p>
+                        </div>
+                        <div class="z-10 flex items-center order-1 bg-secondary shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">4</h1>
+                        </div>
+                        <div class="order-1 md:w-5/12"></div>
                     </div>
 
-                    <!-- Value 4: Simplicity -->
-                    <div class="p-6 rounded-xl border border-gray-200 hover:shadow-lg transition duration-300">
-                        <i data-lucide="zap" class="w-8 h-8 text-primary mx-auto mb-4"></i>
-                        <h4 class="text-xl font-bold mb-2">Efficiency</h4>
-                        <p class="text-gray-600 text-sm">Designing interfaces and workflows for maximum ease of use, minimizing clicks, and maximizing administrative productivity.</p>
-                    </div>
+                    <!-- CSS for Timeline alignment (Pure CSS logic) -->
+                    <style>
+                        /* For smaller screens, treat all timeline items as right-aligned */
+                        @media (max-width: 768px) {
+                            .left-timeline {
+                                justify-content: flex-start;
+                            }
+                            .left-timeline > .order-1:first-child {
+                                display: none; /* Hide the empty div on the left */
+                            }
+                            .left-timeline > .order-1:nth-child(3) {
+                                order: 3; /* Move content to the right of the bullet */
+                            }
+                        }
+                    </style>
                 </div>
+
             </div>
         </section>
 
-        <!-- Leadership Team (Mock Profiles) -->
-        <section class="py-16 md:py-20 bg-gray-50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p class="text-sm font-semibold uppercase tracking-wider text-primary mb-3">The People Behind the Platform</p>
-                <h2 class="text-4xl font-extrabold text-gray-900 mb-12">
-                    Meet Our Leadership Team
-                </h2>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <!-- Team Section -->
+        <section class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">Meet Our Dedicated Leadership Team</h2>
+                
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-6xl mx-auto">
                     
                     <!-- Team Member 1 -->
-                    <div class="profile-card bg-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
-                        <img src="https://placehold.co/150x150/4f46e5/ffffff?text=J.D." 
-                             onerror="this.onerror=null; this.src='https://placehold.co/150x150/4f46e5/ffffff?text=Jane+Doe';"
-                             alt="Jane Doe, CEO" 
-                             class="profile-img w-32 h-32 rounded-full mx-auto mb-4 border-4 border-gray-200 hover:border-primary transition duration-300">
-                        <h4 class="text-xl font-bold text-gray-900">Jane Doe</h4>
-                        <p class="text-primary font-semibold mb-3">Chief Executive Officer</p>
-                        <p class="text-gray-600 text-sm">Visionary leader focused on academic partnership and growth strategy.</p>
+                    <div class="text-center bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                        <img src="https://placehold.co/150x150/4f46e5/ffffff?text=A.V." alt="Team Founder Photo" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary">
+                        <h3 class="text-xl font-bold text-gray-900">Dr. Alex Vance</h3>
+                        <p class="text-primary font-semibold mb-3">Founder & CEO</p>
+                        <p class="text-sm text-gray-600">Visionary leader with 15+ years in educational technology and campus administration systems.</p>
+                        <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        </div>
                     </div>
 
                     <!-- Team Member 2 -->
-                    <div class="profile-card bg-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
-                        <img src="https://placehold.co/150x150/10b981/ffffff?text=A.S."
-                             onerror="this.onerror=null; this.src='https://placehold.co/150x150/10b981/ffffff?text=Alex+Smith';"
-                             alt="Alex Smith, CTO" 
-                             class="profile-img w-32 h-32 rounded-full mx-auto mb-4 border-4 border-gray-200 hover:border-secondary transition duration-300">
-                        <h4 class="text-xl font-bold text-gray-900">Alex Smith</h4>
+                    <div class="text-center bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                        <img src="https://placehold.co/150x150/10b981/ffffff?text=M.C." alt="Team CTO Photo" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-secondary">
+                        <h3 class="text-xl font-bold text-gray-900">Maria Chen</h3>
                         <p class="text-secondary font-semibold mb-3">Chief Technology Officer</p>
-                        <p class="text-gray-600 text-sm">Drives the platform's security architecture and innovation roadmap.</p>
+                        <p class="text-sm text-gray-600">Leads our engineering team, ensuring the platform remains scalable, secure, and performant.</p>
+                         <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        </div>
                     </div>
                     
                     <!-- Team Member 3 -->
-                    <div class="profile-card bg-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
-                        <img src="https://placehold.co/150x150/4f46e5/ffffff?text=L.G."
-                             onerror="this.onerror=null; this.src='https://placehold.co/150x150/4f46e5/ffffff?text=Lisa+Garcia';"
-                             alt="Lisa Garcia, Head of Sales" 
-                             class="profile-img w-32 h-32 rounded-full mx-auto mb-4 border-4 border-gray-200 hover:border-primary transition duration-300">
-                        <h4 class="text-xl font-bold text-gray-900">Lisa Garcia</h4>
-                        <p class="text-primary font-semibold mb-3">Head of Sales & Partnerships</p>
-                        <p class="text-gray-600 text-sm">Leads client relations and ensures CampusG meets college needs globally.</p>
+                    <div class="text-center bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                        <img src="https://placehold.co/150x150/4f46e5/ffffff?text=D.K." alt="Team Sales Photo" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary">
+                        <h3 class="text-xl font-bold text-gray-900">David Kim</h3>
+                        <p class="text-primary font-semibold mb-3">VP of Sales & Partnerships</p>
+                        <p class="text-sm text-gray-600">Manages enterprise relationships and ensures CampusG meets the financial needs of large universities.</p>
+                         <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                        </div>
                     </div>
 
                     <!-- Team Member 4 -->
-                    <div class="profile-card bg-white p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
-                        <img src="https://placehold.co/150x150/10b981/ffffff?text=M.K."
-                             onerror="this.onerror=null; this.src='https://placehold.co/150x150/10b981/ffffff?text=Mark+Kwan';"
-                             alt="Mark Kwan, Lead Educator" 
-                             class="profile-img w-32 h-32 rounded-full mx-auto mb-4 border-4 border-gray-200 hover:border-secondary transition duration-300">
-                        <h4 class="text-xl font-bold text-gray-900">Mark Kwan</h4>
-                        <p class="text-secondary font-semibold mb-3">Chief Educational Officer</p>
-                        <p class="text-gray-600 text-sm">Ensures the platform aligns perfectly with modern pedagogy and academic standards.</p>
+                    <div class="text-center bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.03]">
+                        <img src="https://placehold.co/150x150/10b981/ffffff?text=E.W." alt="Team Marketing Photo" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-secondary">
+                        <h3 class="text-xl font-bold text-gray-900">Elena Wu</h3>
+                        <p class="text-secondary font-semibold mb-3">Head of Product Design</p>
+                        <p class="text-sm text-gray-600">Focused on user experience, making complex management tasks intuitive and visually appealing for all users.</p>
+                         <div class="flex justify-center space-x-3 mt-4">
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-primary transition"><i data-lucide="dribbble" class="w-5 h-5"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
 
         <!-- CTA Section (Consistent Styling) -->
         <section id="cta-section" class="py-16 md:py-20 bg-primary text-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                 <h2 class="text-4xl font-extrabold mb-4">
-                    Ready to Start Your Digital Campus Journey?
+                    Join Our Mission to Transform Education
                 </h2>
                 <p class="text-xl mb-10 opacity-90">
-                    See the platform in action with a free, no-obligation demo.
+                    See the full power of CampusG tailored to your institution's needs.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -258,15 +355,15 @@
                         Request a Personalized Demo
                     </button>
                     <a href="features.html" 
-                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md">
-                        Explore Full Features List
+                        class="border border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-xl transition duration-300 shadow-md flex items-center justify-center">
+                        Explore Open Careers
                     </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer Section (Same as Landing Page) -->
+    <!-- Footer Section (Consistent) -->
     <footer class="bg-gray-900 text-gray-300 py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
@@ -274,7 +371,12 @@
                 <!-- Logo & Info -->
                 <div class="col-span-2 md:col-span-1">
                     <a href="index.html" class="flex items-center space-x-2 text-2xl font-bold text-white mb-4">
-                        <i data-lucide="graduation-cap" class="w-7 h-7 text-primary"></i>
+                        <svg class="h-7 w-7 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                            <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <span>CampusG</span>
                     </a>
                     <p class="text-sm">Powering the next generation of academic excellence.</p>
@@ -336,27 +438,30 @@
         // 2. Mobile Menu Toggle (Consistent across pages)
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
 
         mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            const icon = mobileMenuButton.querySelector('svg');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
-            } else {
-                icon.outerHTML = lucide.createIcons({'icon': 'x'}).x.outerHTML;
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            
+            // Toggle icon (menu <-> x)
+            if (mobileMenuIcon) {
+                mobileMenuIcon.setAttribute('data-lucide', isHidden ? 'menu' : 'x');
+                lucide.createIcons(); // Recreate icon
             }
-            lucide.createIcons(); // Recreate icons after changing HTML
         });
 
         // Close mobile menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                const icon = mobileMenuButton.querySelector('svg');
-                icon.outerHTML = lucide.createIcons({'icon': 'menu'}).menu.outerHTML;
-                lucide.createIcons();
+        if (mobileMenu) {
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    if (mobileMenuIcon) {
+                        mobileMenuIcon.setAttribute('data-lucide', 'menu');
+                        lucide.createIcons();
+                    }
+                });
             });
-        });
+        }
     </script>
 </body>
 </html>
