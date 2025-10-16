@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Executive Dashboard</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font and base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Slate 100 background for app feel */
+            min-height: 100vh;
+        }
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
+
+        /* Ensure main content scales responsively with sidebar */
+        @media (min-width: 1024px) {
+            .main-content-area {
+                margin-left: 16rem; /* Tailwind 'w-64' for sidebar */
+            }
+        }
+        
+        /* Custom animation for KPI glow on hover */
+        .kpi-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2), 0 4px 6px -4px rgba(79, 70, 229, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        /* Simple Chart Placeholder Styling (SVG) */
+        .chart-placeholder {
+            width: 100%;
+            height: 150px;
+            background-color: #e0e7ff; /* light indigo */
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Sidebar (Fixed on Desktop, Hidden on Mobile) -->
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-full bg-gray-900 text-white shadow-2xl lg:translate-x-0 transition-transform duration-300 transform -translate-x-full">
+        <div class="p-6 h-full flex flex-col">
+            
+            <!-- Logo/App Title -->
+            <div class="flex items-center space-x-2 pb-6 mb-6 border-b border-gray-700">
+                <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-2xl font-bold">CampusG</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-grow space-y-2">
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white font-semibold shadow-lg">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#academics" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                
+                <a href="#finance" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+
+                <a href="#hr-staff" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                
+                <a href="#campus-life" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+            </nav>
+
+            <!-- Sign Out Button -->
+            <button id="signout-button" class="w-full mt-8 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content-area transition-all duration-300 p-4 lg:p-8">
+        
+        <!-- Top Nav/Header for Mobile and Desktop -->
+        <header class="flex items-center justify-between p-4 bg-white rounded-xl shadow-md mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                <i data-lucide="flag" class="w-7 h-7 text-primary mr-3 hidden md:block"></i>
+                Executive Overview
+            </h1>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Toggle Button (Visible on Mobile Only) -->
+                <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                
+                <button class="p-2 rounded-full text-gray-600 hover:bg-gray-100 relative">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <span class="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+                        <img src="https://placehold.co/40x40/4f46e5/ffffff?text=C" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary">
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600"></i>
+                    </button>
+                    <!-- Mock Profile Dropdown -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
+                        <div class="flex flex-col p-2">
+                            <p class="text-sm font-semibold px-3 py-1 text-gray-900 border-b mb-1">Chairman/Admin</p>
+                            <button id="profile-signout-button" class="w-full text-left text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition duration-150">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div class="space-y-8">
+            
+            <!-- 1. Global KPIs: Financial, Enrollment, Operational Health -->
+            <section id="kpi-stats">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- KPI Card 1: Total Enrollment -->
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-primary transition duration-300">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="users" class="w-8 h-8 text-primary"></i>
+                            <span class="text-xs font-semibold text-primary uppercase">Total Enrollment</span>
+                        </div>
+                        <p class="text-4xl font-extrabold text-gray-900 mt-3">8,930</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="arrow-up" class="w-4 h-4 text-secondary mr-1"></i> 
+                            +6.1% YoY Growth
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 2: Tuition Revenue YTD -->
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-secondary transition duration-300">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="dollar-sign" class="w-8 h-8 text-secondary"></i>
+                            <span class="text-xs font-semibold text-secondary uppercase">Revenue YTD</span>
+                        </div>
+                        <p class="text-4xl font-extrabold text-gray-900 mt-3">$4.8M</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-secondary mr-1"></i> 
+                            85% of Annual Target
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 3: System Health -->
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-primary transition duration-300">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-primary"></i>
+                            <span class="text-xs font-semibold text-primary uppercase">System Health</span>
+                        </div>
+                        <p class="text-4xl font-extrabold text-gray-900 mt-3">99.9%</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="clock" class="w-4 h-4 text-gray-500 mr-1"></i> 
+                            Uptime Last 30 Days
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 4: New Applications (Admissions Pipeline) -->
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-secondary transition duration-300">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="file-text" class="w-8 h-8 text-secondary"></i>
+                            <span class="text-xs font-semibold text-secondary uppercase">New Applications</span>
+                        </div>
+                        <p class="text-4xl font-extrabold text-gray-900 mt-3">412</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="bell" class="w-4 h-4 text-red-500 mr-1"></i> 
+                            15 Pending Review
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Academic Oversight & Attendance (Two-Column Layout) -->
+            <div class="grid lg:grid-cols-3 gap-6">
+                
+                <!-- Chart Col 1: Attendance Trends (2/3 width) -->
+                <section id="attendance-trends" class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                        <i data-lucide="clipboard-check" class="w-6 h-6 text-primary mr-2"></i>
+                        Weekly Attendance Snapshot by Branch
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Attendance Chart Mock -->
+                        <div class="chart-placeholder">
+                            <p class="text-sm font-semibold text-primary mb-2">Branch Attendance Trend (Last 7 Days)</p>
+                            <svg class="w-full h-[80%]" viewBox="0 0 400 120" preserveAspectRatio="none">
+                                <polyline fill="none" stroke="#4f46e5" stroke-width="2" points="0,100 80,40 160,80 240,20 320,60 400,10" />
+                                <text x="10" y="115" class="text-xs fill-gray-600">Mon</text>
+                                <text x="380" y="115" class="text-xs fill-gray-600">Sun</text>
+                                <text x="10" y="10" class="text-xs fill-gray-600">95%</text>
+                                <text x="10" y="100" class="text-xs fill-gray-600">70%</text>
+                            </svg>
+                        </div>
+                        <!-- Branch Status Table -->
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900 mb-2">Current Status by Department</p>
+                            <ul class="space-y-2">
+                                <li class="flex justify-between items-center bg-indigo-50 p-3 rounded-lg">
+                                    <span class="font-medium">Computer Science</span>
+                                    <span class="text-secondary font-bold">94%</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg">
+                                    <span class="font-medium">Business Administration</span>
+                                    <span class="text-primary font-bold">98%</span>
+                                </li>
+                                <li class="flex justify-between items-center bg-red-50 p-3 rounded-lg">
+                                    <span class="font-medium">Arts & Humanities</span>
+                                    <span class="text-red-500 font-bold">87%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Card Col 2: Classes in Session Today (1/3 width) -->
+                <section id="live-classes" class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                        <i data-lucide="monitor" class="w-6 h-6 text-primary mr-2"></i>
+                        Live Academic Status
+                    </h2>
+                    <ul class="space-y-4">
+                        <li class="border-l-4 border-primary pl-3">
+                            <p class="text-sm font-semibold text-gray-900">10:00 AM: Advanced Algorithms</p>
+                            <p class="text-xs text-gray-600">Branch: Comp. Science | Room: L-301</p>
+                        </li>
+                        <li class="border-l-4 border-secondary pl-3">
+                            <p class="text-sm font-semibold text-gray-900">11:00 AM: Financial Accounting II</p>
+                            <p class="text-xs text-gray-600">Branch: Business | Room: B-105</p>
+                        </li>
+                        <li class="border-l-4 border-primary pl-3">
+                            <p class="text-sm font-semibold text-gray-900">1:00 PM: Intro to Design Principles</p>
+                            <p class="text-xs text-gray-600">Branch: Arts | Room: Studio A</p>
+                        </li>
+                        <li class="border-l-4 border-gray-400 pl-3">
+                            <p class="text-sm font-semibold text-gray-900">2:00 PM: Staff Training Session</p>
+                            <p class="text-xs text-gray-600">Topic: New LMS Features</p>
+                        </li>
+                    </ul>
+                </section>
+
+            </div>
+
+            <!-- 3. Staff & Campus Life Snapshot (Two-Column Layout) -->
+            <div class="grid lg:grid-cols-2 gap-6">
+                
+                <!-- Staff & Training (50% width) -->
+                <section id="staff-snapshot" class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                        <i data-lucide="briefcase" class="w-6 h-6 text-secondary mr-2"></i>
+                        Staff & HR Snapshot
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-lg font-semibold mb-2">Faculty On Duty Today</p>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-secondary mr-2"></i> Prof. Maria Chen (CS)</li>
+                                <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-secondary mr-2"></i> Dr. David Kim (Business)</li>
+                                <li class="flex items-center"><i data-lucide="x" class="w-4 h-4 text-red-500 mr-2"></i> Prof. Elena Wu (Leave)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold mb-2">Current Training Status</p>
+                            <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                                <p class="font-medium text-primary">Mandatory Cybersecurity Training</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                    <div class="bg-primary h-2.5 rounded-full" style="width: 78%"></div>
+                                </div>
+                                <p class="text-xs text-gray-600 mt-1">78% Faculty Completion Rate</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Events and Clubs (50% width) -->
+                <section id="campus-life" class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                        <i data-lucide="activity" class="w-6 h-6 text-primary mr-2"></i>
+                        Campus Life & Clubs
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-lg font-semibold mb-2">Upcoming Major Events</p>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex justify-between"><span>**Oct 28:** Annual Tech Fest</span></li>
+                                <li class="flex justify-between"><span>**Nov 5:** Board of Governors Meeting</span></li>
+                                <li class="flex justify-between"><span>**Dec 1:** Alumni Homecoming Day</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-lg font-semibold mb-2">Active Student Clubs</p>
+                            <div class="bg-emerald-50 p-3 rounded-lg border border-secondary">
+                                <p class="font-medium text-secondary">Student Body Engagement</p>
+                                <p class="text-sm text-gray-700 mt-1">45 clubs are currently registered and active for the semester.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        // Constants and Mock Data (Using the same mock key as initial_setup.html)
+        const MOCK_SESSION_KEY = 'campusg_session_mock';
+        const MOCK_USER_ID = 'UID_EXECUTIVE'; // Executive ID for Dashboard testing
+        
+        // 1. Initialize Icons and Check Session
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            checkMockSession();
+            setupSidebarToggle();
+            setupSignoutButtons();
+        });
+
+        // --- Session Management (Consistent with Login Module) ---
+
+        function checkMockSession() {
+            const sessionData = localStorage.getItem(MOCK_SESSION_KEY);
+            
+            // If no valid session, redirect to login page
+            if (!sessionData) {
+                console.warn('No active mock session found. Redirecting to login.');
+                // window.location.href = 'login.html'; // Actual redirect in a real app
+                return; 
+            }
+
+            try {
+                const { role, userId, is_onboarded } = JSON.parse(sessionData);
+                
+                // CRITICAL CHECK: If user is logged in but not onboarded, redirect to setup
+                if (!is_onboarded) {
+                    console.warn('User logged in but not onboarded. Redirecting to setup.');
+                    window.location.href = 'initial_setup.html'; 
+                    return;
+                }
+
+                // If role is set, use it (otherwise default to Admin for Executive View)
+                const userRole = role || 'Admin';
+                console.log(`Session found. Displaying Dashboard for role: ${userRole}`);
+
+                // In a true application, this is where you'd hide/show sections based on role.
+                // For this executive dashboard, we show everything.
+
+            } catch (e) {
+                console.error('Failed to parse session data:', e);
+                // Force sign out if data is corrupted
+                clearMockSession();
+            }
+        }
+
+        function clearMockSession() {
+            localStorage.removeItem(MOCK_SESSION_KEY);
+            sessionStorage.removeItem(MOCK_SESSION_KEY);
+            console.log('Mock session cleared. Redirecting to login.');
+            window.location.href = 'login.html';
+        }
+
+        function setupSignoutButtons() {
+            const signoutHandler = (event) => {
+                event.preventDefault();
+                clearMockSession();
+            };
+
+            // Attach to sidebar button and profile button
+            document.getElementById('signout-button').addEventListener('click', signoutHandler);
+            document.getElementById('profile-signout-button').addEventListener('click', signoutHandler);
+        }
+        
+        // --- UI Interactions ---
+
+        function setupSidebarToggle() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('mobile-sidebar-toggle');
+
+            toggleButton.addEventListener('click', () => {
+                // Toggle visibility on mobile via class names
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            // Close sidebar when clicking outside (mobile only)
+            document.getElementById('main-content').addEventListener('click', (event) => {
+                if (!sidebar.classList.contains('-translate-x-full') && !sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
+                    if (window.innerWidth < 1024) { // Only hide on mobile/tablet
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
