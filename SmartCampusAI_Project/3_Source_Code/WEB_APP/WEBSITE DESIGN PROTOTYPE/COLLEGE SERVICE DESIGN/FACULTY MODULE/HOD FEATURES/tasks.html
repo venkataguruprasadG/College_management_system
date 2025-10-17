@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Task & Workflow Execution</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font and base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Slate 100 background for app feel */
+            min-height: 100vh;
+        }
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
+
+        /* Ensure main content scales responsively with sidebar */
+        @media (min-width: 1024px) {
+            .main-content-area {
+                margin-left: 16rem; /* Tailwind 'w-64' for sidebar */
+            }
+        }
+        
+        /* Styling for the Task Columns (Kanban) */
+        .task-column {
+            min-width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        /* Scrollbar styling for a cleaner look */
+        .task-column::-webkit-scrollbar { width: 6px; }
+        .task-column::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .task-column::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .task-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                        'red-base': '#ef4444', /* Red 500 */
+                        'yellow-base': '#f59e0b', /* Yellow 500 */
+                        'blue-base': '#3b82f6', /* Blue 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Sidebar (Fixed on Desktop, Hidden on Mobile) -->
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-full bg-gray-900 text-white shadow-2xl lg:translate-x-0 transition-transform duration-300 transform -translate-x-full">
+        <div class="p-6 h-full flex flex-col">
+            
+            <!-- Logo/App Title -->
+            <div class="flex items-center space-x-2 pb-6 mb-6 border-b border-gray-700">
+                <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-2xl font-bold">CampusG</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-grow space-y-2">
+                <a href="dashboard.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="academics.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                
+                <a href="finance.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+
+                <a href="hr_staff.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                
+                <a href="campus_life.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white font-semibold shadow-lg">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+
+                <a href="admissions.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </nav>
+
+            <!-- Sign Out Button -->
+            <button id="signout-button" class="w-full mt-8 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content-area transition-all duration-300 p-4 lg:p-8">
+        
+        <!-- Top Nav/Header for Mobile and Desktop -->
+        <header class="flex items-center justify-between p-4 bg-white rounded-xl shadow-md mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                <i data-lucide="list-checks" class="w-7 h-7 text-primary mr-3 hidden md:block"></i>
+                Operational Task Execution
+            </h1>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Toggle Button (Visible on Mobile Only) -->
+                <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                
+                <button class="p-2 rounded-full text-gray-600 hover:bg-gray-100 relative">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <span class="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+                        <img src="https://placehold.co/40x40/4f46e5/ffffff?text=HOD" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary">
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600"></i>
+                    </button>
+                    <!-- Mock Profile Dropdown -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
+                        <div class="flex flex-col p-2">
+                            <p class="text-sm font-semibold px-3 py-1 text-gray-900 border-b mb-1">HOD (Operational User)</p>
+                            <button id="profile-signout-button" class="w-full text-left text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition duration-150">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div class="space-y-8">
+            
+            <!-- Global Task Controls -->
+            <section id="task-controls" class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row gap-4 items-center justify-between">
+                
+                <div class="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto md:flex-grow">
+                    <h2 class="text-xl font-bold text-gray-900 flex-shrink-0">My Workflows:</h2>
+                    
+                    <!-- Filter 1: Workflow Type -->
+                    <div class="w-full md:w-auto">
+                        <label for="filter-workflow" class="block text-xs font-medium text-gray-500 mb-1">Workflow Type</label>
+                        <select id="filter-workflow" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary transition">
+                            <option value="my_tasks">Tasks Assigned to Me</option>
+                            <option value="department">My Department's Workflows</option>
+                            <option value="onboarding">Staff Onboarding</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter 2: Priority -->
+                    <div class="w-full md:w-auto">
+                        <label for="filter-priority" class="block text-xs font-medium text-gray-500 mb-1">Priority</label>
+                        <select id="filter-priority" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary transition">
+                            <option value="all">All Priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <button onclick="createTaskOrWorkflow()" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-dark transition duration-150 mt-auto md:mt-0 flex items-center justify-center space-x-2">
+                    <i data-lucide="file-plus" class="w-5 h-5"></i>
+                    <span>Delegate Task</span>
+                </button>
+            </section>
+
+            <!-- 2. Task Kanban Board -->
+            <section id="task-board" class="overflow-x-auto">
+                <div class="inline-flex space-x-6 pb-4">
+                    
+                    <!-- Column 1: To Do -->
+                    <div class="task-column bg-gray-200 p-4 rounded-xl shadow-inner flex-shrink-0">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 flex items-center justify-between">
+                            TO DO <span class="text-xs bg-gray-500 text-white px-2 py-0.5 rounded-full">4</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- Task Card 1: Onboarding -->
+                            <div class="task-card bg-white p-4 rounded-xl shadow-md border-t-4 border-blue-base" data-status="todo" data-workflow="onboarding">
+                                <p class="text-sm font-semibold mb-1">Approve Faculty IT Access (HOD Action)</p>
+                                <p class="text-xs text-gray-500 mb-2">Workflow: HR Onboarding</p>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-red-500 flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i> Due: Today</span>
+                                    <span class="text-gray-700">Priority: High</span>
+                                </div>
+                            </div>
+                            <!-- Task Card 2: Maintenance -->
+                            <div class="task-card bg-white p-4 rounded-xl shadow-md border-t-4 border-yellow-base" data-status="todo" data-workflow="maintenance">
+                                <p class="text-sm font-semibold mb-1">Finalize Syllabus for M.Tech Q3</p>
+                                <p class="text-xs text-gray-500 mb-2">Workflow: Academic Review</p>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-red-500 flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i> Due: This Week</span>
+                                    <span class="text-gray-700">Priority: Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Column 2: In Progress -->
+                    <div class="task-column bg-gray-200 p-4 rounded-xl shadow-inner flex-shrink-0">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 flex items-center justify-between">
+                            IN PROGRESS <span class="text-xs bg-blue-base text-white px-2 py-0.5 rounded-full">2</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- Task Card 3: Accreditation -->
+                            <div class="task-card bg-white p-4 rounded-xl shadow-md border-t-4 border-red-base" data-status="in_progress" data-workflow="accreditation">
+                                <p class="text-sm font-semibold mb-1">Review Student Feedback Forms (HOD)</p>
+                                <p class="text-xs text-gray-500 mb-2">Workflow: Q3 Compliance</p>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-red-500 flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i> Due: Oct 30</span>
+                                    <span class="text-gray-700">Priority: High</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Column 3: Review -->
+                    <div class="task-column bg-gray-200 p-4 rounded-xl shadow-inner flex-shrink-0">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 flex items-center justify-between">
+                            PENDING APPROVAL <span class="text-xs bg-yellow-base text-white px-2 py-0.5 rounded-full">1</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- Task Card 4: Finance -->
+                            <div class="task-card bg-white p-4 rounded-xl shadow-md border-t-4 border-secondary" data-status="review" data-workflow="finance">
+                                <p class="text-sm font-semibold mb-1">Verify Departmental Expense Reports</p>
+                                <p class="text-xs text-gray-500 mb-2">Workflow: Finance Reporting</p>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-primary flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-1"></i> Due: Next Week</span>
+                                    <span class="text-gray-700">Approver: Principal/Admin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: Complete -->
+                    <div class="task-column bg-gray-200 p-4 rounded-xl shadow-inner flex-shrink-0">
+                        <h3 class="text-lg font-bold mb-4 text-gray-900 flex items-center justify-between">
+                            COMPLETE <span class="text-xs bg-secondary text-white px-2 py-0.5 rounded-full">7</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- Task Card 5: Completed -->
+                            <div class="task-card bg-white p-4 rounded-xl shadow-md border-t-4 border-secondary/50" data-status="complete" data-workflow="onboarding">
+                                <p class="text-sm font-semibold mb-1 text-gray-500 line-through">IT Setup for New Dean</p>
+                                <p class="text-xs text-gray-500 mb-2">Completed: Yesterday</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        // Constants
+        const MOCK_SESSION_KEY = 'campusg_session_mock';
+        
+        // 1. Initialize Icons and Check Session
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            checkMockSession();
+            setupSidebarToggle();
+            setupSignoutButtons();
+            setupFilterListeners();
+        });
+
+        // --- Mock Management Functions ---
+
+        function setupFilterListeners() {
+            const filterWorkflow = document.getElementById('filter-workflow');
+            const filterPriority = document.getElementById('filter-priority');
+            
+            [filterWorkflow, filterPriority].forEach(element => {
+                element.addEventListener('change', applyTaskFilters);
+            });
+        }
+        
+        function applyTaskFilters() {
+            const workflow = document.getElementById('filter-workflow').value;
+            const priority = document.getElementById('filter-priority').value;
+            
+            console.log(`Task filters applied: Workflow=${workflow}, Priority=${priority}`);
+            
+            // NOTE: In a full application, this would filter the displayed Kanban cards.
+            // For the prototype, we use an alert to simulate the action.
+            alert(`Filters applied! Showing tasks for Workflow: ${workflow} and Priority: ${priority}.`);
+        }
+
+        function createTaskOrWorkflow() {
+            alert("Action: Open Delegation/Task Creation Modal (For HOD use)");
+        }
+
+
+        // --- Session & UI Functions (Reused from Dashboard) ---
+
+        function checkMockSession() {
+            const sessionData = localStorage.getItem(MOCK_SESSION_KEY);
+            if (!sessionData) {
+                console.warn('No active mock session found. Redirecting to login.');
+                // window.location.href = 'login.html'; // In live, redirect here
+                return; 
+            }
+            try {
+                // We assume the user logging into this page is an HOD or Staff
+                const { is_onboarded } = JSON.parse(sessionData);
+                if (!is_onboarded) {
+                    console.warn('User logged in but not onboarded. Redirecting to setup.');
+                    window.location.href = 'initial_setup.html'; 
+                    return;
+                }
+            } catch (e) {
+                console.error('Failed to parse session data:', e);
+                clearMockSession();
+            }
+        }
+
+        function clearMockSession() {
+            localStorage.removeItem(MOCK_SESSION_KEY);
+            sessionStorage.removeItem(MOCK_SESSION_KEY);
+            console.log('Mock session cleared. Redirecting to login.');
+            window.location.href = 'login.html';
+        }
+
+        function setupSignoutButtons() {
+            const signoutHandler = (event) => {
+                event.preventDefault();
+                clearMockSession();
+            };
+            document.getElementById('signout-button').addEventListener('click', signoutHandler);
+            document.getElementById('profile-signout-button').addEventListener('click', signoutHandler);
+        }
+        
+        function setupSidebarToggle() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('mobile-sidebar-toggle');
+
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            document.getElementById('main-content').addEventListener('click', (event) => {
+                const isSidebarVisible = !sidebar.classList.contains('-translate-x-full');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = toggleButton.contains(event.target);
+
+                // Close sidebar on outside click on mobile
+                if (isSidebarVisible && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
