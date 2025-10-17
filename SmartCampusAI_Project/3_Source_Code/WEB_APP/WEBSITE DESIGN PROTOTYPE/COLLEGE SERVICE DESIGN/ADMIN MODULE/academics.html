@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Academics Management</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font and base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Slate 100 background for app feel */
+            min-height: 100vh;
+        }
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+        }
+
+        /* Ensure main content scales responsively with sidebar */
+        @media (min-width: 1024px) {
+            .main-content-area {
+                margin-left: 16rem; /* Tailwind 'w-64' for sidebar */
+            }
+        }
+        
+        /* Simple Chart Placeholder Styling (SVG) */
+        .chart-placeholder {
+            width: 100%;
+            height: 180px;
+            background-color: #e0e7ff; /* light indigo */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', /* Indigo 600 */
+                        'primary-dark': '#4338ca', /* Indigo 700 */
+                        'secondary': '#10b981', /* Emerald 500 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Sidebar (Fixed on Desktop, Hidden on Mobile) -->
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-full bg-gray-900 text-white shadow-2xl lg:translate-x-0 transition-transform duration-300 transform -translate-x-full">
+        <div class="p-6 h-full flex flex-col">
+            
+            <!-- Logo/App Title -->
+            <div class="flex items-center space-x-2 pb-6 mb-6 border-b border-gray-700">
+                <svg class="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.1"/>
+                    <path d="M22 7V17L12 22L2 17V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 9L12 12L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-2xl font-bold">CampusG</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-grow space-y-2">
+                <a href="dashboard.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-primary text-white font-semibold shadow-lg">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                
+                <a href="#finance" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+
+                <a href="#hr-staff" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                
+                <a href="#campus-life" class="flex items-center space-x-3 p-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-primary transition duration-150">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+            </nav>
+
+            <!-- Sign Out Button -->
+            <button id="signout-button" class="w-full mt-8 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content-area transition-all duration-300 p-4 lg:p-8">
+        
+        <!-- Top Nav/Header for Mobile and Desktop -->
+        <header class="flex items-center justify-between p-4 bg-white rounded-xl shadow-md mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                <i data-lucide="book-open" class="w-7 h-7 text-primary mr-3 hidden md:block"></i>
+                Academic Oversight
+            </h1>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Toggle Button (Visible on Mobile Only) -->
+                <button id="mobile-sidebar-toggle" class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                
+                <button class="p-2 rounded-full text-gray-600 hover:bg-gray-100 relative">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <span class="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+                        <img src="https://placehold.co/40x40/4f46e5/ffffff?text=A" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary">
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600"></i>
+                    </button>
+                    <!-- Mock Profile Dropdown -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
+                        <div class="flex flex-col p-2">
+                            <p class="text-sm font-semibold px-3 py-1 text-gray-900 border-b mb-1">Admin User</p>
+                            <button id="profile-signout-button" class="w-full text-left text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition duration-150">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div class="space-y-8">
+            
+            <!-- Filter Controls (Crucial for Admin View) -->
+            <section id="filter-controls" class="bg-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row gap-4 items-center">
+                <h2 class="text-xl font-bold text-gray-900 flex-shrink-0">Filter Academic Data:</h2>
+                
+                <!-- Filter 1: Academic Year -->
+                <div class="w-full md:w-auto">
+                    <label for="filter-year" class="block text-xs font-medium text-gray-500 mb-1">Academic Year</label>
+                    <select id="filter-year" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary transition">
+                        <option value="2024">2024 - 2025 (Current)</option>
+                        <option value="2023">2023 - 2024</option>
+                        <option value="2022">2022 - 2023</option>
+                    </select>
+                </div>
+                
+                <!-- Filter 2: Branch/Department -->
+                <div class="w-full md:w-auto md:flex-grow">
+                    <label for="filter-branch" class="block text-xs font-medium text-gray-500 mb-1">Branch/Department</label>
+                    <select id="filter-branch" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary transition">
+                        <option value="all">All Branches</option>
+                        <option value="cs">Computer Science & Engineering</option>
+                        <option value="mba">Business Administration (MBA)</option>
+                        <option value="arts">Arts & Humanities</option>
+                        <option value="mech">Mechanical Engineering</option>
+                    </select>
+                </div>
+                
+                <!-- Filter 3: Semester (Hidden until Branch selected - mock) -->
+                <div class="w-full md:w-auto">
+                    <label for="filter-semester" class="block text-xs font-medium text-gray-500 mb-1">Semester</label>
+                    <select id="filter-semester" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary transition">
+                        <option value="all">All Semesters</option>
+                        <option value="s1">Semester 1</option>
+                        <option value="s2">Semester 2</option>
+                        <option value="s3">Semester 3</option>
+                    </select>
+                </div>
+                
+                <button onclick="applyFilters()" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-dark transition duration-150 mt-auto md:mt-0">
+                    Apply Filters
+                </button>
+            </section>
+
+            <!-- 1. Key Academic Metrics (KPI Cards) -->
+            <section id="academic-kpis">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- KPI Card 1: Overall Pass Rate -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-secondary transition duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="award" class="w-8 h-8 text-secondary"></i>
+                            <span class="text-xs font-semibold text-secondary uppercase">Overall Pass Rate</span>
+                        </div>
+                        <p id="kpi-pass-rate" class="text-4xl font-extrabold text-gray-900 mt-3">89.5%</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="arrow-up" class="w-4 h-4 text-secondary mr-1"></i> 
+                            +1.2% from last year
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 2: Average Attendance -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-primary transition duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="fingerprint" class="w-8 h-8 text-primary"></i>
+                            <span class="text-xs font-semibold text-primary uppercase">Avg. Attendance</span>
+                        </div>
+                        <p id="kpi-attendance" class="text-4xl font-extrabold text-gray-900 mt-3">92.8%</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="arrow-down" class="w-4 h-4 text-red-500 mr-1"></i> 
+                            -0.5% this month
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 3: Faculty Teaching Load -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-secondary transition duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="briefcase" class="w-8 h-8 text-secondary"></i>
+                            <span class="text-xs font-semibold text-secondary uppercase">Avg. Faculty Load</span>
+                        </div>
+                        <p id="kpi-load" class="text-4xl font-extrabold text-gray-900 mt-3">15 Hrs/Wk</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-secondary mr-1"></i> 
+                            Balanced
+                        </p>
+                    </div>
+
+                    <!-- KPI Card 4: Students at Risk -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-b-4 border-primary transition duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                        <div class="flex items-center justify-between">
+                            <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
+                            <span class="text-xs font-semibold text-red-500 uppercase">Students At Risk</span>
+                        </div>
+                        <p id="kpi-risk" class="text-4xl font-extrabold text-red-500 mt-3">345</p>
+                        <p class="text-sm text-gray-500 mt-1 flex items-center">
+                            <i data-lucide="arrow-up" class="w-4 h-4 text-red-500 mr-1"></i> 
+                            15 new alerts this week
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Detailed Performance View (Charts and Tables) -->
+            <div class="grid lg:grid-cols-3 gap-6">
+                
+                <!-- Col 1 (Attendance Reports by Branch) -->
+                <section class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                        <i data-lucide="bar-chart-2" class="w-6 h-6 text-primary mr-2"></i>
+                        Attendance Report by Branch
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Chart Placeholder 1 -->
+                        <div class="chart-placeholder">
+                            <p>Mock Bar Chart: Attendance by Branch</p>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg. Att.</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Low Att.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- Data Rows added by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Col 2 (Pass/Fail Report & Faculty Load) -->
+                <section class="lg:col-span-1 space-y-6">
+                    
+                    <!-- Pass/Fail Chart -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h2 class="text-xl font-bold mb-4 text-gray-900 flex items-center">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-secondary mr-2"></i>
+                            Semester Pass/Fail Ratio
+                        </h2>
+                        <div class="chart-placeholder !h-40 !bg-emerald-50/50 !border-secondary">
+                            <p>Mock Pie Chart: Pass/Fail</p>
+                        </div>
+                        <div class="flex justify-between text-sm mt-3 font-medium">
+                            <span class="text-secondary">Pass: 89.5%</span>
+                            <span class="text-red-500">Fail: 10.5%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Faculty Teaching Today -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h2 class="text-xl font-bold mb-4 text-gray-900 flex items-center">
+                            <i data-lucide="chalkboard" class="w-5 h-5 text-primary mr-2"></i>
+                            Faculty Teaching Today
+                        </h2>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex justify-between items-center border-b pb-2">
+                                <span>Prof. A. Smith (CS)</span>
+                                <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-primary">4 hrs</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b pb-2">
+                                <span>Dr. B. Jones (MBA)</span>
+                                <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-primary">6 hrs</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span>Ms. C. Lee (Arts)</span>
+                                <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-primary">2 hrs</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        // Constants
+        const MOCK_SESSION_KEY = 'campusg_session_mock';
+        const ATTENDANCE_DATA = [
+            { branch: 'Computer Science & Engineering', avg: '94.2%', low: '35' },
+            { branch: 'Business Administration (MBA)', avg: '90.5%', low: '48' },
+            { branch: 'Arts & Humanities', avg: '87.1%', low: '72' },
+            { branch: 'Mechanical Engineering', avg: '95.8%', low: '21' },
+        ];
+
+        // 1. Initialize Icons and Check Session
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            checkMockSession();
+            setupSidebarToggle();
+            setupSignoutButtons();
+            populateAttendanceTable(ATTENDANCE_DATA);
+        });
+
+        // --- Mock Data Functions ---
+
+        function populateAttendanceTable(data) {
+            const tableBody = document.getElementById('attendance-table-body');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(item => {
+                const isLow = parseFloat(item.avg) < 90;
+                const row = document.createElement('tr');
+                row.classList.add('hover:bg-indigo-50/50', 'transition', 'duration-150');
+                
+                let lowAttColor = isLow ? 'text-red-500 font-medium' : 'text-gray-700';
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.branch}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-secondary">${item.avg}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${lowAttColor}">${item.low}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function applyFilters() {
+            const year = document.getElementById('filter-year').value;
+            const branch = document.getElementById('filter-branch').value;
+            const semester = document.getElementById('filter-semester').value;
+            
+            console.log(`Applying Filters: Year=${year}, Branch=${branch}, Semester=${semester}`);
+            
+            // --- MOCK DATA CHANGE LOGIC ---
+            // In a real app, this would trigger an API call. For the prototype, we update the data.
+            
+            let newPassRate = '89.5%';
+            let newAttendance = '92.8%';
+            let newRisk = '345';
+            
+            if (branch === 'cs') {
+                 newPassRate = '91.2%';
+                 newAttendance = '94.2%';
+                 newRisk = '120';
+            } else if (branch === 'mba') {
+                 newPassRate = '85.0%';
+                 newAttendance = '90.5%';
+                 newRisk = '95';
+            } else if (branch === 'arts') {
+                 newPassRate = '82.0%';
+                 newAttendance = '87.1%';
+                 newRisk = '130';
+            }
+
+            // Update KPIs
+            document.getElementById('kpi-pass-rate').textContent = newPassRate;
+            document.getElementById('kpi-attendance').textContent = newAttendance;
+            document.getElementById('kpi-risk').textContent = newRisk;
+
+            // In a real app, this would filter the attendance table data as well.
+            alert(`Filters applied! Showing data for ${branch} in year ${year}. KPI values have been mocked accordingly.`);
+        }
+
+
+        // --- Session & UI Functions (Reused from Dashboard) ---
+
+        function checkMockSession() {
+            const sessionData = localStorage.getItem(MOCK_SESSION_KEY);
+            if (!sessionData) {
+                console.warn('No active mock session found. Redirecting to login.');
+                // window.location.href = 'login.html'; 
+                return; 
+            }
+            try {
+                const { is_onboarded } = JSON.parse(sessionData);
+                if (!is_onboarded) {
+                    console.warn('User logged in but not onboarded. Redirecting to setup.');
+                    window.location.href = 'initial_setup.html'; 
+                    return;
+                }
+            } catch (e) {
+                console.error('Failed to parse session data:', e);
+                clearMockSession();
+            }
+        }
+
+        function clearMockSession() {
+            localStorage.removeItem(MOCK_SESSION_KEY);
+            sessionStorage.removeItem(MOCK_SESSION_KEY);
+            console.log('Mock session cleared. Redirecting to login.');
+            window.location.href = 'login.html';
+        }
+
+        function setupSignoutButtons() {
+            const signoutHandler = (event) => {
+                event.preventDefault();
+                clearMockSession();
+            };
+            document.getElementById('signout-button').addEventListener('click', signoutHandler);
+            document.getElementById('profile-signout-button').addEventListener('click', signoutHandler);
+        }
+        
+        function setupSidebarToggle() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('mobile-sidebar-toggle');
+
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            document.getElementById('main-content').addEventListener('click', (event) => {
+                if (!sidebar.classList.contains('-translate-x-full') && !sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
+                    if (window.innerWidth < 1024) { 
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
