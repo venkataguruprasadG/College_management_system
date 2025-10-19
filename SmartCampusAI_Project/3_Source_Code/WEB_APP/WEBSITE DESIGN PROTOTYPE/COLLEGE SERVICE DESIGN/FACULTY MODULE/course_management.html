@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Faculty Course Management</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Define CampusG Colors and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #006064; /* Deep Teal - New Primary */
+            --primary-dark: #004d50; 
+            --secondary-color: #4caf50; /* Forest Green - New Success */
+            --accent-color: #ff7043; /* Vibrant Coral - New Accent */
+            --text-color: #1f2937; 
+            --card-bg: #ffffff;
+            --radius: 12px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f6f9; 
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+        }
+        
+        /* --- Sidebar Styles (Fixed for consistency) --- */
+        #sidebar {
+            width: 256px; 
+            background: #263238; 
+            color: #fff;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            z-index: 50; 
+            padding: 16px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar .logo { padding: 0 16px 16px; display: flex; align-items: center; border-bottom: 1px solid #455a64; margin-bottom: 16px; }
+        .logo-title { font-weight: 800; font-size: 1.5rem; margin-left: 8px; }
+        .logo-icon { width: 30px; height: 30px; color: var(--accent-color); }
+        .nav-container { overflow-y: auto; flex-grow: 1; padding: 0 0 10px 0; }
+
+        .nav-item { display:flex; align-items:center; padding:10px 16px; color: rgba(255,255,255,0.8); text-decoration:none; transition: background 160ms, color 160ms; border-radius: 8px; margin: 0 10px; }
+        .nav-item svg { width:20px;height:20px; margin-right:12px; flex-shrink:0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { 
+            background: var(--primary-color); 
+            font-weight:700; 
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 96, 100, 0.4);
+        }
+        .nav-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #90a4ae; padding: 8px 16px 4px; }
+        #signout-button { margin: 16px 10px 16px 10px; flex-shrink: 0; }
+
+        /* --- Main Content Layout --- */
+        #main-content { 
+            margin-left: 256px; 
+            flex:1; 
+            padding:28px 32px; 
+            max-width: 1600px; 
+            width:calc(100% - 256px); 
+        }
+
+        /* --- Custom Styles for Course List --- */
+        .course-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+        }
+
+        .course-header {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .action-link {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .action-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .stat-badge {
+            background-color: #e0f7fa;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Progress Bar Styles */
+        .progress-bar-container {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-color);
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1023px) { 
+            #sidebar { left: -256px; }
+            #main-content { margin-left: 0; width: 100%; padding: 16px; }
+            .mobile-menu-btn { display: inline-flex; }
+        }
+        #sidebar.is-open { transform: translateX(0); }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#006064',
+                        'primary-dark': '#004d50',
+                        'secondary': '#4caf50',
+                        'accent': '#ff7043',
+                        'red-base': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar / Navigation (Copied structure from faculty_profile.html) -->
+    <nav id="sidebar" class="transition-transform duration-300">
+        <div class="p-4 h-full flex flex-col">
+            
+            <div class="logo pb-4 border-b border-gray-700">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 11-6-11-6z"/>
+                </svg>
+                <span class="logo-title">CampusG Portal</span>
+            </div>
+
+            <div class="nav-container">
+                <p class="nav-label">My Portal</p>
+                <a class="nav-item" href="staff_portal.html">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="faculty_profile.html">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="nav-item active" href="#">
+                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                    <span>My Courses</span>
+                </a>
+                
+                <p class="nav-label border-t border-gray-700 mt-3 pt-3">Modules</p>
+                
+                <a class="nav-item" href="dashboard.html">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Executive Monitor</span>
+                </a>
+                <a class="nav-item" href="academics.html">
+                    <i data-lucide="school" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                <a class="nav-item" href="finance.html">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+                <a class="nav-item" href="hr_staff.html">
+                    <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                <a class="nav-item" href="campus_life.html">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+                <a class="nav-item" href="tasks.html">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+                <a class="nav-item" href="admissions.html">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </div>
+
+            <button id="signout-button" class="w-full mt-4 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        
+        <!-- Header / Title -->
+        <header class="flex items-center justify-between pb-4 border-b border-gray-200 mb-8">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center space-x-2">
+                <i data-lucide="book-open-check" class="w-8 h-8"></i>
+                <span>My Course Management Hub</span>
+            </h1>
+            <button id="mobile-sidebar-toggle" class="mobile-menu-btn bg-primary text-white p-2 rounded-lg lg:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Course Filters and Overview -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <h2 class="text-xl font-bold text-gray-900">Active Load: Fall 2025 Semester</h2>
+            
+            <div class="flex flex-wrap gap-4 items-center">
+                <select class="p-2 border border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition">
+                    <option>Filter by Branch</option>
+                    <option>B.Tech - CSE</option>
+                    <option>M.Tech - CSE</option>
+                </select>
+                <select class="p-2 border border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition">
+                    <option>Filter by Year</option>
+                    <option>Year 3</option>
+                    <option>Year 1 (M.Tech)</option>
+                </select>
+                <button class="bg-secondary text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-green-600 transition">
+                    <i data-lucide="file-plus" class="w-4 h-4 inline mr-1"></i> New Assignment
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Course List Grid -->
+        <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
+
+            <!-- Course Card 1: B.Tech CSE -->
+            <div class="course-card border-t-4 border-primary">
+                <div class="course-header">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-1">CS 301: Advanced Algorithms</h3>
+                    <p class="text-sm text-gray-500">B.Tech - CSE | Year 3</p>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Total Students:</span>
+                        <span class="text-gray-900">60</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Next Class:</span>
+                        <span class="font-bold text-primary">Tues @ 10:00 AM</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Pending Grades:</span>
+                        <span class="stat-badge bg-red-100 text-red-600">15 Assignments</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Attendance Rate:</span>
+                        <span class="text-secondary font-bold">88%</span>
+                    </div>
+                    
+                    <!-- NEW SYLLABUS PROGRESS -->
+                    <div class="pt-4 border-t border-gray-100">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-semibold text-gray-700">Syllabus Covered:</span>
+                            <span class="font-bold text-primary">65%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 65%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Next Topic: Graph Theory & Complexity</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex justify-between space-x-3">
+                    <a href="#" onclick="alert('Navigating to CS 301 Gradebook')" class="action-link text-sm">
+                        <i data-lucide="award" class="w-4 h-4 mr-1"></i> Grade Submissions
+                    </a>
+                    <a href="#" onclick="alert('Navigating to CS 301 Attendance')" class="action-link text-sm">
+                        <i data-lucide="clipboard-check" class="w-4 h-4 mr-1"></i> Take Attendance
+                    </a>
+                </div>
+            </div>
+
+            <!-- Course Card 2: M.Tech CSE -->
+            <div class="course-card border-t-4 border-secondary">
+                <div class="course-header">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-1">CS 405: Distributed Systems</h3>
+                    <p class="text-sm text-gray-500">M.Tech - CSE | Year 1</p>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Total Students:</span>
+                        <span class="text-gray-900">30</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Next Class:</span>
+                        <span class="font-bold text-primary">Mon @ 2:00 PM</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Pending Grades:</span>
+                        <span class="stat-badge">5 Projects</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Attendance Rate:</span>
+                        <span class="text-secondary font-bold">95%</span>
+                    </div>
+                    
+                    <!-- NEW SYLLABUS PROGRESS -->
+                    <div class="pt-4 border-t border-gray-100">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-semibold text-gray-700">Syllabus Covered:</span>
+                            <span class="font-bold text-primary">40%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 40%; background-color: var(--accent-color);"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Next Topic: Concurrency Control</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex justify-between space-x-3">
+                    <a href="#" onclick="alert('Navigating to CS 405 Gradebook')" class="action-link text-sm">
+                        <i data-lucide="award" class="w-4 h-4 mr-1"></i> Grade Submissions
+                    </a>
+                    <a href="#" onclick="alert('Navigating to CS 405 Attendance')" class="action-link text-sm">
+                        <i data-lucide="clipboard-check" class="w-4 h-4 mr-1"></i> Take Attendance
+                    </a>
+                </div>
+            </div>
+
+            <!-- Course Card 3: New Faculty Advising Group -->
+            <div class="course-card border-t-4 border-accent">
+                <div class="course-header">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-1">Faculty Advising Group</h3>
+                    <p class="text-sm text-gray-500">Mentorship | Mixed Year/Branch</p>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Total Advisees:</span>
+                        <span class="text-gray-900">12</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Office Hours:</span>
+                        <span class="font-bold text-primary">Fri @ 9:00 AM</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Pending Meetings:</span>
+                        <span class="stat-badge bg-yellow-100 text-yellow-600">3 Students</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="font-semibold text-gray-700">Average CGPA:</span>
+                        <span class="text-secondary font-bold">8.54</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex justify-between space-x-3">
+                    <a href="#" onclick="alert('Navigating to Advising Notes')" class="action-link text-sm">
+                        <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i> View Notes
+                    </a>
+                    <a href="#" onclick="alert('Navigating to Advising Schedule')" class="action-link text-sm">
+                        <i data-lucide="calendar-plus" class="w-4 h-4 mr-1"></i> Book Student
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        
+        // --- Sidebar Toggle Function ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
+
+        function setupSidebarToggle() {
+            if (!sidebar || !mobileToggle || !mainContent) return;
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('is-open');
+                // Toggle icon for better UX
+                const icon = mobileToggle.querySelector('i');
+                const isOpened = sidebar.classList.contains('is-open');
+                icon.setAttribute('data-lucide', isOpened ? 'x' : 'menu');
+                lucide.createIcons();
+            });
+            
+            mainContent.addEventListener('click', (event) => {
+                const isSidebarOpen = sidebar.classList.contains('is-open');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                // Close sidebar on outside click on mobile
+                if (isSidebarOpen && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.remove('is-open');
+                }
+            });
+        }
+        
+        // --- Final Execution ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupSidebarToggle();
+            
+            // Mock Sign Out link handler (re-used logic)
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.confirm('Are you sure you want to sign out?')) {
+                        // Mock signout: clear local storage and redirect
+                        localStorage.removeItem('campusg_session_mock');
+                        localStorage.removeItem('staffDashboardWidgets');
+                        window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
