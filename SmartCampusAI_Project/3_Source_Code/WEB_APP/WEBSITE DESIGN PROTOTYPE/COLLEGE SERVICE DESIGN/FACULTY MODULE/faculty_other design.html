@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Faculty Profile - Dr. Johnson</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Define CampusG Colors and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #006064; /* Deep Teal - New Primary */
+            --primary-dark: #004d50; 
+            --secondary-color: #4caf50; /* Forest Green - New Success */
+            --accent-color: #ff7043; /* Vibrant Coral - New Accent */
+            --text-color: #1f2937; 
+            --card-bg: #ffffff;
+            --radius: 12px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f6f9; 
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+        }
+        
+        /* --- Sidebar Styles (Fixed for consistency) --- */
+        #sidebar {
+            width: 256px; 
+            background: #263238; 
+            color: #fff;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            z-index: 50; 
+            padding: 16px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar .logo { padding: 0 16px 16px; display: flex; align-items: center; border-bottom: 1px solid #455a64; margin-bottom: 16px; }
+        .logo-title { font-weight: 800; font-size: 1.5rem; margin-left: 8px; }
+        .logo-icon { width: 30px; height: 30px; color: var(--accent-color); }
+        .nav-container { overflow-y: auto; flex-grow: 1; padding: 0 0 10px 0; }
+
+        .nav-item { display:flex; align-items:center; padding:10px 16px; color: rgba(255,255,255,0.8); text-decoration:none; transition: background 160ms, color 160ms; border-radius: 8px; margin: 0 10px; }
+        .nav-item svg { width:20px;height:20px; margin-right:12px; flex-shrink:0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { 
+            background: var(--primary-color); 
+            font-weight:700; 
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 96, 100, 0.4);
+        }
+        .nav-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #90a4ae; padding: 8px 16px 4px; }
+        #signout-button { margin: 16px 10px 16px 10px; flex-shrink: 0; }
+
+        /* --- Main Content Layout --- */
+        #main-content { 
+            margin-left: 256px; 
+            flex:1; 
+            padding:28px 32px; 
+            max-width: 1600px; 
+            width:calc(100% - 256px); 
+        }
+
+        /* --- Profile Card Specific Styles --- */
+        .profile-header-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 24px;
+        }
+
+        .profile-stat-card {
+            background: #f7f9fb;
+            border-radius: var(--radius);
+            padding: 16px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .profile-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1023px) { 
+            #sidebar { left: -256px; }
+            #main-content { margin-left: 0; width: 100%; padding: 16px; }
+            .mobile-menu-btn { display: inline-flex; }
+        }
+        #sidebar.is-open { transform: translateX(0); }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#006064',
+                        'primary-dark': '#004d50',
+                        'secondary': '#4caf50',
+                        'accent': '#ff7043',
+                        'red-base': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar / Navigation -->
+    <nav id="sidebar" class="transition-transform duration-300">
+        <div class="p-4 h-full flex flex-col">
+            
+            <div class="logo pb-4 border-b border-gray-700">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 11-6-11-6z"/>
+                </svg>
+                <span class="logo-title">CampusG Portal</span>
+            </div>
+
+            <div class="nav-container">
+                <p class="nav-label">My Portal</p>
+                <a class="nav-item" href="staff_portal.html">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item active" href="#">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </a>
+                
+                <p class="nav-label border-t border-gray-700 mt-3 pt-3">Modules</p>
+                
+                <a class="nav-item" href="dashboard.html">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Executive Monitor</span>
+                </a>
+                <a class="nav-item" href="academics.html">
+                    <i data-lucide="school" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                <a class="nav-item" href="finance.html">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+                <a class="nav-item" href="hr_staff.html">
+                    <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                <a class="nav-item" href="campus_life.html">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+                <a class="nav-item" href="tasks.html">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+                <a class="nav-item" href="admissions.html">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </div>
+
+            <button id="signout-button" class="w-full mt-4 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        
+        <!-- Header / Breadcrumb -->
+        <header class="flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center space-x-2">
+                <i data-lucide="user" class="w-8 h-8"></i>
+                <span>Faculty Profile: Dr. Alex Johnson</span>
+            </h1>
+            <button id="mobile-sidebar-toggle" class="mobile-menu-btn bg-primary text-white p-2 rounded-lg lg:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Profile Header & Stats -->
+        <div class="grid lg:grid-cols-4 gap-6 mb-8">
+            
+            <!-- Profile Card (Spans 1 column) -->
+            <div class="profile-header-card lg:col-span-1 text-center">
+                <img src="https://placehold.co/100x100/006064/ffffff?text=AJ" alt="Faculty Avatar" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-accent">
+                <h2 class="text-xl font-bold text-gray-900">Dr. Alex Johnson</h2>
+                <p class="text-sm font-semibold text-primary">Head of Department, Computer Science</p>
+                <p class="text-xs text-gray-500 mt-1">Faculty ID: FCT-2001</p>
+                <button class="mt-4 bg-accent text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-orange-600 transition">
+                    <i data-lucide="edit" class="w-4 h-4 inline mr-1"></i> Edit Profile
+                </button>
+            </div>
+
+            <!-- Stats/KPIs (Spans 3 columns) -->
+            <div class="lg:col-span-3 grid md:grid-cols-3 gap-6">
+                
+                <!-- Stat 1: Teaching Load -->
+                <div class="profile-stat-card">
+                    <p class="text-sm text-gray-600 flex items-center space-x-2"><i data-lucide="book-open-check" class="w-5 h-5 text-secondary"></i><span>Current Load</span></p>
+                    <p class="text-3xl font-bold text-gray-900 mt-1">3 Courses</p>
+                    <p class="text-xs text-gray-500">Advising: 12 Students</p>
+                </div>
+
+                <!-- Stat 2: Student Feedback -->
+                <div class="profile-stat-card border-l-4 border-secondary">
+                    <p class="text-sm text-gray-600 flex items-center space-x-2"><i data-lucide="star" class="w-5 h-5 text-accent"></i><span>Avg. Student Feedback</span></p>
+                    <p class="text-3xl font-bold text-gray-900 mt-1">4.7 / 5.0</p>
+                    <p class="text-xs text-gray-500">Based on Fall 2024 reviews</p>
+                </div>
+
+                <!-- Stat 3: Leave Balance -->
+                <div class="profile-stat-card border-l-4 border-red-500">
+                    <p class="text-sm text-gray-600 flex items-center space-x-2"><i data-lucide="calendar-off" class="w-5 h-5 text-red-500"></i><span>Annual Leave Remaining</span></p>
+                    <p class="text-3xl font-bold text-secondary mt-1">12 Days</p>
+                    <p class="text-xs text-red-500">1 request pending HOD approval</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabbed Content Area -->
+        <div class="profile-header-card">
+            
+            <!-- Tabs Navigation -->
+            <div class="border-b border-gray-200 mb-6 flex space-x-6 overflow-x-auto">
+                <button class="tab-button active pb-2 text-sm md:text-base transition" data-tab="personal">Personal & Contact</button>
+                <button class="tab-button pb-2 text-sm md:text-base transition" data-tab="academic">Academic & Qualifications</button>
+                <button class="tab-button pb-2 text-sm md:text-base transition" data-tab="workload">Workload & Schedule</button>
+                <button class="tab-button pb-2 text-sm md:text-base transition" data-tab="performance">Performance & History</button>
+            </div>
+
+            <!-- Tab Content Containers -->
+            <div id="tab-content">
+                
+                <!-- 1. Personal & Contact Tab -->
+                <div id="tab-personal" class="tab-pane">
+                    <h3 class="text-xl font-bold text-primary mb-4">Contact Details</h3>
+                    <div class="grid md:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                        <p><span class="font-semibold text-gray-600">Email:</span> <a href="mailto:ajohnson@campusg.edu" class="text-primary hover:underline">ajohnson@campusg.edu</a></p>
+                        <p><span class="font-semibold text-gray-600">Phone:</span> +91 98765 43210</p>
+                        <p><span class="font-semibold text-gray-600">Date of Birth:</span> 1978-05-15</p>
+                        <p><span class="font-semibold text-gray-600">Nationality:</span> Indian</p>
+                        <p class="md:col-span-2"><span class="font-semibold text-gray-600">Residential Address:</span> Apt. 402, Green Meadows Complex, Hyderabad, 500032</p>
+                    </div>
+                </div>
+
+                <!-- 2. Academic & Qualifications Tab -->
+                <div id="tab-academic" class="tab-pane hidden">
+                    <h3 class="text-xl font-bold text-primary mb-4">Academic Background</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <h4 class="font-semibold text-lg">Ph.D. in Computer Science</h4>
+                            <p class="text-sm text-gray-600">Massachusetts Institute of Technology (MIT), 2008</p>
+                            <p class="text-sm text-gray-600 mt-1">Research Area: Distributed Algorithms & AI</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <h4 class="font-semibold text-lg">M.Tech. in Software Engineering</h4>
+                            <p class="text-sm text-gray-600">Indian Institute of Technology (IIT Bombay), 2003</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-primary mt-8 mb-4">Certifications & Expertise</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Certified AI Engineer</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Cloud Computing Specialist</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Cybersecurity (CISSP)</span>
+                    </div>
+                </div>
+
+                <!-- 3. Workload & Schedule Tab -->
+                <div id="tab-workload" class="tab-pane hidden">
+                    <h3 class="text-xl font-bold text-primary mb-4">Current Teaching Load (Fall 2025)</h3>
+                    
+                    <ul class="space-y-4">
+                        <li class="p-4 bg-gray-50 rounded-lg flex justify-between items-center border-l-4 border-primary">
+                            <div>
+                                <h4 class="font-semibold">CS 301: Advanced Algorithms</h4>
+                                <p class="text-sm text-gray-600">B.Tech CSE - Year 3 (60 students)</p>
+                            </div>
+                            <span class="text-sm font-semibold text-primary">Tues/Thurs 10:00 - 11:30 AM</span>
+                        </li>
+                        <li class="p-4 bg-gray-50 rounded-lg flex justify-between items-center border-l-4 border-primary">
+                            <div>
+                                <h4 class="font-semibold">CS 405: Distributed Systems</h4>
+                                <p class="text-sm text-gray-600">M.Tech CSE - Year 1 (30 students)</p>
+                            </div>
+                            <span class="text-sm font-semibold text-primary">Mon/Wed 2:00 - 3:30 PM</span>
+                        </li>
+                        <li class="p-4 bg-gray-50 rounded-lg flex justify-between items-center border-l-4 border-primary">
+                            <div>
+                                <h4 class="font-semibold">Advising Group: 12 Students</h4>
+                                <p class="text-sm text-gray-600">Weekly office hours: Fridays 9:00 AM - 12:00 PM</p>
+                            </div>
+                            <span class="text-sm font-semibold text-primary">Room 205 (HOD Office)</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-primary mb-4">Departmental Role</h3>
+                        <p class="text-gray-700">As **Head of Department (HOD)**, I oversee faculty hiring, budget allocation for the CS department, and curriculum compliance with institutional standards.</p>
+                    </div>
+                </div>
+
+                <!-- 4. Performance & History Tab -->
+                <div id="tab-performance" class="tab-pane hidden">
+                    <h3 class="text-xl font-bold text-primary mb-4">Key Performance Indicators (KPIs)</h3>
+                    
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <p class="text-sm text-gray-600">Student Pass Rate (Overall)</p>
+                            <p class="text-2xl font-bold text-secondary">95%</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <p class="text-sm text-gray-600">Grading Submission Timeliness</p>
+                            <p class="text-2xl font-bold text-secondary">98% on-time</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <p class="text-sm text-gray-600">Research Citations (Last 5 Years)</p>
+                            <p class="text-2xl font-bold text-secondary">425</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-secondary">
+                            <p class="text-sm text-gray-600">Years of Service at Institution</p>
+                            <p class="text-2xl font-bold text-secondary">10 Years</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-primary mt-8 mb-4">Internal Activity Log</h3>
+                    <ul class="text-sm space-y-2 border-t pt-4">
+                        <li class="flex justify-between text-gray-700"><span>Approved 5 Leave Requests (HOD Action)</span> <span class="text-xs text-gray-500">2025-10-15</span></li>
+                        <li class="flex justify-between text-gray-700"><span>Submitted CS 405 Midterm Grades</span> <span class="text-xs text-gray-500">2025-09-28</span></li>
+                        <li class="flex justify-between text-gray-700"><span>Attended Quarterly HOD Meeting</span> <span class="text-xs text-gray-500">2025-09-10</span></li>
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        
+        // --- Sidebar Toggle Function ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
+
+        function setupSidebarToggle() {
+            if (!sidebar || !mobileToggle || !mainContent) return;
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('is-open');
+                // Toggle icon for better UX
+                const icon = mobileToggle.querySelector('i');
+                const isOpened = sidebar.classList.contains('is-open');
+                icon.setAttribute('data-lucide', isOpened ? 'x' : 'menu');
+                lucide.createIcons();
+            });
+            
+            mainContent.addEventListener('click', (event) => {
+                const isSidebarOpen = sidebar.classList.contains('is-open');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                // Close sidebar on outside click on mobile
+                if (isSidebarOpen && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.remove('is-open');
+                }
+            });
+        }
+        
+        // --- Tab Switching Logic ---
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContent = document.getElementById('tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+
+                    // Remove active state from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Hide all content panes
+                    tabContent.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
+
+                    // Set active state on clicked button
+                    button.classList.add('active');
+                    // Show target pane
+                    document.getElementById(`tab-${targetTab}`).classList.remove('hidden');
+                });
+            });
+        }
+        
+        // --- Final Execution ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupSidebarToggle();
+            setupTabs();
+
+            // Mock Sign Out link handler (re-used logic)
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.confirm('Are you sure you want to sign out?')) {
+                        // Mock signout: clear local storage and redirect
+                        localStorage.removeItem('campusg_session_mock');
+                        localStorage.removeItem('staffDashboardWidgets');
+                        window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
