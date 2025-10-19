@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Faculty Leave Request</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Define CampusG Colors and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #006064; /* Deep Teal - New Primary */
+            --primary-dark: #004d50; 
+            --secondary-color: #4caf50; /* Forest Green - New Success */
+            --accent-color: #ff7043; /* Vibrant Coral - New Accent */
+            --text-color: #1f2937; 
+            --card-bg: #ffffff;
+            --radius: 12px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f6f9; 
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+        }
+        
+        /* --- Sidebar Styles (Fixed for consistency) --- */
+        #sidebar {
+            width: 256px; 
+            background: #263238; 
+            color: #fff;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            z-index: 50; 
+            padding: 16px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar .logo { padding: 0 16px 16px; display: flex; align-items: center; border-bottom: 1px solid #455a64; margin-bottom: 16px; }
+        .logo-title { font-weight: 800; font-size: 1.5rem; margin-left: 8px; }
+        .logo-icon { width: 30px; height: 30px; color: var(--accent-color); }
+        .nav-container { overflow-y: auto; flex-grow: 1; padding: 0 0 10px 0; }
+
+        .nav-item { display:flex; align-items:center; padding:10px 16px; color: rgba(255,255,255,0.8); text-decoration:none; transition: background 160ms, color 160ms; border-radius: 8px; margin: 0 10px; }
+        .nav-item svg { width:20px;height:20px; margin-right:12px; flex-shrink:0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { 
+            background: var(--primary-color); 
+            font-weight:700; 
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 96, 100, 0.4);
+        }
+        .nav-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #90a4ae; padding: 8px 16px 4px; }
+        #signout-button { margin: 16px 10px 16px 10px; flex-shrink: 0; }
+
+        /* --- Main Content Layout --- */
+        #main-content { 
+            margin-left: 256px; 
+            flex:1; 
+            padding:28px 32px; 
+            max-width: 1600px; 
+            width:calc(100% - 256px); 
+        }
+
+        /* --- Custom Styles --- */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 32px;
+        }
+
+        .input-style {
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-style:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 96, 100, 0.2);
+        }
+
+        .leave-stat {
+            background: #f7f9fb;
+            border-radius: var(--radius);
+            padding: 20px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        .leave-stat.pending {
+            border-left: 4px solid var(--accent-color);
+            background: #fff8e1;
+        }
+
+        /* Leave History Table Styles */
+        .leave-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        .leave-table th {
+            text-align: left;
+            padding: 10px;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .leave-table td {
+            padding: 15px 10px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s;
+        }
+        .leave-table tr:hover td {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .leave-table tr:first-child td { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        .leave-table tr:last-child td { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-pending { background-color: #fff3e0; color: var(--accent-color); }
+        .status-approved { background-color: #e8f5e9; color: var(--secondary-color); }
+        .status-rejected { background-color: #ffebee; color: #dc2626; }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 1023px) { 
+            #sidebar { left: -256px; }
+            #main-content { margin-left: 0; width: 100%; padding: 16px; }
+            .mobile-menu-btn { display: inline-flex; }
+        }
+        #sidebar.is-open { transform: translateX(0); }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#006064',
+                        'primary-dark': '#004d50',
+                        'secondary': '#4caf50',
+                        'accent': '#ff7043',
+                        'red-base': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar / Navigation -->
+    <nav id="sidebar" class="transition-transform duration-300">
+        <div class="p-4 h-full flex flex-col">
+            
+            <div class="logo pb-4 border-b border-gray-700">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 11-6-11-6z"/>
+                </svg>
+                <span class="logo-title">CampusG Portal</span>
+            </div>
+
+            <div class="nav-container">
+                <p class="nav-label">My Portal</p>
+                <a class="nav-item" href="staff_portal.html">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="faculty_profile.html">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="nav-item" href="course_management.html">
+                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                    <span>My Courses</span>
+                </a>
+                <a class="nav-item active" href="#">
+                    <i data-lucide="calendar-off" class="w-5 h-5"></i>
+                    <span>Leave Request</span>
+                </a>
+                
+                <p class="nav-label border-t border-gray-700 mt-3 pt-3">Modules</p>
+                
+                <a class="nav-item" href="dashboard.html">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Executive Monitor</span>
+                </a>
+                <a class="nav-item" href="academics.html">
+                    <i data-lucide="school" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                <a class="nav-item" href="finance.html">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+                <a class="nav-item" href="hr_staff.html">
+                    <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                <a class="nav-item" href="campus_life.html">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+                <a class="nav-item" href="tasks.html">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+                <a class="nav-item" href="admissions.html">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </div>
+
+            <button id="signout-button" class="w-full mt-4 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        
+        <!-- Header / Title -->
+        <header class="flex items-center justify-between pb-4 border-b border-gray-200 mb-8">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center space-x-2">
+                <i data-lucide="calendar-off" class="w-8 h-8"></i>
+                <span>Leave Request Management</span>
+            </h1>
+            <button id="mobile-sidebar-toggle" class="mobile-menu-btn bg-primary text-white p-2 rounded-lg lg:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Leave Status and Balance -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            
+            <div class="leave-stat border-l-4 border-secondary">
+                <p class="text-sm font-semibold text-gray-600">Annual Leave Remaining</p>
+                <p class="text-3xl font-bold text-secondary mt-1">12 Days</p>
+                <p class="text-xs text-gray-500 mt-1">Resets Jan 1st</p>
+            </div>
+            
+            <div class="leave-stat pending">
+                <p class="text-sm font-semibold text-gray-600">Pending HOD Approval</p>
+                <p class="text-3xl font-bold text-accent mt-1">1 Request</p>
+                <p class="text-xs text-gray-500 mt-1">Submitted Oct 18, 2025</p>
+            </div>
+            
+            <div class="leave-stat border-l-4 border-primary">
+                <p class="text-sm font-semibold text-gray-600">Total Leave Taken (YTD)</p>
+                <p class="text-3xl font-bold text-primary mt-1">5 Days</p>
+                <p class="text-xs text-gray-500 mt-1">Since Jan 1st</p>
+            </div>
+        </div>
+
+        <!-- Main Content Grid (Request Form & History) -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- 1. New Leave Request Form -->
+            <div class="form-card">
+                <h2 class="text-2xl font-bold text-primary mb-6">Submit New Leave Request</h2>
+                
+                <form id="leave-form" onsubmit="event.preventDefault(); showSuccessMessage();">
+                    
+                    <div class="grid sm:grid-cols-2 gap-6 mb-4">
+                        <!-- Start Date -->
+                        <div>
+                            <label for="start_date" class="block text-sm font-semibold mb-2">Start Date</label>
+                            <input type="date" id="start_date" required class="input-style" />
+                        </div>
+                        <!-- End Date -->
+                        <div>
+                            <label for="end_date" class="block text-sm font-semibold mb-2">End Date</label>
+                            <input type="date" id="end_date" required class="input-style" />
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="leave_type" class="block text-sm font-semibold mb-2">Leave Type</label>
+                        <select id="leave_type" required class="input-style">
+                            <option value="">Select...</option>
+                            <option value="Annual">Annual / Vacation Leave</option>
+                            <option value="Sick">Sick Leave (Requires Doctor's Note)</option>
+                            <option value="Official Duty">Official Duty / Conference</option>
+                            <option value="Personal">Personal Emergency Leave</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="reason" class="block text-sm font-semibold mb-2">Reason for Leave (Max 200 words)</label>
+                        <textarea id="reason" rows="4" maxlength="200" required class="input-style resize-none" placeholder="Briefly explain the reason for your absence..."></textarea>
+                    </div>
+
+                    <div id="form-message" class="hidden p-3 mb-4 rounded-lg text-sm font-medium border text-secondary bg-green-50 border-secondary">
+                        Leave request submitted successfully for HOD approval!
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-white py-3 px-4 rounded-lg font-bold hover:bg-primary-dark transition duration-200">
+                        Submit Request to HOD
+                    </button>
+                </form>
+            </div>
+            
+            <!-- 2. Leave History -->
+            <div class="form-card">
+                <h2 class="text-2xl font-bold text-primary mb-6">Leave History</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="leave-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/4">Period</th>
+                                <th class="w-1/4">Type</th>
+                                <th class="w-1/4">Status</th>
+                                <th class="w-1/4">HOD Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Pending Request -->
+                            <tr>
+                                <td>Oct 20 - Oct 22</td>
+                                <td>Official Duty</td>
+                                <td><span class="status-badge status-pending">PENDING</span></td>
+                                <td>N/A</td>
+                            </tr>
+                            <!-- Approved Request -->
+                            <tr>
+                                <td>Sept 15 - Sept 16</td>
+                                <td>Annual</td>
+                                <td><span class="status-badge status-approved">APPROVED</span></td>
+                                <td>Substitute arranged.</td>
+                            </tr>
+                            <!-- Rejected Request (Example) -->
+                            <tr>
+                                <td>Aug 5</td>
+                                <td>Sick</td>
+                                <td><span class="status-badge status-rejected">REJECTED</span></td>
+                                <td>Critical class schedule conflict.</td>
+                            </tr>
+                            <!-- Approved Request -->
+                            <tr>
+                                <td>Feb 1 - Feb 2</td>
+                                <td>Personal</td>
+                                <td><span class="status-badge status-approved">APPROVED</span></td>
+                                <td>OK.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-500 mt-4 text-center">Contact administration for details on older requests.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        
+        // --- Sidebar Toggle Function ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
+
+        function setupSidebarToggle() {
+            if (!sidebar || !mobileToggle || !mainContent) return;
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('is-open');
+                // Toggle icon for better UX
+                const icon = mobileToggle.querySelector('i');
+                const isOpened = sidebar.classList.contains('is-open');
+                icon.setAttribute('data-lucide', isOpened ? 'x' : 'menu');
+                lucide.createIcons();
+            });
+            
+            mainContent.addEventListener('click', (event) => {
+                const isSidebarOpen = sidebar.classList.contains('is-open');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                // Close sidebar on outside click on mobile
+                if (isSidebarOpen && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.remove('is-open');
+                }
+            });
+        }
+        
+        // --- Form Submission Handler (Mock Success) ---
+        function showSuccessMessage() {
+            const formMessage = document.getElementById('form-message');
+            formMessage.classList.remove('hidden');
+            
+            // Clear form fields after submission
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+            document.getElementById('leave_type').value = '';
+            document.getElementById('reason').value = '';
+
+            // Automatically hide success message after 5 seconds
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // --- Final Execution ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupSidebarToggle();
+            setupLeaveFormLogic();
+            
+            // Mock Sign Out link handler (re-used logic)
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.confirm('Are you sure you want to sign out?')) {
+                        // Mock signout: clear local storage and redirect
+                        localStorage.removeItem('campusg_session_mock');
+                        localStorage.removeItem('staffDashboardWidgets');
+                        window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+
+        // Placeholder for any complex form validation logic (currently using basic required HTML attributes)
+        function setupLeaveFormLogic() {
+            // Optional: Add client-side date validation (e.g., end date cannot be before start date)
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+
+            startDateInput.addEventListener('change', () => {
+                endDateInput.min = startDateInput.value;
+            });
+        }
+    </script>
+</body>
+</html>
