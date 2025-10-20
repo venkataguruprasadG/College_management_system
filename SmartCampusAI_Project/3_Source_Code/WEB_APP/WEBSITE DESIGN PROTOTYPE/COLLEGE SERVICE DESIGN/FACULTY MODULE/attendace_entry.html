@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Faculty Attendance Entry</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Define CampusG Colors and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #006064; /* Deep Teal */
+            --primary-dark: #004d50; 
+            --secondary-color: #4caf50; /* Forest Green (Success) */
+            --accent-color: #ff7043; /* Coral (Highlight/Action) */
+            --warning-color: #f59e0b; /* Amber */
+            --absent-color: #dc2626; /* Red */
+            --text-color: #1f2937; 
+            --card-bg: #ffffff;
+            --radius: 12px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f6f9; 
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+        }
+        
+        /* --- Sidebar Styles (Fixed for consistency) --- */
+        #sidebar {
+            width: 256px; 
+            background: #263238; 
+            color: #fff;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            z-index: 50; 
+            padding: 16px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar .logo { padding: 0 16px 16px; display: flex; align-items: center; border-bottom: 1px solid #455a64; margin-bottom: 16px; }
+        .logo-title { font-weight: 800; font-size: 1.5rem; margin-left: 8px; }
+        .logo-icon { width: 30px; height: 30px; color: var(--accent-color); }
+        .nav-container { overflow-y: auto; flex-grow: 1; padding: 0 0 10px 0; }
+
+        .nav-item { display:flex; align-items:center; padding:10px 16px; color: rgba(255,255,255,0.8); text-decoration:none; transition: background 160ms, color 160ms; border-radius: 8px; margin: 0 10px; }
+        .nav-item svg { width:20px;height:20px; margin-right:12px; flex-shrink:0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { 
+            background: var(--primary-color); 
+            font-weight:700; 
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 96, 100, 0.4);
+        }
+        .nav-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #90a4ae; padding: 8px 16px 4px; }
+        #signout-button { margin: 16px 10px 16px 10px; flex-shrink: 0; }
+
+        /* --- Main Content Layout --- */
+        #main-content { 
+            margin-left: 256px; 
+            flex:1; 
+            padding:28px 32px; 
+            max-width: 1600px; 
+            width:calc(100% - 256px); 
+        }
+
+        /* --- Attendance Table Styles --- */
+        .attendance-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .attendance-table thead th {
+            text-align: left;
+            padding: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            background-color: #f7f9fb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .attendance-table tbody tr {
+            transition: background-color 0.2s;
+        }
+        .attendance-table tbody tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+        .attendance-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+        .attendance-table tbody tr:hover {
+            background-color: #f0f8f8;
+        }
+
+        /* Status colors for the table cell */
+        .status-P { background-color: #e8f5e9; color: var(--secondary-color); font-weight: 700; }
+        .status-A { background-color: #ffebee; color: var(--absent-color); font-weight: 700; }
+        .status-L { background-color: #fff8e1; color: var(--warning-color); font-weight: 700; }
+        .status-pending-verification { background-color: #f0f4ff; color: #4f46e5; font-weight: 700; }
+        
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 24px;
+        }
+
+        /* Session Buttons */
+        .btn-session-start { background-color: var(--secondary-color); transition: background-color 0.2s; }
+        .btn-session-start:hover { background-color: #388e3c; }
+        .btn-session-stop { background-color: var(--absent-color); transition: background-color 0.2s; }
+        .btn-session-stop:hover { background-color: #b71c1c; }
+
+        /* Responsive adjustments */
+        @media (max-width: 1023px) { 
+            #sidebar { left: -256px; }
+            #main-content { margin-left: 0; width: 100%; padding: 16px; }
+            .mobile-menu-btn { display: inline-flex; }
+        }
+        #sidebar.is-open { transform: translateX(0); }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#006064',
+                        'primary-dark': '#004d50',
+                        'secondary': '#4caf50',
+                        'accent': '#ff7043',
+                        'warning': '#f59e0b',
+                        'absent': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar / Navigation -->
+    <nav id="sidebar" class="transition-transform duration-300">
+        <div class="p-4 h-full flex flex-col">
+            
+            <div class="logo pb-4 border-b border-gray-700">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 11-6-11-6z"/>
+                </svg>
+                <span class="logo-title">CampusG Portal</span>
+            </div>
+
+            <div class="nav-container">
+                <p class="nav-label">My Portal</p>
+                <a class="nav-item" href="staff_portal.html">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="faculty_profile.html">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="nav-item" href="course_management.html">
+                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                    <span>My Courses</span>
+                </a>
+                <a class="nav-item" href="leave_request.html">
+                    <i data-lucide="calendar-off" class="w-5 h-5"></i>
+                    <span>Leave Request</span>
+                </a>
+                
+                <p class="nav-label border-t border-gray-700 mt-3 pt-3">Modules</p>
+                
+                <a class="nav-item" href="dashboard.html">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Executive Monitor</span>
+                </a>
+                <a class="nav-item" href="academics.html">
+                    <i data-lucide="school" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                <a class="nav-item" href="finance.html">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+                <a class="nav-item" href="hr_staff.html">
+                    <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                <a class="nav-item" href="campus_life.html">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+                <a class="nav-item" href="tasks.html">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+                <a class="nav-item" href="admissions.html">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </div>
+
+            <button id="signout-button" class="w-full mt-4 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        
+        <!-- Header / Title -->
+        <header class="flex items-center justify-between pb-4 border-b border-gray-200 mb-8">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center space-x-2">
+                <i data-lucide="clipboard-check" class="w-8 h-8"></i>
+                <span>Proximity Attendance Session</span>
+            </h1>
+            <button id="mobile-sidebar-toggle" class="mobile-menu-btn bg-primary text-white p-2 rounded-lg lg:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Course Context & Session Controls -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent mb-8 grid md:grid-cols-4 gap-4 items-center">
+            
+            <!-- Course Info -->
+            <div class="col-span-4 md:col-span-2">
+                <p class="text-sm font-semibold text-gray-500">Active Course & Section</p>
+                <p class="text-xl font-bold text-gray-900">CS 301: Advanced Algorithms</p>
+                <p class="text-sm text-gray-600">B.Tech, CSE | Year 3 | Section A</p>
+            </div>
+            
+            <!-- Session Status/Time -->
+            <div class="col-span-2 md:col-span-1">
+                <p class="text-sm font-semibold text-gray-500">Session Status</p>
+                <p id="session-status" class="text-xl font-bold text-absent">INACTIVE</p>
+                <p id="session-timer" class="text-xs text-gray-600">Duration: 00:00</p>
+            </div>
+
+            <!-- Session Button -->
+            <div class="col-span-2 md:col-span-1 flex justify-end">
+                <button id="session-button" 
+                        class="w-full md:w-auto text-white py-3 px-6 rounded-lg font-bold transition duration-200 shadow-md btn-session-start" 
+                        onclick="toggleSession()">
+                    <i data-lucide="play" class="w-5 h-5 inline mr-2"></i> Start Attendance
+                </button>
+            </div>
+        </div>
+
+        <!-- Attendance Status Counters -->
+        <div class="grid grid-cols-3 gap-6 mb-8">
+            <div id="count-present" class="form-card text-center border-b-4 border-secondary">
+                <p class="text-sm font-semibold text-gray-600">Confirmed Present</p>
+                <p class="text-4xl font-extrabold text-secondary mt-1">0</p>
+            </div>
+            <div id="count-pending" class="form-card text-center border-b-4 border-warning">
+                <p class="text-sm font-semibold text-gray-600">Pending Verification</p>
+                <p class="text-4xl font-extrabold text-warning mt-1">10</p>
+            </div>
+            <div id="count-absent" class="form-card text-center border-b-4 border-absent">
+                <p class="text-sm font-semibold text-gray-600">Marked Absent</p>
+                <p class="text-4xl font-extrabold text-absent mt-1">0</p>
+            </div>
+        </div>
+
+        <!-- Main Attendance Entry Table -->
+        <div class="form-card overflow-x-auto">
+            <h2 class="text-2xl font-bold text-primary mb-6">Student List (Total: 10)</h2>
+            
+            <!-- Mock Student List (No manual buttons needed) -->
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/12">Roll No.</th>
+                        <th class="w-6/12">Student Name</th>
+                        <th class="w-5/12 text-center">Verification Status</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list-body">
+                    <!-- Student Rows will be populated here by JS -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="save-message" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 p-4 rounded-xl bg-secondary text-white font-bold shadow-2xl transition duration-300 z-50">
+            Attendance session closed and data saved successfully!
+        </div>
+
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        const studentData = [
+            { roll: '18CS001', name: 'Arjun Bhashkar', status: 'PENDING' },
+            { roll: '18CS002', name: 'Bhavya Sharma', status: 'PENDING' },
+            { roll: '18CS003', name: 'Chaitanya Kulkarni', status: 'PENDING' },
+            { roll: '18CS004', name: 'Dinesh Yadav', status: 'PENDING' },
+            { roll: '18CS005', name: 'Esha Gupta', status: 'PENDING' },
+            { roll: '18CS006', name: 'Farhan Mirza', status: 'PENDING' },
+            { roll: '18CS007', name: 'Geeta Iyer', status: 'PENDING' },
+            { roll: '18CS008', name: 'Hari Prasad', status: 'PENDING' },
+            { roll: '18CS009', name: 'Ishaani Sen', status: 'PENDING' },
+            { roll: '18CS010', name: 'Jatin Kohli', status: 'PENDING' }
+        ];
+        
+        let isSessionActive = false;
+        let sessionInterval;
+
+        // --- Sidebar Toggle Function ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
+        
+        function setupSidebarToggle() {
+            if (!sidebar || !mobileToggle || !mainContent) return;
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('is-open');
+                // Toggle icon for better UX
+                const icon = mobileToggle.querySelector('i');
+                if (icon) {
+                    const isOpened = sidebar.classList.contains('is-open');
+                    icon.setAttribute('data-lucide', isOpened ? 'x' : 'menu');
+                    lucide.createIcons();
+                }
+            });
+            
+            mainContent.addEventListener('click', (event) => {
+                const isSidebarOpen = sidebar.classList.contains('is-open');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                
+                // Close sidebar on outside click on mobile
+                if (isSidebarOpen && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.remove('is-open');
+                    const icon = mobileToggle.querySelector('i');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'menu');
+                        lucide.createIcons();
+                    }
+                }
+            });
+        }
+
+        // --- Core Attendance/Session Logic ---
+
+        function updateCounts() {
+            const total = studentData.length;
+            const present = studentData.filter(s => s.status === 'PRESENT').length;
+            const absent = studentData.filter(s => s.status === 'ABSENT').length;
+            const pending = total - present - absent;
+            
+            const countPresent = document.getElementById('count-present')?.querySelector('p:nth-child(2)');
+            const countPending = document.getElementById('count-pending')?.querySelector('p:nth-child(2)');
+            const countAbsent = document.getElementById('count-absent')?.querySelector('p:nth-child(2)');
+            const attendanceCount = document.getElementById('attendance-count');
+
+            if (countPresent) countPresent.textContent = present;
+            if (countPending) countPending.textContent = pending;
+            if (countAbsent) countAbsent.textContent = absent;
+            if (attendanceCount) attendanceCount.textContent = `${present} / ${total} Present`;
+        }
+
+        function renderStudentList() {
+            const tbody = document.getElementById('student-list-body');
+            if (!tbody) return;
+
+            let html = '';
+
+            studentData.forEach(student => {
+                const statusClass = student.status === 'PRESENT' ? 'status-P' : (student.status === 'ABSENT' ? 'status-A' : 'status-pending-verification');
+                const statusText = student.status === 'PRESENT' ? 'VERIFIED' : (student.status === 'ABSENT' ? 'ABSENT' : 'PENDING');
+                
+                html += `
+                    <tr>
+                        <td class="font-semibold">${student.roll}</td>
+                        <td class="font-medium">${student.name}</td>
+                        <td class="text-center">
+                            <span id="status-${student.roll}" class="status-badge ${statusClass}">${statusText}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function startTimer(duration = 0) {
+            let startTime = Date.now() - duration;
+            const timerElement = document.getElementById('session-timer');
+            
+            if (sessionInterval) clearInterval(sessionInterval);
+
+            sessionInterval = setInterval(() => {
+                let elapsedTime = Date.now() - startTime;
+                let minutes = Math.floor(elapsedTime / (1000 * 60));
+                let seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+                minutes = String(minutes).padStart(2, '0');
+                seconds = String(seconds).padStart(2, '0');
+
+                if (timerElement) timerElement.textContent = `Duration: ${minutes}:${seconds}`;
+            }, 1000);
+        }
+        
+        function mockStudentVerification() {
+            // Mock: Simulate 60% of pending students marking themselves present in the first 10 seconds.
+            const pendingStudents = studentData.filter(s => s.status === 'PENDING');
+            
+            let verificationIndex = 0;
+            const verificationSpeed = setInterval(() => {
+                if (verificationIndex < pendingStudents.length * 0.6) {
+                    const student = pendingStudents[verificationIndex];
+                    if (student) {
+                        student.status = 'PRESENT';
+                        renderStudentList();
+                        updateCounts();
+                    }
+                    verificationIndex++;
+                } else {
+                    clearInterval(verificationSpeed);
+                }
+            }, 1000); 
+        }
+
+        function toggleSession() {
+            const button = document.getElementById('session-button');
+            const statusElement = document.getElementById('session-status');
+            
+            if (!button || !statusElement) return;
+
+            if (!isSessionActive) {
+                // START SESSION
+                isSessionActive = true;
+                
+                // 1. Reset all non-present students to PENDING 
+                studentData.forEach(s => s.status = 'PENDING');
+                
+                button.classList.remove('btn-session-start');
+                button.classList.add('btn-session-stop');
+                button.innerHTML = '<i data-lucide="square" class="w-5 h-5 inline mr-2"></i> Stop Session & Save';
+                statusElement.textContent = 'ACTIVE';
+                statusElement.classList.remove('text-absent');
+                statusElement.classList.add('text-secondary');
+                
+                lucide.createIcons();
+                startTimer();
+                mockStudentVerification(); 
+
+            } else {
+                // STOP SESSION & SAVE
+                isSessionActive = false;
+                
+                if (sessionInterval) clearInterval(sessionInterval);
+                
+                // 1. Mark all remaining PENDING students as ABSENT
+                studentData.filter(s => s.status === 'PENDING').forEach(s => s.status = 'ABSENT');
+
+                // 2. Display success message
+                saveAttendance();
+
+                // 3. Reset button/status
+                button.classList.remove('btn-session-stop');
+                button.classList.add('btn-session-start');
+                button.innerHTML = '<i data-lucide="play" class="w-5 h-5 inline mr-2"></i> Start Attendance';
+                statusElement.textContent = 'INACTIVE';
+                statusElement.classList.remove('text-secondary');
+                statusElement.classList.add('text-absent');
+                
+                const timerElement = document.getElementById('session-timer');
+                if (timerElement) timerElement.textContent = 'Duration: 00:00';
+
+                lucide.createIcons();
+            }
+            renderStudentList();
+            updateCounts();
+        }
+
+        function saveAttendance() {
+            // 1. Mock Submission Logic 
+            console.log('Final Attendance data submitted:', studentData);
+
+            // 2. Display success message
+            const saveMessage = document.getElementById('save-message');
+            if (saveMessage) {
+                saveMessage.classList.remove('hidden');
+                
+                // 3. Hide message after a delay
+                setTimeout(() => {
+                    saveMessage.classList.add('hidden');
+                }, 3000); 
+            }
+        }
+
+        // --- Final Execution ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupSidebarToggle();
+            renderStudentList();
+            updateCounts();
+            
+            // Mock Sign Out link handler (re-used logic)
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.confirm('Are you sure you want to sign out?')) {
+                        localStorage.removeItem('campusg_session_mock');
+                        window.location.href = 'login.html'; 
+                    }
+                });
+            }
+            
+            // Attach toggleSession to the button after DOM is loaded
+            const sessionButton = document.getElementById('session-button');
+            if (sessionButton) {
+                sessionButton.addEventListener('click', toggleSession);
+            }
+        });
+    </script>
+</body>
+</html>
