@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusG Gradebook Management</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Define CampusG Colors and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #006064; /* Deep Teal */
+            --primary-dark: #004d50; 
+            --secondary-color: #4caf50; /* Forest Green (Success) */
+            --accent-color: #ff7043; /* Coral (Highlight/Action) */
+            --warning-color: #f59e0b; /* Amber */
+            --absent-color: #dc2626; /* Red */
+            --text-color: #1f2937; 
+            --card-bg: #ffffff;
+            --radius: 12px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f6f9; 
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+        }
+        
+        /* --- Sidebar Styles (Fixed for consistency) --- */
+        #sidebar {
+            width: 256px; 
+            background: #263238; 
+            color: #fff;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            z-index: 50; 
+            padding: 16px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar .logo { padding: 0 16px 16px; display: flex; align-items: center; border-bottom: 1px solid #455a64; margin-bottom: 16px; }
+        .logo-title { font-weight: 800; font-size: 1.5rem; margin-left: 8px; }
+        .logo-icon { width: 30px; height: 30px; color: var(--accent-color); }
+        .nav-container { overflow-y: auto; flex-grow: 1; padding: 0 0 10px 0; }
+
+        .nav-item { display:flex; align-items:center; padding:10px 16px; color: rgba(255,255,255,0.8); text-decoration:none; transition: background 160ms, color 160ms; border-radius: 8px; margin: 0 10px; }
+        .nav-item svg { width:20px;height:20px; margin-right:12px; flex-shrink:0; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { 
+            background: var(--primary-color); 
+            font-weight:700; 
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 96, 100, 0.4);
+        }
+        .nav-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #90a4ae; padding: 8px 16px 4px; }
+        #signout-button { margin: 16px 10px 16px 10px; flex-shrink: 0; }
+
+        /* --- Main Content Layout --- */
+        #main-content { 
+            margin-left: 256px; 
+            flex:1; 
+            padding:28px 32px; 
+            max-width: 1600px; 
+            width:calc(100% - 256px); 
+        }
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 24px;
+        }
+
+        /* Gradebook Specific Styles */
+        .grade-table-wrapper {
+            max-height: 70vh; /* Limits table height for better fixed header/footer usage */
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius);
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .grade-table th {
+            padding: 12px 8px;
+            font-weight: 700;
+            color: #6b7280;
+            background-color: #f7f9fb;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0; /* Sticky header for scrolling */
+            z-index: 10;
+        }
+        .grade-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .grade-table td:first-child, .grade-table th:first-child {
+            text-align: left;
+            position: sticky;
+            left: 0;
+            background: #f7f9fb; /* Match body bg for sticky */
+            z-index: 15; 
+            padding-left: 24px;
+        }
+        .grade-table tbody td:first-child {
+             background: #fff; /* White for student name column */
+        }
+        .grade-table tbody tr:nth-child(even) td:first-child {
+             background-color: #fcfcfc; /* Alternating color for student name column */
+        }
+        .grade-table tbody tr:hover td:first-child {
+            background-color: #f0f8f8;
+        }
+
+        .grade-input {
+            width: 60px;
+            padding: 4px 6px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+        .grade-input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1023px) { 
+            #sidebar { left: -256px; }
+            #main-content { margin-left: 0; width: 100%; padding: 16px; }
+            .mobile-menu-btn { display: inline-flex; }
+        }
+        #sidebar.is-open { transform: translateX(0); }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#006064',
+                        'primary-dark': '#004d50',
+                        'secondary': '#4caf50',
+                        'accent': '#ff7043',
+                        'warning': '#f59e0b',
+                        'absent': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar / Navigation -->
+    <nav id="sidebar" class="transition-transform duration-300">
+        <div class="p-4 h-full flex flex-col">
+            
+            <div class="logo pb-4 border-b border-gray-700">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 11-6-11-6z"/>
+                </svg>
+                <span class="logo-title">CampusG Portal</span>
+            </div>
+
+            <div class="nav-container">
+                <p class="nav-label">My Portal</p>
+                <a class="nav-item" href="staff_portal.html">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="faculty_profile.html">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="nav-item active" href="course_management.html">
+                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                    <span>My Courses</span>
+                </a>
+                 <a class="nav-item" href="attendance_entry.html">
+                    <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                    <span>Attendance</span>
+                </a>
+                <a class="nav-item" href="leave_request.html">
+                    <i data-lucide="calendar-off" class="w-5 h-5"></i>
+                    <span>Leave Request</span>
+                </a>
+                
+                <p class="nav-label border-t border-gray-700 mt-3 pt-3">Modules</p>
+                
+                <a class="nav-item" href="dashboard.html">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Executive Monitor</span>
+                </a>
+                <a class="nav-item" href="academics.html">
+                    <i data-lucide="school" class="w-5 h-5"></i>
+                    <span>Academics</span>
+                </a>
+                <a class="nav-item" href="finance.html">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    <span>Finance</span>
+                </a>
+                <a class="nav-item" href="hr_staff.html">
+                    <i data-lucide="briefcase-business" class="w-5 h-5"></i>
+                    <span>HR & Staff</span>
+                </a>
+                <a class="nav-item" href="campus_life.html">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Campus Life</span>
+                </a>
+                <a class="nav-item" href="tasks.html">
+                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    <span>Tasks & Compliance</span>
+                </a>
+                <a class="nav-item" href="admissions.html">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Admissions</span>
+                </a>
+            </div>
+
+            <button id="signout-button" class="w-full mt-4 flex items-center justify-center space-x-2 p-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-red-700 hover:text-white transition duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        
+        <!-- Header / Title -->
+        <header class="flex items-center justify-between pb-4 border-b border-gray-200 mb-8">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center space-x-2">
+                <i data-lucide="award" class="w-8 h-8"></i>
+                <span>Gradebook Management</span>
+            </h1>
+            <button id="mobile-sidebar-toggle" class="mobile-menu-btn bg-primary text-white p-2 rounded-lg lg:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Course Context & Action Bar -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent mb-8 grid md:grid-cols-4 gap-4 items-center">
+            
+            <!-- Course Info -->
+            <div class="col-span-4 md:col-span-2">
+                <p class="text-sm font-semibold text-gray-500">Active Course Gradebook</p>
+                <p class="text-xl font-bold text-gray-900">CS 301: Advanced Algorithms</p>
+                <p class="text-sm text-gray-600">B.Tech, CSE | Year 3 | Section A (Total Students: 60)</p>
+            </div>
+            
+            <!-- Grading Context/Status -->
+            <div class="col-span-2 md:col-span-1">
+                <p class="text-sm font-semibold text-gray-500">Status</p>
+                <p id="submission-status" class="text-xl font-bold text-warning">DRAFT (4 Pending)</p>
+                <p class="text-xs text-gray-600">Last saved: 10:30 AM</p>
+            </div>
+
+            <!-- Grade Submission Button -->
+            <div class="col-span-2 md:col-span-1 flex justify-end">
+                <button id="submit-grades-button" 
+                        class="w-full md:w-auto text-white py-3 px-6 rounded-lg font-bold transition duration-200 shadow-md bg-secondary hover:bg-primary-dark" 
+                        onclick="submitGrades()">
+                    <i data-lucide="send" class="w-5 h-5 inline mr-2"></i> Submit Final Grades
+                </button>
+            </div>
+        </div>
+        
+        <!-- Gradebook Table -->
+        <div class="form-card p-0">
+            <!-- Filter Bar for Assignments -->
+            <div class="p-4 border-b border-gray-200 flex flex-wrap gap-4 items-center">
+                <label for="assignment-filter" class="font-semibold text-gray-700 text-sm">View Grades For:</label>
+                <select id="assignment-filter" class="p-2 border border-gray-300 rounded-lg text-sm focus:border-accent focus:ring-accent">
+                    <option value="all">All Assignments</option>
+                    <option value="quiz1">Quiz 1 (10%)</option>
+                    <option value="midterm">Midterm Exam (30%)</option>
+                    <option value="project">Final Project (40%)</option>
+                    <option value="attendance">Overall Attendance (10%)</option>
+                    <option value="total">Final Score</option>
+                </select>
+                <button class="text-primary hover:underline text-sm font-medium" onclick="alert('Navigating to Assignment Weight Editor')">
+                    Edit Weights
+                </button>
+            </div>
+
+            <div class="grade-table-wrapper">
+                <table class="grade-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Student Name (Roll No)</th>
+                            <th style="width: 100px;">Quiz 1 (10)</th>
+                            <th style="width: 100px;">Midterm (100)</th>
+                            <th style="width: 100px;">Project (100)</th>
+                            <th style="width: 100px;">Attendance (10)</th>
+                            <th style="width: 120px;">TOTAL Score (100)</th>
+                            <th style="width: 100px;">Final Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grade-entry-body">
+                        <!-- Grade Entry Rows populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="submission-message" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 p-4 rounded-xl bg-secondary text-white font-bold shadow-2xl transition duration-300 z-50">
+            Grades saved successfully! Awaiting HOD review.
+        </div>
+
+    </div>
+
+    <!-- Pure JavaScript Logic -->
+    <script>
+        // Mock data structure: Roll, Name, Scores (Quiz1, Midterm, Project, Attendance, Total, FinalGrade)
+        const gradebookData = [
+            { roll: '18CS001', name: 'Arjun Bhashkar', q1: 8, mid: 75, proj: 88, att: 9, total: 0, final: '' },
+            { roll: '18CS002', name: 'Bhavya Sharma', q1: 9, mid: 92, proj: 95, att: 10, total: 0, final: '' },
+            { roll: '18CS003', name: 'Chaitanya Kulkarni', q1: 6, mid: 65, proj: 70, att: 7, total: 0, final: '' },
+            { roll: '18CS004', name: 'Dinesh Yadav', q1: 10, mid: 88, proj: 91, att: 10, total: 0, final: '' },
+            { roll: '18CS005', name: 'Esha Gupta', q1: 7, mid: 78, proj: 82, att: 8, total: 0, final: '' },
+            { roll: '18CS006', name: 'Farhan Mirza', q1: 5, mid: 55, proj: 60, att: 6, total: 0, final: '' },
+        ];
+        
+        // Mock Weights (must sum to 100)
+        const WEIGHTS = {
+            q1: 10,     // Quiz 1 (out of 10 points max)
+            mid: 30,    // Midterm (out of 100 points max)
+            proj: 40,   // Project (out of 100 points max)
+            att: 10,    // Attendance (out of 10 points max)
+            // 10 + 30 + 40 + 10 = 90. We'll leave 10 points for final/viva/grace
+            viva: 10    // Remaining 10 points for final viva/grace
+        };
+        
+        // --- Core Grade Calculation Logic ---
+
+        function calculateFinalScore(scores) {
+            // Note: This is simplified mock scoring logic
+            let weightedScore = 0;
+            
+            // Normalize scores to 100% and apply weight
+            weightedScore += (scores.q1 / 10) * WEIGHTS.q1;
+            weightedScore += (scores.mid / 100) * WEIGHTS.mid;
+            weightedScore += (scores.proj / 100) * WEIGHTS.proj;
+            weightedScore += (scores.att / 10) * WEIGHTS.att;
+            
+            // Add remaining 10 points as a buffer/viva score (simplified)
+            weightedScore += WEIGHTS.viva; 
+
+            const finalScore = Math.min(weightedScore, 100); // Cap at 100
+            
+            return Math.round(finalScore * 10) / 10; // Round to one decimal place
+        }
+
+        function assignGrade(score) {
+            if (score >= 90) return 'A+';
+            if (score >= 80) return 'A';
+            if (score >= 70) return 'B+';
+            if (score >= 60) return 'B';
+            if (score >= 50) return 'C'; // Passing threshold
+            return 'F';
+        }
+
+        function updateAllGrades() {
+            gradebookData.forEach(student => {
+                const scores = { q1: student.q1, mid: student.mid, proj: student.proj, att: student.att };
+                student.total = calculateFinalScore(scores);
+                student.final = assignGrade(student.total);
+            });
+            renderGradebook();
+        }
+
+        // --- DOM Rendering and Interactions ---
+
+        function handleGradeInput(roll, assignment, element) {
+            let value = parseFloat(element.value);
+            
+            // Input validation: Check if value is a valid number and within range
+            let maxScore;
+            if (assignment === 'q1' || assignment === 'att') {
+                maxScore = 10;
+            } else if (assignment === 'mid' || assignment === 'proj') {
+                maxScore = 100;
+            } else {
+                return;
+            }
+
+            if (isNaN(value) || value < 0 || value > maxScore) {
+                element.style.borderColor = 'var(--absent-color)';
+                return;
+            } else {
+                element.style.borderColor = '#ddd';
+            }
+
+            // Update data model and recalculate
+            const student = gradebookData.find(s => s.roll === roll);
+            if (student) {
+                student[assignment] = value;
+                updateAllGrades();
+            }
+        }
+
+        function renderGradebook() {
+            const tbody = document.getElementById('grade-entry-body');
+            if (!tbody) return;
+
+            let html = '';
+
+            gradebookData.forEach(student => {
+                const finalScoreClass = student.final === 'F' ? 'text-lg font-bold text-absent' : (student.total >= 80 ? 'text-lg font-bold text-secondary' : 'text-lg font-bold text-primary');
+
+                html += `
+                    <tr>
+                        <td class="font-semibold text-gray-800">${student.name} <br><span class="text-xs text-gray-500">${student.roll}</span></td>
+                        
+                        <td><input type="number" value="${student.q1}" min="0" max="10" data-roll="${student.roll}" data-assign="q1" class="grade-input" onchange="handleGradeInput(this.dataset.roll, this.dataset.assign, this)"></td>
+                        
+                        <td><input type="number" value="${student.mid}" min="0" max="100" data-roll="${student.roll}" data-assign="mid" class="grade-input" onchange="handleGradeInput(this.dataset.roll, this.dataset.assign, this)"></td>
+                        
+                        <td><input type="number" value="${student.proj}" min="0" max="100" data-roll="${student.roll}" data-assign="proj" class="grade-input" onchange="handleGradeInput(this.dataset.roll, this.dataset.assign, this)"></td>
+                        
+                        <td><input type="number" value="${student.att}" min="0" max="10" data-roll="${student.roll}" data-assign="att" class="grade-input" onchange="handleGradeInput(this.dataset.roll, this.dataset.assign, this)"></td>
+                        
+                        <td class="font-extrabold text-gray-900">${student.total.toFixed(1)}</td>
+                        
+                        <td><span class="${finalScoreClass}">${student.final}</span></td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function submitGrades() {
+            // Mock Final Submission Logic (Validation before submitting)
+            const submissionStatus = document.getElementById('submission-status');
+
+            if (gradebookData.some(s => s.total < 50)) {
+                // If any student is failing (based on mock score < 50), issue a warning/alert
+                submissionStatus.textContent = "DRAFT (Final Review Needed)";
+                submissionStatus.className = 'text-xl font-bold text-absent';
+                
+                // Use non-blocking modal message instead of alert()
+                const message = document.getElementById('submission-message');
+                if (message) {
+                    message.classList.remove('bg-secondary');
+                    message.classList.add('bg-absent');
+                    message.innerHTML = '<i data-lucide="alert-triangle" class="w-5 h-5 inline mr-2"></i> Warning: Check failing students before submitting!';
+                    message.classList.remove('hidden');
+                    setTimeout(() => message.classList.add('hidden'), 4000);
+                }
+                return;
+            }
+
+            // Mock successful submission
+            console.log('Final Grades Submitted for HOD Approval:', gradebookData);
+            
+            submissionStatus.textContent = "SUBMITTED (Pending HOD)";
+            submissionStatus.className = 'text-xl font-bold text-secondary';
+            
+            const message = document.getElementById('submission-message');
+            if (message) {
+                message.classList.remove('bg-absent');
+                message.classList.add('bg-secondary');
+                message.innerHTML = 'Grades submitted successfully! Awaiting HOD review.';
+                message.classList.remove('hidden');
+                setTimeout(() => message.classList.add('hidden'), 3000);
+            }
+        }
+
+        // --- General App Setup (Sidebar Toggle) ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+        const mainContent = document.getElementById('main-content');
+
+        function setupSidebarToggle() {
+            if (!sidebar || !mobileToggle || !mainContent) return;
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('is-open');
+                const icon = mobileToggle.querySelector('i');
+                if (icon) {
+                    const isOpened = sidebar.classList.contains('is-open');
+                    icon.setAttribute('data-lucide', isOpened ? 'x' : 'menu');
+                    lucide.createIcons();
+                }
+            });
+            mainContent.addEventListener('click', (event) => {
+                const isSidebarOpen = sidebar.classList.contains('is-open');
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = mobileToggle.contains(event.target);
+                if (isSidebarOpen && !isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 1024) { 
+                    sidebar.classList.remove('is-open');
+                    const icon = mobileToggle.querySelector('i');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'menu');
+                        lucide.createIcons();
+                    }
+                }
+            });
+        }
+        
+        // --- Final Execution ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupSidebarToggle();
+            updateAllGrades(); // Initial calculation and rendering
+            
+            // Mock Sign Out link handler
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.confirm('Are you sure you want to sign out?')) {
+                        localStorage.removeItem('campusg_session_mock');
+                        window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
